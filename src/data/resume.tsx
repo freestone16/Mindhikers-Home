@@ -13,7 +13,7 @@ import { Java } from "@/components/ui/svgs/java";
 import { Csharp } from "@/components/ui/svgs/csharp";
 
 export const DATA = {
-  name: "Dillion Verma",
+  name: "MindHikers",
   initials: "DV",
   url: "https://dillion.io",
   location: "San Francisco, CA",
