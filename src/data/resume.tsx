@@ -64,13 +64,13 @@ type HackathonItem = {
 };
 
 export const DATA = {
-  name: "MindHikers",
+  name: "心行者 Mindhikers",
   initials: "MH",
   url: "https://www.mindhikers.com",
   location: "",
   locationLink: "",
   description:
-    "A bilingual brand home for thoughtful content, practical workflows, and product experiments.",
+    "心行者 Mindhikers 是一个双语品牌主页，用来承载内容、方法、产品实验与创作者工具入口。",
   summary: "",
   avatarUrl: "/MindHikers.png",
   skills: [] as Skill[],

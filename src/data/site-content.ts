@@ -81,6 +81,8 @@ export type HomeContent = {
   productDetail: ProductDetail;
 };
 
+const BRAND = "心行者 Mindhikers";
+
 const zhBase = "";
 const enBase = "/en";
 
@@ -100,12 +102,12 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
   zh: {
     locale: "zh",
     metadata: {
-      title: "MindHikers",
+      title: BRAND,
       description:
-        "MindHikers 是一个双语品牌主页，用来承载内容、方法、产品实验与创作者工具入口。",
+        "心行者 Mindhikers 是一个双语品牌主页，用来承载内容、方法、产品实验与创作者工具入口。",
     },
     navigation: {
-      brand: "MindHikers",
+      brand: BRAND,
       links: [
         { href: withBase(zhBase, "#about"), label: "关于" },
         { href: withBase(zhBase, "#products"), label: "产品" },
@@ -120,7 +122,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       eyebrow: "Bilingual brand home",
       title: "把复杂问题，做成清晰可用的作品。",
       description:
-        "MindHikers 用内容、方法和产品实验，把抽象议题拆成可理解、可执行、可持续迭代的路径。",
+        "心行者 Mindhikers 用内容、方法和产品实验，把抽象议题拆成可理解、可执行、可持续迭代的路径。",
       primaryAction: {
         href: "/golden-crucible",
         label: "查看黄金坩埚",
@@ -140,9 +142,9 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       },
     },
     about: {
-      title: "关于 MindHikers",
+      title: "关于 心行者 Mindhikers",
       paragraphs: [
-        "MindHikers 不是一张个人简历页，而是一个面向长期创作与产品实验的品牌门户。它承接我们正在推进的内容、方法论和工具化尝试。",
+        "心行者 Mindhikers 不是一张个人简历页，而是一个面向长期创作与产品实验的品牌门户。它承接我们正在推进的内容、方法论和工具化尝试。",
         "首版首页会保持节制而清晰的结构：先让用户理解品牌在做什么，再给出具体产品入口，最后逐步沉淀项目与工具能力。",
       ],
     },
@@ -155,7 +157,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
           eyebrow: "Featured",
           title: "黄金坩埚",
           description:
-            "一个围绕研究、写作、表达与创作者工作流而展开的产品入口，用来承接 MindHikers 的第一批品牌化实验。",
+            "一个围绕研究、写作、表达与创作者工作流而展开的产品入口，用来承接 心行者 Mindhikers 的第一批品牌化实验。",
           href: "/golden-crucible",
           ctaLabel: "进入产品页",
           meta: "首批挂载入口",
@@ -212,7 +214,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
     closing: {
       title: "先把一个入口做完整，再把系统慢慢搭出来。",
       description:
-        "这是 MindHikers 首页的第一轮品牌化版本。它的重点不是堆信息，而是建立一个足够干净、足够稳定的起点。",
+        "这是 心行者 Mindhikers 首页的第一轮品牌化版本。它的重点不是堆信息，而是建立一个足够干净、足够稳定的起点。",
       primaryAction: {
         href: "/golden-crucible",
         label: "继续看黄金坩埚",
@@ -226,7 +228,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       eyebrow: "Featured Product",
       title: "黄金坩埚",
       summary:
-        "黄金坩埚是 MindHikers 当前最先对外承接的产品入口，用来容纳研究、表达与创作者工作流的第一批产品化尝试。",
+        "黄金坩埚是 心行者 Mindhikers 当前最先对外承接的产品入口，用来容纳研究、表达与创作者工作流的第一批产品化尝试。",
       bullets: [
         "把研究线索整理成可延续的主题资产",
         "把表达过程沉淀成可复用的脚本与结构",
@@ -247,12 +249,12 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
   en: {
     locale: "en",
     metadata: {
-      title: "MindHikers",
+      title: BRAND,
       description:
-        "MindHikers is a bilingual brand home for thoughtful content, repeatable workflows, and product experiments.",
+        "心行者 Mindhikers is a bilingual brand home for thoughtful content, repeatable workflows, and product experiments.",
     },
     navigation: {
-      brand: "MindHikers",
+      brand: BRAND,
       links: [
         { href: withBase(enBase, "#about"), label: "About" },
         { href: withBase(enBase, "#products"), label: "Products" },
@@ -267,7 +269,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       eyebrow: "Bilingual brand home",
       title: "Turn complex questions into clear, usable work.",
       description:
-        "MindHikers brings together content, methods, and product experiments to make difficult ideas easier to understand, apply, and evolve.",
+        "心行者 Mindhikers brings together content, methods, and product experiments to make difficult ideas easier to understand, apply, and evolve.",
       primaryAction: {
         href: "/en/golden-crucible",
         label: "Explore Golden Crucible",
@@ -287,9 +289,9 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       },
     },
     about: {
-      title: "About MindHikers",
+      title: "About 心行者 Mindhikers",
       paragraphs: [
-        "MindHikers is not meant to feel like a personal resume page. It is a brand portal for long-form creation, product thinking, and practical experimentation.",
+        "心行者 Mindhikers is not meant to feel like a personal resume page. It is a brand portal for long-form creation, product thinking, and practical experimentation.",
         "This first release keeps the structure intentional and calm: explain what the brand does, show a concrete product entry, and leave space for projects and tools to grow over time.",
       ],
     },
@@ -302,7 +304,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
           eyebrow: "Featured",
           title: "Golden Crucible",
           description:
-            "A product entry centered on research, writing, expression, and creator workflows. It is the first public-facing experiment under the MindHikers brand.",
+            "A product entry centered on research, writing, expression, and creator workflows. It is the first public-facing experiment under the 心行者 Mindhikers brand.",
           href: "/en/golden-crucible",
           ctaLabel: "Open product page",
           meta: "First featured entry",
@@ -359,7 +361,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
     closing: {
       title: "Build one complete entry point first, then grow the system around it.",
       description:
-        "This is the first branded version of the MindHikers homepage. The goal is not volume. The goal is a calm, durable starting point.",
+        "This is the first branded version of the 心行者 Mindhikers homepage. The goal is not volume. The goal is a calm, durable starting point.",
       primaryAction: {
         href: "/en/golden-crucible",
         label: "Continue to Golden Crucible",
@@ -373,7 +375,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       eyebrow: "Featured Product",
       title: "Golden Crucible",
       summary:
-        "Golden Crucible is the first public product entry under MindHikers, designed to hold early experiments around research, expression, and creator workflows.",
+        "Golden Crucible is the first public product entry under 心行者 Mindhikers, designed to hold early experiments around research, expression, and creator workflows.",
       bullets: [
         "Organize research threads into durable topic assets",
         "Turn expression work into reusable scripts and structures",

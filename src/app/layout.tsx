@@ -20,17 +20,17 @@ const clashDisplay = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mindhikers.com"),
   title: {
-    default: "MindHikers",
-    template: `%s | MindHikers`,
+    default: "心行者 Mindhikers",
+    template: `%s | 心行者 Mindhikers`,
   },
   description:
-    "MindHikers is a bilingual brand home for thoughtful content, practical workflows, and product experiments.",
+    "心行者 Mindhikers 是一个双语品牌主页，用来承载内容、方法、产品实验与创作者工具入口。",
   openGraph: {
-    title: "MindHikers",
+    title: "心行者 Mindhikers",
     description:
-      "MindHikers is a bilingual brand home for thoughtful content, practical workflows, and product experiments.",
+      "心行者 Mindhikers 是一个双语品牌主页，用来承载内容、方法、产品实验与创作者工具入口。",
     url: "https://www.mindhikers.com",
-    siteName: "MindHikers",
+    siteName: "心行者 Mindhikers",
     type: "website",
   },
   robots: {
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: "MindHikers",
+    title: "心行者 Mindhikers",
     card: "summary_large_image",
   },
   verification: {
@@ -69,15 +69,10 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light">
-          <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="absolute left-[-8%] top-[-4%] h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(195,151,97,0.24),transparent_68%)] blur-3xl" />
-            <div className="absolute right-[-10%] top-[14%] h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(231,208,179,0.45),transparent_70%)] blur-3xl" />
-            <div className="absolute bottom-[-8%] left-[22%] h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(160,121,82,0.16),transparent_72%)] blur-3xl" />
-          </div>
-          <div className="relative z-10 mx-auto max-w-6xl px-6 pb-24 pt-24 sm:px-8 sm:pt-28">
+          <Navbar />
+          <div className="relative z-10 mx-auto max-w-5xl px-5 pb-20 pt-[4.6rem] sm:px-6 sm:pt-[5rem]">
             {children}
           </div>
-          <Navbar />
         </ThemeProvider>
       </body>
     </html>

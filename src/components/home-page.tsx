@@ -18,14 +18,14 @@ function SectionHeader({
   description: string;
 }) {
   return (
-    <div className="max-w-2xl space-y-3">
-      <p className="text-sm uppercase tracking-[0.22em] text-primary/80">
+    <div className="max-w-2xl space-y-2">
+      <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
         {eyebrow}
       </p>
-      <h2 className="font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+      <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
         {title}
       </h2>
-      <p className="text-base leading-7 text-muted-foreground sm:text-lg">
+      <p className="text-[13px] leading-6 text-muted-foreground sm:text-sm">
         {description}
       </p>
     </div>
@@ -40,38 +40,38 @@ function Card({
   icon: ReactNode;
 }) {
   return (
-    <div className="group flex h-full flex-col justify-between rounded-[28px] border border-border/70 bg-card/90 p-6 shadow-[0_20px_60px_-40px_rgba(97,68,39,0.45)] transition-transform duration-300 hover:-translate-y-1">
-      <div className="space-y-4">
+    <div className="flex h-full flex-col justify-between rounded-xl border border-border bg-card p-4 shadow-none transition-colors hover:bg-accent/25">
+      <div className="space-y-3">
         <div className="flex items-center justify-between gap-3">
-          <span className="text-xs uppercase tracking-[0.22em] text-primary/80">
+          <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
             {item.eyebrow}
           </span>
-          <span className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <span className="flex size-7 items-center justify-center rounded-md bg-accent text-primary">
             {icon}
           </span>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           <div className="flex items-start justify-between gap-3">
-            <h3 className="font-display text-2xl tracking-tight text-foreground">
+            <h3 className="text-[15px] font-medium tracking-tight text-foreground">
               {item.title}
             </h3>
             {item.meta ? (
-              <span className="rounded-full bg-background px-3 py-1 text-xs text-muted-foreground">
+              <span className="rounded-md bg-accent px-2 py-1 text-[10px] text-muted-foreground">
                 {item.meta}
               </span>
             ) : null}
           </div>
-          <p className="text-sm leading-7 text-muted-foreground sm:text-base">
+          <p className="text-[13px] leading-6 text-muted-foreground">
             {item.description}
           </p>
         </div>
       </div>
       {item.href && item.ctaLabel ? (
-        <div className="pt-6">
+        <div className="pt-5">
           <Button
             asChild
             variant="ghost"
-            className="h-auto rounded-full px-0 text-sm text-foreground hover:bg-transparent"
+            className="h-auto rounded-md px-0 text-[13px] text-foreground hover:bg-transparent"
           >
             <Link href={item.href}>
               {item.ctaLabel}
@@ -103,20 +103,20 @@ export function HomePage({ content }: { content: HomeContent }) {
         };
 
   return (
-    <main className="space-y-24 pb-16 pt-8 sm:space-y-28 sm:pt-12">
-      <section className="grid gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.85fr)] lg:items-end">
-        <div className="space-y-8">
+    <main className="space-y-16 pb-12 pt-8 sm:space-y-18 sm:pt-10">
+      <section className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(260px,0.8fr)] lg:items-start">
+        <div className="space-y-5">
           <BlurFade delay={BLUR_FADE_DELAY}>
-            <p className="text-sm uppercase tracking-[0.24em] text-primary/85">
+            <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               {content.hero.eyebrow}
             </p>
           </BlurFade>
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
-            <div className="space-y-6">
-              <h1 className="max-w-4xl font-display text-5xl leading-[0.95] tracking-[-0.04em] text-foreground sm:text-6xl lg:text-7xl">
+            <div className="space-y-4">
+              <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl">
                 {content.hero.title}
               </h1>
-              <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+              <p className="max-w-2xl text-[14px] leading-7 text-muted-foreground sm:text-[15px]">
                 {content.hero.description}
               </p>
             </div>
@@ -125,8 +125,7 @@ export function HomePage({ content }: { content: HomeContent }) {
             <div className="flex flex-wrap gap-3">
               <Button
                 asChild
-                size="lg"
-                className="rounded-full bg-primary px-6 text-primary-foreground shadow-[0_20px_40px_-24px_rgba(140,95,53,0.95)] hover:bg-primary/90"
+                className="h-9 rounded-md bg-primary px-3.5 text-[13px] text-primary-foreground hover:bg-primary/90"
               >
                 <Link href={content.hero.primaryAction.href}>
                   {content.hero.primaryAction.label}
@@ -134,9 +133,8 @@ export function HomePage({ content }: { content: HomeContent }) {
               </Button>
               <Button
                 asChild
-                size="lg"
                 variant="outline"
-                className="rounded-full border-border/80 bg-background/80 px-6"
+                className="h-9 rounded-md border-border bg-background px-3.5 text-[13px]"
               >
                 <Link href={content.hero.secondaryAction.href}>
                   <Languages className="mr-2 size-4" />
@@ -150,7 +148,7 @@ export function HomePage({ content }: { content: HomeContent }) {
               {content.hero.highlights.map((item) => (
                 <span
                   key={item}
-                  className="rounded-full border border-border/80 bg-background/80 px-4 py-2 text-sm text-muted-foreground"
+                  className="rounded-md border border-border bg-card px-2.5 py-1.5 text-[11px] text-muted-foreground"
                 >
                   {item}
                 </span>
@@ -159,44 +157,44 @@ export function HomePage({ content }: { content: HomeContent }) {
           </BlurFade>
         </div>
         <BlurFade delay={BLUR_FADE_DELAY * 5}>
-          <aside className="rounded-[32px] border border-border/70 bg-[linear-gradient(180deg,rgba(255,250,242,0.98),rgba(246,238,228,0.92))] p-7 shadow-[0_32px_80px_-48px_rgba(97,68,39,0.55)]">
-            <div className="space-y-6">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex size-12 items-center justify-center rounded-full bg-primary/12 text-primary">
-                  <Compass className="size-5" />
-                </div>
-                <div className="relative size-24 overflow-hidden rounded-[28px] border border-white/80 bg-white/80 shadow-[0_20px_50px_-30px_rgba(97,68,39,0.6)]">
+          <aside className="rounded-xl border border-border bg-card p-4">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="relative size-10 overflow-hidden rounded-md border border-border bg-background">
                   <Image
                     src="/MindHikers.png"
-                    alt="MindHikers"
+                    alt="心行者 Mindhikers"
                     fill
                     className="object-cover"
-                    sizes="96px"
+                    sizes="40px"
                     priority
                   />
                 </div>
-              </div>
-              <div className="space-y-3">
-                <p className="text-sm uppercase tracking-[0.22em] text-primary/80">
-                  {content.hero.focusCard.title}
-                </p>
-                <div className="space-y-3">
-                  {content.hero.focusCard.items.map((item) => (
-                    <div
-                      key={item}
-                      className="rounded-2xl border border-white/70 bg-white/70 px-4 py-4 text-sm leading-6 text-foreground/85"
-                    >
-                      {item}
-                    </div>
-                  ))}
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                    {content.hero.focusCard.title}
+                  </p>
+                  <p className="text-[13px] font-medium text-foreground">
+                    心行者 Mindhikers
+                  </p>
                 </div>
+              </div>
+              <div className="divide-y divide-border rounded-lg border border-border bg-background">
+                {content.hero.focusCard.items.map((item) => (
+                  <div
+                    key={item}
+                    className="px-3 py-3 text-[13px] leading-6 text-foreground/85"
+                  >
+                    {item}
+                  </div>
+                ))}
               </div>
             </div>
           </aside>
         </BlurFade>
       </section>
 
-      <section id="about" className="space-y-8">
+      <section id="about" className="space-y-6">
         <BlurFade delay={BLUR_FADE_DELAY * 6}>
           <SectionHeader
             eyebrow={labels.about}
@@ -204,10 +202,10 @@ export function HomePage({ content }: { content: HomeContent }) {
             description={content.about.paragraphs[0]}
           />
         </BlurFade>
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2">
           {content.about.paragraphs.map((paragraph, index) => (
             <BlurFade key={paragraph} delay={BLUR_FADE_DELAY * (7 + index)}>
-              <div className="rounded-[28px] border border-border/70 bg-card/90 p-6 leading-8 text-muted-foreground shadow-[0_20px_60px_-45px_rgba(97,68,39,0.45)]">
+              <div className="rounded-xl border border-border bg-card p-4 text-[13px] leading-6 text-muted-foreground shadow-none">
                 {paragraph}
               </div>
             </BlurFade>
@@ -215,7 +213,7 @@ export function HomePage({ content }: { content: HomeContent }) {
         </div>
       </section>
 
-      <section id="products" className="space-y-10">
+      <section id="products" className="space-y-6">
         <BlurFade delay={BLUR_FADE_DELAY * 9}>
           <SectionHeader
             eyebrow={labels.featured}
@@ -223,7 +221,7 @@ export function HomePage({ content }: { content: HomeContent }) {
             description={content.products.description}
           />
         </BlurFade>
-        <div className="grid gap-5 lg:grid-cols-1">
+        <div className="grid gap-4 lg:grid-cols-1">
           {content.products.items.map((item, index) => (
             <BlurFade key={item.title} delay={BLUR_FADE_DELAY * (10 + index)}>
               <Card item={item} icon={<Sparkles className="size-4" />} />
@@ -232,7 +230,7 @@ export function HomePage({ content }: { content: HomeContent }) {
         </div>
       </section>
 
-      <section id="projects" className="space-y-10">
+      <section id="projects" className="space-y-6">
         <BlurFade delay={BLUR_FADE_DELAY * 11}>
           <SectionHeader
             eyebrow={labels.infrastructure}
@@ -240,7 +238,7 @@ export function HomePage({ content }: { content: HomeContent }) {
             description={content.projects.description}
           />
         </BlurFade>
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
           {content.projects.items.map((item, index) => (
             <BlurFade key={item.title} delay={BLUR_FADE_DELAY * (12 + index)}>
               <Card item={item} icon={<Compass className="size-4" />} />
@@ -249,7 +247,7 @@ export function HomePage({ content }: { content: HomeContent }) {
         </div>
       </section>
 
-      <section id="tools" className="space-y-10">
+      <section id="tools" className="space-y-6">
         <BlurFade delay={BLUR_FADE_DELAY * 15}>
           <SectionHeader
             eyebrow={labels.methods}
@@ -257,7 +255,7 @@ export function HomePage({ content }: { content: HomeContent }) {
             description={content.tools.description}
           />
         </BlurFade>
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
           {content.tools.items.map((item, index) => (
             <BlurFade key={item.title} delay={BLUR_FADE_DELAY * (16 + index)}>
               <Card item={item} icon={<Languages className="size-4" />} />
@@ -266,26 +264,25 @@ export function HomePage({ content }: { content: HomeContent }) {
         </div>
       </section>
 
-      <section className="rounded-[32px] border border-border/70 bg-[linear-gradient(180deg,rgba(255,252,247,0.94),rgba(243,235,224,0.98))] px-6 py-10 shadow-[0_32px_90px_-60px_rgba(97,68,39,0.8)] sm:px-10 sm:py-12">
+      <section className="rounded-xl border border-border bg-card px-4 py-6 shadow-none sm:px-5 sm:py-7">
         <BlurFade delay={BLUR_FADE_DELAY * 19}>
-          <div className="space-y-6">
-            <p className="text-sm uppercase tracking-[0.22em] text-primary/80">
+          <div className="space-y-4">
+            <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
               {labels.next}
             </p>
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_auto] lg:items-end">
-              <div className="space-y-4">
-                <h2 className="max-w-3xl font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+            <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_auto] lg:items-end">
+              <div className="space-y-2.5">
+                <h2 className="max-w-3xl text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
                   {content.closing.title}
                 </h2>
-                <p className="max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+                <p className="max-w-2xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
                   {content.closing.description}
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
                 <Button
                   asChild
-                  size="lg"
-                  className="rounded-full bg-primary px-6 text-primary-foreground"
+                  className="h-9 rounded-md bg-primary px-3.5 text-[13px] text-primary-foreground"
                 >
                   <Link href={content.closing.primaryAction.href}>
                     {content.closing.primaryAction.label}
@@ -293,9 +290,8 @@ export function HomePage({ content }: { content: HomeContent }) {
                 </Button>
                 <Button
                   asChild
-                  size="lg"
                   variant="outline"
-                  className="rounded-full border-border/80 bg-background/80 px-6"
+                  className="h-9 rounded-md border-border bg-background px-3.5 text-[13px]"
                 >
                   <Link href={content.closing.secondaryAction.href}>
                     {content.closing.secondaryAction.label}
