@@ -2,6 +2,7 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { Button } from "@/components/ui/button";
 import { HomeContent } from "@/data/site-content";
 import { ArrowUpRight, Compass, Languages, Sparkles } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -160,8 +161,20 @@ export function HomePage({ content }: { content: HomeContent }) {
         <BlurFade delay={BLUR_FADE_DELAY * 5}>
           <aside className="rounded-[32px] border border-border/70 bg-[linear-gradient(180deg,rgba(255,250,242,0.98),rgba(246,238,228,0.92))] p-7 shadow-[0_32px_80px_-48px_rgba(97,68,39,0.55)]">
             <div className="space-y-6">
-              <div className="flex size-12 items-center justify-center rounded-full bg-primary/12 text-primary">
-                <Compass className="size-5" />
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex size-12 items-center justify-center rounded-full bg-primary/12 text-primary">
+                  <Compass className="size-5" />
+                </div>
+                <div className="relative size-24 overflow-hidden rounded-[28px] border border-white/80 bg-white/80 shadow-[0_20px_50px_-30px_rgba(97,68,39,0.6)]">
+                  <Image
+                    src="/MindHikers.png"
+                    alt="MindHikers"
+                    fill
+                    className="object-cover"
+                    sizes="96px"
+                    priority
+                  />
+                </div>
               </div>
               <div className="space-y-3">
                 <p className="text-sm uppercase tracking-[0.22em] text-primary/80">

@@ -72,7 +72,7 @@ export const DATA = {
   description:
     "A bilingual brand home for thoughtful content, practical workflows, and product experiments.",
   summary: "",
-  avatarUrl: "",
+  avatarUrl: "/MindHikers.png",
   skills: [] as Skill[],
   navbar: [] as Array<{
     href: string;
