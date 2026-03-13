@@ -1,38 +1,36 @@
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
-import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
+const cabinetGrotesk = localFont({
+  src: "../../public/fonts/CabinetGrotesk-Medium.ttf",
+  variable: "--font-brand-sans",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-mono",
+const clashDisplay = localFont({
+  src: "../../public/fonts/ClashDisplay-Semibold.ttf",
+  variable: "--font-brand-display",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(DATA.url),
+  metadataBase: new URL("https://www.mindhikers.com"),
   title: {
-    default: DATA.name,
-    template: `%s | ${DATA.name}`,
+    default: "MindHikers",
+    template: `%s | MindHikers`,
   },
-  description: DATA.description,
+  description:
+    "MindHikers is a bilingual brand home for thoughtful content, practical workflows, and product experiments.",
   openGraph: {
-    title: `${DATA.name}`,
-    description: DATA.description,
-    url: DATA.url,
-    siteName: `${DATA.name}`,
-    locale: "en_US",
+    title: "MindHikers",
+    description:
+      "MindHikers is a bilingual brand home for thoughtful content, practical workflows, and product experiments.",
+    url: "https://www.mindhikers.com",
+    siteName: "MindHikers",
     type: "website",
   },
   robots: {
@@ -47,7 +45,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: `${DATA.name}`,
+    title: "MindHikers",
     card: "summary_large_image",
   },
   verification: {
@@ -62,32 +60,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="zh-CN" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased relative",
-          geist.variable,
-          geistMono.variable
+          "relative min-h-screen bg-background antialiased",
+          cabinetGrotesk.variable,
+          clashDisplay.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light">
-          <TooltipProvider delayDuration={0}>
-            <div className="absolute inset-0 top-0 left-0 right-0 h-[100px] overflow-hidden z-0">
-              <FlickeringGrid
-                className="h-full w-full"
-                squareSize={2}
-                gridGap={2}
-                style={{
-                  maskImage: "linear-gradient(to bottom, black, transparent)",
-                  WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
-                }}
-              />
-            </div>
-            <div className="relative z-10 max-w-2xl mx-auto py-12 pb-24 sm:py-24 px-6">
-              {children}
-            </div>
-            <Navbar />
-          </TooltipProvider>
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="absolute left-[-8%] top-[-4%] h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(195,151,97,0.24),transparent_68%)] blur-3xl" />
+            <div className="absolute right-[-10%] top-[14%] h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(231,208,179,0.45),transparent_70%)] blur-3xl" />
+            <div className="absolute bottom-[-8%] left-[22%] h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(160,121,82,0.16),transparent_72%)] blur-3xl" />
+          </div>
+          <div className="relative z-10 mx-auto max-w-6xl px-6 pb-24 pt-24 sm:px-8 sm:pt-28">
+            {children}
+          </div>
+          <Navbar />
         </ThemeProvider>
       </body>
     </html>
