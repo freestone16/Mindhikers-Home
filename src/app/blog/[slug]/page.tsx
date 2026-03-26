@@ -7,14 +7,10 @@ import { MDXContent } from "@content-collections/mdx/react";
 import { mdxComponents } from "@/mdx-components";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { sortPostsByPublishedDateDesc } from "@/lib/posts";
 
 function getSortedPosts() {
-  return [...allPosts].sort((a, b) => {
-    if (new Date(a.publishedAt) > new Date(b.publishedAt)) {
-      return -1;
-    }
-    return 1;
-  });
+  return sortPostsByPublishedDateDesc(allPosts);
 }
 
 export async function generateStaticParams() {

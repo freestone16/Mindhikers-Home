@@ -19,6 +19,12 @@ type EntryCard = {
   meta?: string;
 };
 
+type ContactLink = {
+  href: string;
+  label: string;
+  note: string;
+};
+
 type ProductDetail = {
   eyebrow: string;
   title: string;
@@ -48,35 +54,44 @@ export type HomeContent = {
     primaryAction: ActionLink;
     secondaryAction: ActionLink;
     highlights: string[];
-    focusCard: {
-      title: string;
-      items: string[];
-    };
+    statusLabel: string;
+    statusValue: string;
+    availabilityLabel: string;
+    availabilityValue: string;
+    panelTitle: string;
   };
   about: {
     title: string;
+    intro: string;
     paragraphs: string[];
+    notes: string[];
   };
-  products: {
+  product: {
     title: string;
     description: string;
+    headline: string;
+    featured: EntryCard;
     items: EntryCard[];
   };
-  projects: {
+  blog: {
     title: string;
     description: string;
-    items: EntryCard[];
+    headline: string;
+    cta: ActionLink;
+    emptyLabel: string;
+    readArticleLabel: string;
   };
-  tools: {
+  contact: {
     title: string;
     description: string;
-    items: EntryCard[];
-  };
-  closing: {
-    title: string;
-    description: string;
-    primaryAction: ActionLink;
-    secondaryAction: ActionLink;
+    headline: string;
+    emailLabel: string;
+    email: string;
+    locationLabel: string;
+    location: string;
+    availabilityLabel: string;
+    availability: string;
+    links: ContactLink[];
   };
   productDetail: ProductDetail;
 };
@@ -104,14 +119,15 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
     metadata: {
       title: BRAND,
       description:
-        "心行者 Mindhikers 是一个双语品牌主页，用来承载内容、方法、产品实验与创作者工具入口。",
+        "心行者 Mindhikers 是一个双语品牌主页，用来承载内容、产品实验、博客输出与长期创作协作。",
     },
     navigation: {
       brand: BRAND,
       links: [
-        { href: withBase(zhBase, "#about"), label: "关于" },
-        { href: withBase(zhBase, "#products"), label: "产品" },
-        { href: withBase(zhBase, "#tools"), label: "工具" },
+        { href: withBase(zhBase, "#about"), label: "About" },
+        { href: withBase(zhBase, "#product"), label: "Product" },
+        { href: withBase(zhBase, "#blog"), label: "Blog" },
+        { href: withBase(zhBase, "#contact"), label: "Contact" },
       ],
       switchLanguage: {
         href: "/en",
@@ -119,110 +135,115 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       },
     },
     hero: {
-      eyebrow: "Bilingual brand home",
-      title: "把复杂问题，做成清晰可用的作品。",
+      eyebrow: "Editorial homepage",
+      title: "把研究、产品与表达，排成一个有呼吸感的品牌入口。",
       description:
-        "心行者 Mindhikers 用内容、方法和产品实验，把抽象议题拆成可理解、可执行、可持续迭代的路径。",
+        "心行者 Mindhikers 正在把长期创作、内容实验与产品化尝试收拢成一个更完整的首页。它不想像简历，也不想像模板，而是像一个持续更新的工作现场。",
       primaryAction: {
-        href: "/golden-crucible",
-        label: "查看黄金坩埚",
+        href: "#product",
+        label: "查看当前产品入口",
       },
       secondaryAction: {
-        href: "/en",
-        label: "切换到英文版",
+        href: "/blog",
+        label: "进入博客",
       },
-      highlights: ["品牌主页", "产品入口", "双语表达"],
-      focusCard: {
-        title: "当前建设重点",
-        items: [
-          "去掉模板的简历叙事",
-          "先挂出黄金坩埚入口",
-          "建立 / 与 /en 的轻量双语结构",
-        ],
-      },
+      highlights: ["双语品牌入口", "产品化实验", "长期写作与研究"],
+      statusLabel: "Current focus",
+      statusValue: "Homepage refresh in progress",
+      availabilityLabel: "Working rhythm",
+      availabilityValue: "Research, build, write, publish",
+      panelTitle: "Homepage blocks",
     },
     about: {
-      title: "关于 心行者 Mindhikers",
+      title: "About",
+      intro:
+        "心行者 Mindhikers 不是一张展示履历的页面，而是一个兼顾思考、制作与对外发布的品牌主页。",
       paragraphs: [
-        "心行者 Mindhikers 不是一张个人简历页，而是一个面向长期创作与产品实验的品牌门户。它承接我们正在推进的内容、方法论和工具化尝试。",
-        "首版首页会保持节制而清晰的结构：先让用户理解品牌在做什么，再给出具体产品入口，最后逐步沉淀项目与工具能力。",
+        "我们希望首页既能承接产品入口，也能容纳博客、研究线索和下一步动作，而不是把所有信息压成一页静态介绍。",
+        "这次改版会更靠近一种“持续编排中的工作室主页”气质：内容像栏目，入口像节目单，动效和节奏帮助信息呼吸，而不是成为噱头。",
+      ],
+      notes: [
+        "去掉模板味的自我介绍",
+        "保留轻量但明确的动效层次",
+        "让产品、博客、联系入口一眼可见",
       ],
     },
-    products: {
-      title: "产品",
+    product: {
+      title: "Product",
       description:
-        "先从一个真实入口开始，用最小但完整的结构承接品牌的第一批产品化表达。",
-      items: [
-        {
-          eyebrow: "Featured",
-          title: "黄金坩埚",
-          description:
-            "一个围绕研究、写作、表达与创作者工作流而展开的产品入口，用来承接 心行者 Mindhikers 的第一批品牌化实验。",
-          href: "/golden-crucible",
-          ctaLabel: "进入产品页",
-          meta: "首批挂载入口",
-        },
-      ],
-    },
-    projects: {
-      title: "项目",
-      description:
-        "除了单点产品，我们也在构建更完整的品牌基础设施，让表达、协作和发布能够逐渐形成体系。",
-      items: [
-        {
-          eyebrow: "Brand System",
-          title: "双语品牌首页",
-          description:
-            "用轻量路由而不是重型国际化方案，先把中文与英文两个入口跑顺。",
-        },
-        {
-          eyebrow: "Content Flow",
-          title: "内容生产工作流",
-          description:
-            "把选题、研究、脚本、审校和交付拆成可协作的稳定模块，而不是临时堆砌。",
-        },
-        {
-          eyebrow: "Distribution",
-          title: "品牌化入口矩阵",
-          description:
-            "围绕官网、产品页和后续内容分发节点，逐步搭出一致的品牌落点。",
-        },
-      ],
-    },
-    tools: {
-      title: "工具",
-      description:
-        "工具不是目的，工具是让复杂工作反复复用、降低摩擦、放大长期价值的方式。",
-      items: [
-        {
-          eyebrow: "Research",
-          title: "结构化研究",
-          description: "把零散输入整理成可继续推演的知识骨架。",
-        },
-        {
-          eyebrow: "Script",
-          title: "脚本与表达提炼",
-          description: "把想法打磨成可发布、可复用、可审校的表达单元。",
-        },
-        {
-          eyebrow: "Execution",
-          title: "研发与落地协同",
-          description: "让内容策划、页面承载和产品化入口在同一套节奏里推进。",
-        },
-      ],
-    },
-    closing: {
-      title: "先把一个入口做完整，再把系统慢慢搭出来。",
-      description:
-        "这是 心行者 Mindhikers 首页的第一轮品牌化版本。它的重点不是堆信息，而是建立一个足够干净、足够稳定的起点。",
-      primaryAction: {
+        "先把一个足够真实的产品入口放在首页中央，再围绕它挂出内容、工作流和后续生长点。",
+      headline: "首页中段应该像一个正在播出的栏目，而不是说明书。",
+      featured: {
+        eyebrow: "Featured release",
+        title: "黄金坩埚",
+        description:
+          "围绕研究、写作、表达与创作者工作流展开的首个产品入口。它承担的不只是一个页面，而是 Mindhikers 第一批品牌化实验的落点。",
         href: "/golden-crucible",
-        label: "继续看黄金坩埚",
+        ctaLabel: "打开产品页",
+        meta: "Live now",
       },
-      secondaryAction: {
-        href: "/en",
-        label: "查看英文版",
+      items: [
+        {
+          eyebrow: "Brand system",
+          title: "双语首页结构",
+          description:
+            "首页会同时承担中文与英文入口，让不同受众都能快速找到切入点。",
+        },
+        {
+          eyebrow: "Content flow",
+          title: "博客与研究栏目",
+          description:
+            "后续会把 blog 与研究内容接入首页，让站点像持续更新的出版物，而不只是产品单页。",
+        },
+        {
+          eyebrow: "Contact surface",
+          title: "合作与联系窗口",
+          description:
+            "把联系入口做得更自然，既能留住潜在合作，也不破坏整体节奏。",
+        },
+      ],
+    },
+    blog: {
+      title: "Blog",
+      description:
+        "这里会逐步积累方法、写作和产品思考。首页先展示最近几篇，完整归档放在博客页里。",
+      headline: "让首页直接露出最近的写作，而不是把内容藏在站点深处。",
+      cta: {
+        href: "/blog",
+        label: "查看全部文章",
       },
+      emptyLabel: "博客内容还在整理中，很快会补上第一批文章。",
+      readArticleLabel: "Read article",
+    },
+    contact: {
+      title: "Contact",
+      description:
+        "如果你想讨论品牌、内容、产品实验，或者只是想交换一个更清晰的切题方式，这里是最直接的入口。",
+      headline:
+        "把联系入口做得像一段自然的续篇，而不是页面底部的表单义务。",
+      emailLabel: "Email",
+      email: "contactmindhiker@gmail.com",
+      locationLabel: "Base",
+      location: "Shanghai / Remote",
+      availabilityLabel: "Open to",
+      availability: "Editorial collaboration, product experiments, thoughtful internet projects",
+      links: [
+        {
+          href: "mailto:contactmindhiker@gmail.com",
+          label: "发邮件",
+          note: "最快的合作入口",
+        },
+        {
+          href: "/en",
+          label: "English home",
+          note: "查看英文版入口",
+        },
+        {
+          href: "/blog",
+          label: "Recent writing",
+          note: "先从文章理解我们的工作方式",
+        },
+      ],
     },
     productDetail: {
       eyebrow: "Featured Product",
@@ -251,14 +272,15 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
     metadata: {
       title: BRAND,
       description:
-        "心行者 Mindhikers is a bilingual brand home for thoughtful content, repeatable workflows, and product experiments.",
+        "心行者 Mindhikers is a bilingual brand home for product experiments, writing, and a quieter long-form creative practice.",
     },
     navigation: {
       brand: BRAND,
       links: [
         { href: withBase(enBase, "#about"), label: "About" },
-        { href: withBase(enBase, "#products"), label: "Products" },
-        { href: withBase(enBase, "#tools"), label: "Tools" },
+        { href: withBase(enBase, "#product"), label: "Product" },
+        { href: withBase(enBase, "#blog"), label: "Blog" },
+        { href: withBase(enBase, "#contact"), label: "Contact" },
       ],
       switchLanguage: {
         href: "/",
@@ -266,110 +288,117 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       },
     },
     hero: {
-      eyebrow: "Bilingual brand home",
-      title: "Turn complex questions into clear, usable work.",
+      eyebrow: "Editorial homepage",
+      title: "A brand home for research, products, and writing that still feels alive.",
       description:
-        "心行者 Mindhikers brings together content, methods, and product experiments to make difficult ideas easier to understand, apply, and evolve.",
+        "心行者 Mindhikers is becoming a quieter but more expressive front page for long-form creation, product experiments, and the kind of internet work that benefits from rhythm, not clutter.",
       primaryAction: {
-        href: "/en/golden-crucible",
-        label: "Explore Golden Crucible",
+        href: "#product",
+        label: "See the current product entry",
       },
       secondaryAction: {
-        href: "/",
-        label: "Switch to Chinese",
+        href: "/blog",
+        label: "Open the blog",
       },
-      highlights: ["Brand home", "Product gateway", "Bilingual structure"],
-      focusCard: {
-        title: "Current focus",
-        items: [
-          "Remove the resume-like template narrative",
-          "Publish Golden Crucible as the first product entry",
-          "Establish a clean / and /en routing structure",
-        ],
-      },
+      highlights: ["Bilingual entry point", "Product experiments", "Research and publishing"],
+      statusLabel: "Current focus",
+      statusValue: "Homepage refresh in progress",
+      availabilityLabel: "Working rhythm",
+      availabilityValue: "Research, build, write, publish",
+      panelTitle: "Homepage blocks",
     },
     about: {
-      title: "About 心行者 Mindhikers",
+      title: "About",
+      intro:
+        "心行者 Mindhikers is not meant to read like a resume page. It is a brand homepage for making, thinking, and publishing in public with more intention.",
       paragraphs: [
-        "心行者 Mindhikers is not meant to feel like a personal resume page. It is a brand portal for long-form creation, product thinking, and practical experimentation.",
-        "This first release keeps the structure intentional and calm: explain what the brand does, show a concrete product entry, and leave space for projects and tools to grow over time.",
+        "The goal is to make room for product entries, recent writing, research threads, and future collaborations without collapsing everything into a single static summary.",
+        "This refresh leans toward the feeling of an actively edited studio homepage: sections behave like columns, entry points feel like programming blocks, and motion supports reading instead of distracting from it.",
+      ],
+      notes: [
+        "Remove the template-like self-introduction",
+        "Keep motion light but visible",
+        "Make product, blog, and contact pathways obvious",
       ],
     },
-    products: {
-      title: "Products",
+    product: {
+      title: "Product",
       description:
-        "We start with one real entry point so the brand has something concrete to stand on from day one.",
-      items: [
-        {
-          eyebrow: "Featured",
-          title: "Golden Crucible",
-          description:
-            "A product entry centered on research, writing, expression, and creator workflows. It is the first public-facing experiment under the 心行者 Mindhikers brand.",
-          href: "/en/golden-crucible",
-          ctaLabel: "Open product page",
-          meta: "First featured entry",
-        },
-      ],
-    },
-    projects: {
-      title: "Projects",
-      description:
-        "Beyond a single product, we are building the brand infrastructure that makes expression, collaboration, and publishing feel consistent.",
-      items: [
-        {
-          eyebrow: "Brand System",
-          title: "Bilingual homepage",
-          description:
-            "A light routing approach that gives Chinese and English their own clear entry points without heavy i18n overhead.",
-        },
-        {
-          eyebrow: "Content Flow",
-          title: "Content production workflow",
-          description:
-            "A more stable system for topic development, research, scripting, review, and delivery.",
-        },
-        {
-          eyebrow: "Distribution",
-          title: "Branded entry matrix",
-          description:
-            "A growing set of brand touchpoints across the homepage, product pages, and future distribution surfaces.",
-        },
-      ],
-    },
-    tools: {
-      title: "Tools",
-      description:
-        "Tools matter because they turn difficult work into something reusable, lower-friction, and durable.",
-      items: [
-        {
-          eyebrow: "Research",
-          title: "Structured research",
-          description: "Turn scattered inputs into a knowledge skeleton worth building on.",
-        },
-        {
-          eyebrow: "Script",
-          title: "Script and expression refinement",
-          description: "Shape ideas into outputs that are publishable, reusable, and reviewable.",
-        },
-        {
-          eyebrow: "Execution",
-          title: "Build-and-delivery coordination",
-          description: "Keep content planning, page delivery, and product entry points moving in one rhythm.",
-        },
-      ],
-    },
-    closing: {
-      title: "Build one complete entry point first, then grow the system around it.",
-      description:
-        "This is the first branded version of the 心行者 Mindhikers homepage. The goal is not volume. The goal is a calm, durable starting point.",
-      primaryAction: {
+        "Start with one concrete release at the center of the page, then let the broader system grow around it.",
+      headline:
+        "The middle of the homepage should feel like a live program block, not a spec sheet.",
+      featured: {
+        eyebrow: "Featured release",
+        title: "Golden Crucible",
+        description:
+          "The first product entry under Mindhikers, built around research, writing, expression, and creator workflows. It is both a page and a signal of where the brand is heading.",
         href: "/en/golden-crucible",
-        label: "Continue to Golden Crucible",
+        ctaLabel: "Open product page",
+        meta: "Live now",
       },
-      secondaryAction: {
-        href: "/",
-        label: "Open Chinese version",
+      items: [
+        {
+          eyebrow: "Brand system",
+          title: "Bilingual homepage structure",
+          description:
+            "A calm bilingual structure gives Chinese and English readers their own clear point of entry.",
+        },
+        {
+          eyebrow: "Content flow",
+          title: "Blog and research columns",
+          description:
+            "The homepage will gradually connect to writing and research so the site feels like a publication, not a frozen launch page.",
+        },
+        {
+          eyebrow: "Contact surface",
+          title: "Collaboration window",
+          description:
+            "Contact should feel natural and visible without breaking the visual rhythm of the homepage.",
+        },
+      ],
+    },
+    blog: {
+      title: "Blog",
+      description:
+        "Writing will sit closer to the front of the brand. The homepage surfaces a small selection, while the archive lives in the full blog.",
+      headline:
+        "Bring recent writing onto the homepage instead of hiding the thinking deeper in the site.",
+      cta: {
+        href: "/blog",
+        label: "Browse all posts",
       },
+      emptyLabel: "The first wave of writing is still being curated.",
+      readArticleLabel: "Read article",
+    },
+    contact: {
+      title: "Contact",
+      description:
+        "If you want to talk about brand, editorial systems, product experiments, or a more thoughtful corner of the internet, this is the cleanest place to start.",
+      headline:
+        "Let contact feel like a continuation of the page, not a mandatory form block at the bottom.",
+      emailLabel: "Email",
+      email: "contactmindhiker@gmail.com",
+      locationLabel: "Base",
+      location: "Shanghai / Remote",
+      availabilityLabel: "Open to",
+      availability: "Editorial collaboration, product experiments, thoughtful internet projects",
+      links: [
+        {
+          href: "mailto:contactmindhiker@gmail.com",
+          label: "Send email",
+          note: "The fastest way to start a conversation",
+        },
+        {
+          href: "/",
+          label: "Chinese home",
+          note: "Switch back to the Chinese entry",
+        },
+        {
+          href: "/blog",
+          label: "Recent writing",
+          note: "Start with the blog to understand the practice",
+        },
+      ],
     },
     productDetail: {
       eyebrow: "Featured Product",
