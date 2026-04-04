@@ -1,58 +1,64 @@
-🕐 Last updated: 2026-04-03 17:27
+🕐 Last updated: 2026-04-04 12:48
 🌿 Branch: codex/cyd-stumpel-home-exploration
 
 ## 交接入口
 
 - 工作目录：`/Users/luzhoua/Mindhikers/Mindhikers-Homepage`
 - Linear 主线：`MIN-110`
-- 今日日志：`docs/dev_logs/2026-04-03.md`
-- 执行方案：`docs/plans/2026-04-02_MIN-110_CMS_Operate_And_Homepage_Domain_Release_Plan.md`
+- 今日日志：`docs/dev_logs/2026-04-04.md`
+- 当前执行方案：`docs/plans/2026-04-04_MIN-110_WordPress_Template_Rebuild_Execution_Plan.md`
 
-## 当前状态（最终口径）
+## 当前状态（最新路线）
 
-1. Homepage 正式域名已上线：
-   - `https://mindhikers.com/` 为当前正式首页入口
-   - `https://www.mindhikers.com/` 已通过 Cloudflare Redirect Rule 永久跳转到根域
-2. CMS 管理链路保持可用：
-   - `https://homepage-manage.mindhikers.com/` 继续作为管理域名
-   - 当前 CMS 生产服务仍是 `WordPress-L1ta` + `MariaDB-94P8`
-3. CMS 内容基线已完成：
-   - `Homepage zh/en` 已按本地 seed 回灌
-   - 已确认乱码修复保持生效
-4. Railway 生产资源已收敛完成：
-   - 保留服务仅 3 个：`Mindhikers-Homepage`、`WordPress-L1ta`、`MariaDB-94P8`
-   - 保留 volume 仅 2 个：`mariadb-volume-x1on`、`wordpress-volume-vRzA`
-   - 旧服务与孤儿 volume 已清理完毕
+1. 正式域名状态保持不变：
+   - `https://mindhikers.com/` 已上线
+   - `https://www.mindhikers.com/` 已 301 到根域
+   - `https://homepage-manage.mindhikers.com/` 仍为当前管理域名
+2. 当前 Railway 生产资源仍保持收敛状态：
+   - 服务：`Mindhikers-Homepage`、`WordPress-L1ta`、`MariaDB-94P8`
+   - volumes：`mariadb-volume-x1on`、`wordpress-volume-vRzA`
+3. 已确认放弃继续演进当前 `Next.js + Headless WordPress + Homepage JSON 自定义后台` 方案
+4. 已确认新主线：
+   - 前台直接用 WordPress 模版渲染
+   - 后台直接用 WordPress 原生 GUI 管理
+   - 模版选择：`Astra - Interior Designer`
+5. 首轮首页范围固定为 5 个模块：
+   - `Hero`
+   - `About`
+   - `Product`
+   - `Blog`
+   - `Contact`
 
 ## 当前 WIP
 
-1. 将“域名已正式上线 + 生产资源已收敛”的结果写入日志并提交到仓库
-2. 后续窗口若继续发布，应围绕：
-   - 前台 smoke / revalidate
-   - canonical / OG 域名口径复核
-   - `WORDPRESS_API_URL` 生产值守与回滚演练
+1. 已完成详细重建计划文档
+2. 等待按新计划进入 staging 搭建与模版导入阶段
+3. 准备补齐本仓的黄金测试协议目录，让后续回归测试可外包
 
 ## 待解决问题
 
-1. 当前会话尚未执行 git 提交与推远；提交前需要按老杨流程再次确认
-2. 公开站的 canonical / OG / sitemap 等是否已完全统一到 `mindhikers.com`，仍建议单开一个核验窗口
-3. 若后续继续做 CMS 运营接管，需要补充正式 smoke 结果与值守记录
+1. 首轮语言策略尚未最终锁定：
+   - 先中文
+   - 或中英一起
+2. 新的 WordPress staging 环境尚未建立
+3. 当前仓库没有正式 `testing/` 协议目录，黄金测试还不能直接标准化接手
+4. 旧 Next.js 前台未来何时下线，尚未进入执行窗口
 
 ## 下一窗口直接做
 
-1. 先读本文件，不要再重复排查“域名是否已上线”
-2. 以当前事实为准继续工作：
-   - 正式首页域名：`mindhikers.com`
-   - `www` 只做跳转，不再作为主口径
-   - CMS 管理域名：`homepage-manage.mindhikers.com`
-3. 若要继续发布验证，优先做：
-   - `/`、`/en`、`/blog` 公开页 smoke
-   - `homepage-manage` 的 `wp-json` 对照
-   - revalidate 验证
-4. 不要恢复或重建已删除的旧 Railway 服务 / volumes
+1. 先读本文件，再读：
+   - `docs/plans/2026-04-04_MIN-110_WordPress_Template_Rebuild_Execution_Plan.md`
+2. 不要再回头补当前 Homepage JSON CMS
+3. 直接进入以下顺序：
+   - 建 WordPress staging
+   - 导入 `Astra - Interior Designer`
+   - 用 GUI 重建五区块首页
+   - 统一 Blog 到 WordPress Posts
+   - 补齐测试协议并接黄金测试
 
 ## 当前不要做的事
 
-1. 不要把已下线的 `Primary`、`mindhikers-cms-v2`、旧 `WordPress` / `MySQL` / `MariaDB` 重新接回生产
-2. 不要再把 `www.mindhikers.com` 当作主站正式口径
-3. 未做新一轮 smoke 前，不要声称 CMS 读取链路已完成最终验收
+1. 不要继续为当前 `Mindhikers Homepages` JSON 后台追加 GUI 功能
+2. 不要再把当前 Next.js 首页当作正式长期路线
+3. 不要在生产环境直接导入 WordPress 模版试错
+4. 不要在 Blog 方案上继续保留 `MDX + WordPress` 双来源作为长期状态
