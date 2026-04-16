@@ -1,0 +1,133 @@
+/* === MIN-110: WordPress Staging 品牌风格覆盖 CSS === */
+/* 目标：让 Astra 模板风格接近当前线上 mindhikers.com */
+
+/* --- 字体导入 --- */
+@import url('https://fonts.cdnfonts.com/css/cabinet-grotesk');
+@import url('https://fonts.cdnfonts.com/css/clash-display');
+
+/* --- 根变量定义 --- */
+:root {
+  /* 品牌色彩体系 */
+  --mh-background: #f9fafb;
+  --mh-foreground: #272a2f;
+  --mh-primary: #386652;
+  --mh-primary-foreground: #f9fafb;
+  --mh-border: #e2e3e5;
+  --mh-ring: #5e8473;
+  --mh-muted: #f4f5f7;
+  --mh-muted-foreground: #6b7280;
+
+  /* 字体体系 */
+  --mh-font-sans: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mh-font-display: 'Clash Display', Georgia, serif;
+}
+
+/* --- 全局背景与文字 --- */
+body {
+  background-color: var(--mh-background) !important;
+  color: var(--mh-foreground) !important;
+  font-family: var(--mh-font-sans) !important;
+}
+
+/* --- 标题字体覆盖 --- */
+h1, h2, h3, h4, h5, h6,
+.ast-site-title,
+.entry-title,
+.widget-title {
+  font-family: var(--mh-font-display) !important;
+  color: var(--mh-foreground) !important;
+}
+
+/* --- 主按钮样式 --- */
+.ast-button,
+.button,
+.wp-element-button,
+.elementor-button {
+  background-color: var(--mh-primary) !important;
+  color: var(--mh-primary-foreground) !important;
+  border-color: var(--mh-primary) !important;
+  font-family: var(--mh-font-sans) !important;
+}
+
+.ast-button:hover,
+.button:hover,
+.elementor-button:hover {
+  background-color: #2d5242 !important;
+  border-color: #2d5242 !important;
+}
+
+/* --- 链接样式 --- */
+a {
+  color: var(--mh-primary) !important;
+}
+
+a:hover {
+  color: #2d5242 !important;
+}
+
+/* --- Header 区域 --- */
+.site-header {
+  background-color: rgba(249, 250, 251, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid var(--mh-border) !important;
+}
+
+/* --- Footer 区域 --- */
+.site-footer {
+  background-color: var(--mh-background) !important;
+  border-top: 1px solid var(--mh-border) !important;
+}
+
+/* --- 卡片与容器 --- */
+.ast-article-post,
+.elementor-widget-container,
+.wp-block-group {
+  background-color: #ffffff !important;
+  border: 1px solid var(--mh-border) !important;
+  border-radius: 8px !important;
+}
+
+/* --- 导航菜单 --- */
+.main-header-menu .menu-link {
+  font-family: var(--mh-font-sans) !important;
+  color: var(--mh-foreground) !important;
+}
+
+.main-header-menu .menu-link:hover {
+  color: var(--mh-primary) !important;
+}
+
+/* --- Elementor 特定覆盖 --- */
+.elementor-heading-title {
+  font-family: var(--mh-font-display) !important;
+  color: var(--mh-foreground) !important;
+}
+
+.elementor-widget-text-editor {
+  font-family: var(--mh-font-sans) !important;
+  color: var(--mh-foreground) !important;
+}
+
+/* --- 表单元素 --- */
+input, textarea, select {
+  border-color: var(--mh-border) !important;
+  font-family: var(--mh-font-sans) !important;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--mh-ring) !important;
+  box-shadow: 0 0 0 2px rgba(56, 102, 82, 0.1) !important;
+}
+
+/* --- 分割线 --- */
+hr, .wp-block-separator {
+  border-color: var(--mh-border) !important;
+}
+
+/* --- 元信息文字 --- */
+.entry-meta,
+.post-meta,
+.ast-blog-meta {
+  color: var(--mh-muted-foreground) !important;
+  font-family: var(--mh-font-sans) !important;
+}

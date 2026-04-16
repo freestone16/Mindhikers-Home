@@ -1,0 +1,19 @@
+{
+  "request_id": "wp-staging-init-2026-04-05",
+  "date": "2026-04-05",
+  "target_env": "staging",
+  "status": "pass_with_followup",
+  "summary": "staging 已完成 WordPress 初始化、后台登录、Astra 激活和 Starter Templates 打开，但 Interior Designer 尚未完成最终导入。",
+  "evidence": [
+    "docs/testing_reports/requests/2026-04-05_wordpress_staging_init_request.md",
+    "docs/testing_reports/2026-04-05_wordpress_staging_init_report.md",
+    "docs/testing_artifacts/2026-04-05-wordpress-staging-dashboard.png",
+    "docs/testing_artifacts/2026-04-05-starter-templates-elementor.png"
+  ],
+  "next_actions": [
+    "导入 Astra Interior Designer",
+    "删除默认示例内容",
+    "开始首页五区块重建",
+    "按 A+ 清单迁入首批内容"
+  ]
+}

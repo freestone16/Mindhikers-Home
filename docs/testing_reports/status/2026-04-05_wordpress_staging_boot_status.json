@@ -1,0 +1,17 @@
+{
+  "request_id": "wp-staging-boot-2026-04-05",
+  "date": "2026-04-05",
+  "target_env": "staging",
+  "status": "partial_pass",
+  "summary": "staging 环境已创建且 WordPress Railway 域名可访问，但当前页面落在 WordPress 安装页，说明它是待初始化实例而非现成后台副本。",
+  "evidence": [
+    "docs/testing_reports/requests/2026-04-05_wordpress_staging_boot_request.md",
+    "docs/testing_reports/2026-04-05_wordpress_staging_boot_report.md",
+    "docs/testing_artifacts/2026-04-05-wordpress-staging-installation.png"
+  ],
+  "next_actions": [
+    "确认 staging 初始化策略",
+    "如走全新初始化，则继续后台初始化与模板导入",
+    "如不走全新初始化，则先补数据恢复策略"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "request_id": "gt-homepage-cms-linkage-2026-04-01",
+  "executed_at": "2026-04-01",
+  "status": "partial_pass",
+  "actual_model": "N/A - repository lacks formal OpenCode golden-testing protocol; executed via Codex + agent-browser fallback",
+  "browser_execution": "agent-browser",
+  "summary": "Homepage zh/en routes render correctly; local frontend CMS config and revalidate are now wired, but the candidate CMS endpoint still contains empty homepage payloads so the site continues to render fallback content."
+}

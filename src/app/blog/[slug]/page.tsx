@@ -1,22 +1,27 @@
-import { allPosts } from "content-collections";
+import { PostContent } from "@/components/blog/post-content";
 import { formatDate } from "@/lib/utils";
 import { DATA } from "@/data/resume";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { MDXContent } from "@content-collections/mdx/react";
-import { mdxComponents } from "@/mdx-components";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { sortPostsByPublishedDateDesc } from "@/lib/posts";
+import { getPostBySlug, listPostSlugs, listPosts } from "@/lib/cms";
 
-function getSortedPosts() {
-  return sortPostsByPublishedDateDesc(allPosts);
+function toAbsoluteImageUrl(imagePath: string) {
+  if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+    return imagePath;
+  }
+
+  return `${DATA.url}${imagePath.startsWith("/") ? imagePath : `/${imagePath}`}`;
+}
+
+function toIsoTimestamp(date: string) {
+  return new Date(`${date}T00:00:00.000Z`).toISOString();
 }
 
 export async function generateStaticParams() {
-  return allPosts.map((post) => ({
-    slug: post._meta.path.replace(/\.mdx$/, ""),
-  }));
+  const slugs = await listPostSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -27,18 +32,20 @@ export async function generateMetadata({
   }>;
 }): Promise<Metadata | undefined> {
   const { slug } = await params;
-  const post = allPosts.find((p) => p._meta.path.replace(/\.mdx$/, "") === slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     return undefined;
   }
 
-  let {
+  const {
     title,
     publishedAt: publishedTime,
     summary: description,
-    image,
+    coverImage,
   } = post;
+
+  const imageUrl = coverImage ? toAbsoluteImageUrl(coverImage) : undefined;
 
   return {
     title,
@@ -47,12 +54,12 @@ export async function generateMetadata({
       title,
       description,
       type: "article",
-      publishedTime,
+      publishedTime: toIsoTimestamp(publishedTime),
       url: `${DATA.url}/blog/${slug}`,
-      ...(image && {
+      ...(imageUrl && {
         images: [
           {
-            url: `${DATA.url}${image}`,
+            url: imageUrl,
           },
         ],
       }),
@@ -61,8 +68,8 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      ...(image && {
-        images: [`${DATA.url}${image}`],
+      ...(imageUrl && {
+        images: [imageUrl],
       }),
     },
   };
@@ -76,31 +83,27 @@ export default async function Blog({
   }>;
 }) {
   const { slug } = await params;
-  const sortedPosts = getSortedPosts();
+  const [post, sortedPosts] = await Promise.all([getPostBySlug(slug), listPosts()]);
   const currentIndex = sortedPosts.findIndex(
-    (p) => p._meta.path.replace(/\.mdx$/, "") === slug
+    (candidate) => candidate.slug === slug
   );
-  const post = sortedPosts[currentIndex];
 
-  if (!post) {
+  if (!post || currentIndex === -1) {
     notFound();
   }
 
   const previousPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 
-  const getSlug = (post: (typeof sortedPosts)[0]) =>
-    post._meta.path.replace(/\.mdx$/, "");
-
   const jsonLdContent = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
-    datePublished: post.publishedAt,
-    dateModified: post.publishedAt,
+    datePublished: toIsoTimestamp(post.publishedAt),
+    dateModified: toIsoTimestamp(post.updatedAt ?? post.publishedAt),
     description: post.summary,
-    image: post.image
-      ? `${DATA.url}${post.image}`
+    image: post.coverImage
+      ? toAbsoluteImageUrl(post.coverImage)
       : `${DATA.url}/blog/${slug}/opengraph-image`,
     url: `${DATA.url}/blog/${slug}`,
     author: {
@@ -144,14 +147,14 @@ export default async function Blog({
         />
       </div>
       <article className="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
-        <MDXContent code={post.mdx} components={mdxComponents} />
+        <PostContent post={post} />
       </article>
 
       <nav className="mt-12 pt-8 max-w-2xl">
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           {previousPost ? (
             <Link
-              href={`/blog/${getSlug(previousPost)}`}
+              href={`/blog/${previousPost.slug}`}
               className="group flex-1 flex flex-col gap-1 p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors"
             >
               <span className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -168,7 +171,7 @@ export default async function Blog({
 
           {nextPost ? (
             <Link
-              href={`/blog/${getSlug(nextPost)}`}
+              href={`/blog/${nextPost.slug}`}
               className="group flex-1 flex flex-col gap-1 p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors text-right"
             >
               <span className="flex items-center justify-end gap-1 text-xs text-muted-foreground">

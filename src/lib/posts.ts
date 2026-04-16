@@ -17,11 +17,22 @@ export function parsePublishedDate(date: string) {
   return new Date(`${date}T00:00:00.000Z`);
 }
 
+export function normalizePublishedDate(date: string | Date) {
+  const parsed = date instanceof Date ? date : new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) {
+    throw new Error(`Invalid date value: ${String(date)}`);
+  }
+
+  return parsed.toISOString().slice(0, 10);
+}
+
 type PostWithPublishedDate = {
   publishedAt: string;
-  _meta: {
+  _meta?: {
     path: string;
   };
+  slug?: string;
 };
 
 export function sortPostsByPublishedDateDesc<T extends PostWithPublishedDate>(posts: T[]) {
@@ -34,6 +45,8 @@ export function sortPostsByPublishedDateDesc<T extends PostWithPublishedDate>(po
       return timeDelta;
     }
 
-    return a._meta.path.localeCompare(b._meta.path);
+    const aTieBreaker = a._meta?.path ?? a.slug ?? "";
+    const bTieBreaker = b._meta?.path ?? b.slug ?? "";
+    return aTieBreaker.localeCompare(bTieBreaker);
   });
 }

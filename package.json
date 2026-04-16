@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "export:homepage-seeds": "esbuild ops/wordpress/export-homepage-seeds.ts --bundle --platform=node --format=cjs --outfile=/tmp/export-homepage-seeds.cjs && node /tmp/export-homepage-seeds.cjs"
   },
   "dependencies": {
     "@content-collections/mdx": "^0.2.2",
@@ -31,6 +32,7 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-markdown": "^10.1.0",
+    "sanitize-html": "^2.17.0",
     "rehype-pretty-code": "^0.14.1",
     "remark-gfm": "^4.0.1",
     "shiki": "^3.20.0",
@@ -43,6 +45,7 @@
     "@content-collections/core": "^0.13.1",
     "@content-collections/next": "^0.2.10",
     "@tailwindcss/typography": "^0.5.19",
+    "@types/sanitize-html": "^2.16.0",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",

@@ -1,0 +1,157 @@
+{
+  "locale": "en",
+  "metadata": {
+    "title": "心行者 Mindhikers",
+    "description": "心行者 Mindhikers is a bilingual brand home for product experiments, writing, and a quieter long-form creative practice."
+  },
+  "navigation": {
+    "brand": "心行者 Mindhikers",
+    "links": [
+      {
+        "href": "/en#about",
+        "label": "About"
+      },
+      {
+        "href": "/en#product",
+        "label": "Product"
+      },
+      {
+        "href": "/en#blog",
+        "label": "Blog"
+      },
+      {
+        "href": "/en#contact",
+        "label": "Contact"
+      }
+    ],
+    "switchLanguage": {
+      "href": "/",
+      "label": "中文"
+    }
+  },
+  "hero": {
+    "eyebrow": "Editorial homepage",
+    "title": "A brand home for research, products, and writing that still feels alive.",
+    "description": "心行者 Mindhikers is becoming a quieter but more expressive front page for long-form creation, product experiments, and the kind of internet work that benefits from rhythm, not clutter.",
+    "primaryAction": {
+      "href": "#product",
+      "label": "See the current product entry"
+    },
+    "secondaryAction": {
+      "href": "/blog",
+      "label": "Open the blog"
+    },
+    "highlights": [
+      "Bilingual entry point",
+      "Product experiments",
+      "Research and publishing"
+    ],
+    "statusLabel": "Current focus",
+    "statusValue": "Homepage refresh in progress",
+    "availabilityLabel": "Working rhythm",
+    "availabilityValue": "Research, build, write, publish",
+    "panelTitle": "Homepage blocks"
+  },
+  "about": {
+    "title": "About",
+    "intro": "心行者 Mindhikers is not meant to read like a resume page. It is a brand homepage for making, thinking, and publishing in public with more intention.",
+    "paragraphs": [
+      "The goal is to make room for product entries, recent writing, research threads, and future collaborations without collapsing everything into a single static summary.",
+      "This refresh leans toward the feeling of an actively edited studio homepage: sections behave like columns, entry points feel like programming blocks, and motion supports reading instead of distracting from it."
+    ],
+    "notes": [
+      "Remove the template-like self-introduction",
+      "Keep motion light but visible",
+      "Make product, blog, and contact pathways obvious"
+    ]
+  },
+  "product": {
+    "title": "Product",
+    "description": "Start with one concrete release at the center of the page, then let the broader system grow around it.",
+    "headline": "The middle of the homepage should feel like a live program block, not a spec sheet.",
+    "featured": {
+      "eyebrow": "Featured release",
+      "title": "Golden Crucible",
+      "description": "The first product entry under Mindhikers, built around research, writing, expression, and creator workflows. It is both a page and a signal of where the brand is heading.",
+      "href": "/en/golden-crucible",
+      "ctaLabel": "Open product page",
+      "meta": "Live now"
+    },
+    "items": [
+      {
+        "eyebrow": "Brand system",
+        "title": "Bilingual homepage structure",
+        "description": "A calm bilingual structure gives Chinese and English readers their own clear point of entry."
+      },
+      {
+        "eyebrow": "Content flow",
+        "title": "Blog and research columns",
+        "description": "The homepage will gradually connect to writing and research so the site feels like a publication, not a frozen launch page."
+      },
+      {
+        "eyebrow": "Contact surface",
+        "title": "Collaboration window",
+        "description": "Contact should feel natural and visible without breaking the visual rhythm of the homepage."
+      }
+    ]
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Writing will sit closer to the front of the brand. The homepage surfaces a small selection, while the archive lives in the full blog.",
+    "headline": "Bring recent writing onto the homepage instead of hiding the thinking deeper in the site.",
+    "cta": {
+      "href": "/blog",
+      "label": "Browse all posts"
+    },
+    "emptyLabel": "The first wave of writing is still being curated.",
+    "readArticleLabel": "Read article"
+  },
+  "contact": {
+    "title": "Contact",
+    "description": "If you want to talk about brand, editorial systems, product experiments, or a more thoughtful corner of the internet, this is the cleanest place to start.",
+    "headline": "Let contact feel like a continuation of the page, not a mandatory form block at the bottom.",
+    "emailLabel": "Email",
+    "email": "contactmindhiker@gmail.com",
+    "locationLabel": "Base",
+    "location": "Shanghai / Remote",
+    "availabilityLabel": "Open to",
+    "availability": "Editorial collaboration, product experiments, thoughtful internet projects",
+    "links": [
+      {
+        "href": "mailto:contactmindhiker@gmail.com",
+        "label": "Send email",
+        "note": "The fastest way to start a conversation"
+      },
+      {
+        "href": "/",
+        "label": "Chinese home",
+        "note": "Switch back to the Chinese entry"
+      },
+      {
+        "href": "/blog",
+        "label": "Recent writing",
+        "note": "Start with the blog to understand the practice"
+      }
+    ]
+  },
+  "productDetail": {
+    "eyebrow": "Featured Product",
+    "title": "Golden Crucible",
+    "summary": "Golden Crucible is the first public product entry under 心行者 Mindhikers, designed to hold early experiments around research, expression, and creator workflows.",
+    "bullets": [
+      "Organize research threads into durable topic assets",
+      "Turn expression work into reusable scripts and structures",
+      "Gradually shape creator workflows into productized tools"
+    ],
+    "stageLabel": "Current stage",
+    "stageValue": "The branded entry page is live first. More product detail and richer assets will follow.",
+    "returnHome": {
+      "href": "/en",
+      "label": "Back to homepage"
+    },
+    "switchLanguage": {
+      "href": "/golden-crucible",
+      "label": "查看中文版"
+    }
+  }
+}

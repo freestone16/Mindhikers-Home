@@ -1,0 +1,20 @@
+{
+  "request_id": "wp-staging-template-import-2026-04-05",
+  "date": "2026-04-05",
+  "target_env": "staging",
+  "status": "pass_with_followup",
+  "summary": "staging 已成功导入 Astra Interior Designer 模板，导入完成页显示 100%，公开首页也已切换到模板前台，但默认示例内容清理和五区块收敛还未完成。",
+  "evidence": [
+    "docs/testing_reports/requests/2026-04-05_wordpress_staging_template_import_request.md",
+    "docs/testing_reports/2026-04-05_wordpress_staging_template_import_report.md",
+    "docs/testing_artifacts/2026-04-05-interior-designer-detail-state-forced.png",
+    "docs/testing_artifacts/2026-04-05-interior-designer-import-complete.png",
+    "docs/testing_artifacts/2026-04-05-interior-designer-homepage-live.png"
+  ],
+  "next_actions": [
+    "删除默认示例内容",
+    "把模板首页收敛成五区块 Mindhikers 骨架",
+    "统一 Blog 到 WordPress Posts",
+    "补 staging smoke 后再做人工验收"
+  ]
+}

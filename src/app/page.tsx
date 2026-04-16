@@ -1,24 +1,18 @@
 import { HomePage } from "@/components/home-page";
-import { getHomeContent } from "@/data/site-content";
-import { allPosts } from "content-collections";
-import { sortPostsByPublishedDateDesc } from "@/lib/posts";
+import { getRecentPosts } from "@/lib/cms";
+import { getManagedHomeContent } from "@/lib/cms/homepage";
 import type { Metadata } from "next";
 
-const content = getHomeContent("zh");
-const recentPosts = sortPostsByPublishedDateDesc(allPosts)
-  .slice(0, 3)
-  .map((post) => ({
-    slug: post._meta.path.replace(/\.mdx$/, ""),
-    title: post.title,
-    publishedAt: post.publishedAt,
-    summary: post.summary,
-  }));
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getManagedHomeContent("zh");
+  return {
+    title: content.metadata.title,
+    description: content.metadata.description,
+  };
+}
 
-export const metadata: Metadata = {
-  title: content.metadata.title,
-  description: content.metadata.description,
-};
-
-export default function Page() {
+export default async function Page() {
+  const content = await getManagedHomeContent("zh");
+  const recentPosts = await getRecentPosts(3);
   return <HomePage content={content} recentPosts={recentPosts} />;
 }

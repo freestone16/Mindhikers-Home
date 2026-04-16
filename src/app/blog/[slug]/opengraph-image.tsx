@@ -1,11 +1,8 @@
  
-
 import { ImageResponse } from "next/og";
-import { allPosts } from "content-collections";
 import { DATA } from "@/data/resume";
-import { parsePublishedDate } from "@/lib/posts";
-
-export const runtime = "edge";
+import { getPostBySlug } from "@/lib/cms";
+import { formatDate } from "@/lib/utils";
 
 export const alt = "Blog Post";
 export const size = {
@@ -129,7 +126,7 @@ export default async function Image({
 }) {
     const fontData = await getFontData();
     const { slug } = await params;
-    const post = allPosts.find((p) => p._meta.path.replace(/\.mdx$/, "") === slug);
+    const post = await getPostBySlug(slug);
     const imageUrl = DATA.avatarUrl
         ? new URL(DATA.avatarUrl, DATA.url).toString()
         : undefined;
@@ -170,14 +167,7 @@ export default async function Image({
 
     const title = post.title;
     const description = post.summary || "";
-    const publishedDate = post.publishedAt
-        ? parsePublishedDate(post.publishedAt).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            timeZone: "UTC",
-        })
-        : "";
+    const publishedDate = post.publishedAt ? formatDate(post.publishedAt) : "";
 
     return new ImageResponse(
         (
