@@ -18,9 +18,9 @@ add_action('after_setup_theme', static function (): void {
 require_once __DIR__ . '/lib/carbon-fields.php';
 
 /**
- * Override Astra Header Builder button text for English pages
+ * Override Chinese text for English pages via output buffering
  */
-add_action('wp_head', static function (): void {
+add_action('template_redirect', static function (): void {
     if (!function_exists('pll_current_language')) {
         return;
     }
@@ -28,16 +28,24 @@ add_action('wp_head', static function (): void {
     if ($lang !== 'en') {
         return;
     }
-    ?>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var buttons = document.querySelectorAll('.ast-custom-button, .menu-link');
-        buttons.forEach(function(btn) {
-            if (btn.textContent.trim() === '开始联系') {
-                btn.textContent = 'Get in Touch';
-            }
-        });
+    ob_start(static function (string $buffer): string {
+        $replacements = [
+            '开始联系' => 'Get in Touch',
+            'aria-label="开始联系"' => 'aria-label="Get in Touch"',
+            '联系方式' => 'Contact',
+            '所在' => 'Location',
+            '心行者 Mindhikers Staging' => 'MindHikers',
+            '心行者 Mindhikers' => 'MindHikers',
+            '心行者 MindHikers' => 'MindHikers',
+            'Welcome to 心行者 MindHikers' => 'Welcome to MindHikers',
+            '版权所有 © 2026 心行者 Mindhikers Staging' => 'Copyright © 2026 MindHikers',
+        ];
+        return str_replace(array_keys($replacements), array_values($replacements), $buffer);
     });
-    </script>
-    <?php
 });
+
+add_action('shutdown', static function (): void {
+    if (ob_get_level() > 0) {
+        ob_end_flush();
+    }
+}, 0);
