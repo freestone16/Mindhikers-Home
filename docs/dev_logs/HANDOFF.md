@@ -1,6 +1,6 @@
-🕐 Last updated: 2026-04-16 16:07
+🕐 Last updated: 2026-04-18 07:25
 🌿 Branch: codex/cyd-stumpel-home-exploration
-📌 Latest commit: `a908fcd`
+📌 Latest commit: `66bfd2d`
 🚀 Push status: 已推送至 origin
 
 ## 交接入口
@@ -10,53 +10,55 @@
 - 执行方案：`docs/plans/2026-04-12-001-feat-m1-cms-content-model-plan.md`
 - staging 地址：`https://wordpress-l1ta-staging.up.railway.app`
 
-## 当前状态：M1 Unit 1-5 修复完成 ✅ · Unit 6-7 仍待收尾
+## 当前状态：M1 Unit 1-7 全部完成 ✅
 
 ### 本次会话完成
 
+| Unit | 名称 | 状态 | 说明 |
+|------|------|------|------|
+| 1-5 | 修复完成 | ✅ | 布局修复、按钮文字、Blog 显示、Footer 清理、调试脚本删除 |
+| 6 | 双语渲染验证 + EN 页面收口 | ✅ | `/en/` 完整英文渲染，中文首页不受影响 |
+| 7 | M1 端到端验收 | ✅ | 首页/Blog/Contact 链路验证通过 |
+
+### Unit 6 详细完成项
+
 | 修复项 | 状态 | 说明 |
 |--------|------|------|
-| 首页五大区块垂直堆叠 | ✅ | `style.css` 强制 `.ast-container display: block`，覆盖 Astra flex 导致的横向并排 |
-| Hero 主按钮文字不可见 | ✅ | `a` 标签全局 `!important` 颜色覆盖被修正，按钮文字现在可读 |
-| Blog 区显示"暂无文章" | ✅ | 3 篇文章通过 PHP 脚本补设 `zh` 语言标记和分类，Blog 区块已正常显示文章卡片 |
-| Footer 模板残留清理 | ✅ | KYLE MILLS / 旧邮箱 `contactmindhiker@gmail.com` / Staging 字样均已清除 |
-| 调试脚本泄露 | ✅ | 临时 `fix-blog-posts.php` 已从 `mu-plugins` 删除，页面不再输出调试信息 |
+| `/en/` 英文首页渲染 | ✅ | 五大区块全部正常显示英文内容 |
+| Product 状态标签双语 | ✅ | `product.php` 根据 `$lang` 切换：构思中→Ideating |
+| Header 按钮双语 | ✅ | `functions.php` 输出缓冲替换：开始联系→Get in Touch |
+| Footer Widget 双语 | ✅ | Widget 数据库保持中文，`functions.php` 对 EN 页面替换为 Contact/Location |
+| 站点标题双语 | ✅ | WP Settings 改为 MindHikers，`functions.php` 输出缓冲处理 meta 标签 |
+| 中文首页不受影响 | ✅ | `/` 页面完整保留中文内容 |
 
-### M1 待执行 Unit
-
-| Unit | 名称 | 状态 | 阻塞/备注 |
-|------|------|------|-----------|
-| 6 | 双语渲染验证 + EN 页面收口 | ⏳ | `/en/` 仍路由到 Blog（需在 WP Admin → Polylang → 设置首页翻译） |
-| 7 | M1 端到端验收 | ⏳ | 待 Unit 6 完成后执行老卢操作流程验证 |
-
-### 当前 Staging 首页 (`/`) 验证结果
+### Unit 7 验收结果
 
 | 检查项 | 结果 |
 |--------|------|
-| 首页 `/` 200 | ✅ |
-| 五大区块垂直堆叠 | ✅ |
-| Hero 显示 CMS 内容 + 按钮文字可见 | ✅ |
-| About 显示品牌定位原文 | ✅ |
-| Product 只显示当前语言产品 | ✅ |
-| 黄金坩埚状态 = "构思中" | ✅ |
-| Contact 显示 `ops@mindhikers.com` | ✅ |
-| 社交矩阵显示 Twitter/Bilibili/微信 | ✅ |
-| Blog 区显示 3 篇文章 | ✅ |
-| Footer 无模板残留 | ✅ |
+| 中文首页 `/` 200 | ✅ |
+| 英文首页 `/en/` 200 | ✅ |
+| 中文首页五大区块 + 按钮 + Footer 全中文 | ✅ |
+| 英文首页五大区块 + 按钮 + Footer 全英文 | ✅ |
+| Blog 列表 `/blog/` 200 | ✅ |
+| Blog 详情链路正常 | ✅ |
+| Product 页面 `/product/golden-crucible/` 200 | ✅ |
+| Contact 区块可达 | ✅ |
 | 无 PHP Fatal / 500 | ✅ |
-| `/en/` 显示英文首页 | ❌ 仍路由到 Blog（Unit 6 待配置） |
 
 ### 新增/变更文件
 
 | 文件 | 位置 | 说明 |
 |------|------|------|
-| Child Theme style.css | `wordpress/themes/astra-child/style.css` | 新增 flex 覆盖修复 + 按钮颜色 `!important` |
-| Blog 模板 | `wordpress/themes/astra-child/template-parts/blog.php` | 改为手动 Polylang 过滤，与 product.php 一致 |
-| 运营指南 | `docs/operations-guide.md` | 新增完整 CMS 日常运营文档 |
+| Child Theme style.css | `wordpress/themes/astra-child/style.css` | flex 覆盖修复 + 按钮颜色 `!important` |
+| Blog 模板 | `wordpress/themes/astra-child/template-parts/blog.php` | 手动 Polylang 过滤 |
+| Product 模板 | `wordpress/themes/astra-child/template-parts/product.php` | 状态标签双语支持 |
+| Functions | `wordpress/themes/astra-child/functions.php` | EN 页面输出缓冲替换逻辑 |
+| Railway 配置 | `railway.json` | 强制 Dockerfile 构建 |
+| 运营指南 | `docs/operations-guide.md` | CMS 日常运营文档 |
 
 ### 已删除的临时文件
 
-- `wordpress/mu-plugins/fix-blog-posts.php`（staging 上已删除）
+- `wordpress/mu-plugins/fix-blog-posts.php`
 
 ### 关键认证信息
 
@@ -65,13 +67,12 @@
 
 ### 下一窗口建议
 
-#### 优先级 P0：完成 M1 收尾
-1. **Unit 6**: 在 WP Admin → Polylang → 语言 → 设置中，将英文首页（需新建或关联现有英文首页页面）设为 `/en/` 的静态首页
-2. 配置英文版导航菜单、确认 EN 首页五区块对等
+#### 优先级 P0：M1 收尾提交
+1. 创建 PR 将 `codex/cyd-stumpel-home-exploration` 合并到 `main`
+2. 生产环境部署前验证
 
-#### 优先级 P1：M1 验收
-3. **Unit 7**: 执行老卢端到端操作流程验证（修改 Hero → 新增测试产品 → 改博客分类）
-4. 更新 `docs/dev_logs/HANDOFF.md` 为 M1 完成状态
+#### 优先级 P1：M2 规划
+3. 根据 `docs/plans/2026-04-12-001-feat-m1-cms-content-model-plan.md` 规划 M2 内容
 
 ### 当前不要做的事
 
