@@ -49,14 +49,22 @@ if ($products->have_posts()) {
                     setup_postdata($product_post);
                     $subtitle = carbon_get_the_post_meta('product_subtitle');
                     $status = carbon_get_the_post_meta('product_status');
-                    $status_label = match ($status) {
-                        'idea' => __('构思中', 'mindhikers-astra-child'),
-                        'dev' => __('开发中', 'mindhikers-astra-child'),
-                        'beta' => __('公测', 'mindhikers-astra-child'),
-                        'live' => __('正式发布', 'mindhikers-astra-child'),
-                        'sunset' => __('已下线', 'mindhikers-astra-child'),
-                        default => '',
-                    };
+                    $status_labels_zh = [
+                        'idea' => '构思中',
+                        'dev' => '开发中',
+                        'beta' => '公测',
+                        'live' => '正式发布',
+                        'sunset' => '已下线',
+                    ];
+                    $status_labels_en = [
+                        'idea' => 'Ideating',
+                        'dev' => 'In Development',
+                        'beta' => 'Public Beta',
+                        'live' => 'Live',
+                        'sunset' => 'Sunset',
+                    ];
+                    $status_map = $lang === 'en' ? $status_labels_en : $status_labels_zh;
+                    $status_label = $status_map[$status] ?? '';
                     $entry_url = carbon_get_the_post_meta('product_entry_url');
                     ?>
                     
