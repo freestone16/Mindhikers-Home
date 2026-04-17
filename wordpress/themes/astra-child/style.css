@@ -147,6 +147,26 @@ hr, .wp-block-separator {
 
 /* --- M1 首页区块样式（Unit 5 细化） --- */
 
+/* 强制首页五大区块垂直堆叠（修复 Astra flex/grid 布局导致的横向并排） */
+.mh-hero-section,
+.mh-about-section,
+.mh-product-section,
+.mh-blog-section,
+.mh-contact-section {
+  width: 100% !important;
+  display: block !important;
+  clear: both;
+  box-sizing: border-box;
+}
+
+/* Astra 内容区 .ast-container 在首页被设为 display: flex，导致区块并排 */
+.home #content > .ast-container,
+.page-template-front-page #content > .ast-container {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 /* Hero Section */
 .mh-hero-section {
   padding: 80px 0;
@@ -199,23 +219,23 @@ hr, .wp-block-separator {
 
 .mh-hero-cta-primary {
   background-color: var(--mh-primary);
-  color: var(--mh-primary-foreground);
+  color: var(--mh-primary-foreground) !important;
 }
 
 .mh-hero-cta-primary:hover {
   background-color: #2d5242;
-  color: var(--mh-primary-foreground);
+  color: var(--mh-primary-foreground) !important;
 }
 
 .mh-hero-cta-secondary {
   background-color: transparent;
-  color: var(--mh-primary);
+  color: var(--mh-primary) !important;
   border: 2px solid var(--mh-primary);
 }
 
 .mh-hero-cta-secondary:hover {
   background-color: var(--mh-primary);
-  color: var(--mh-primary-foreground);
+  color: var(--mh-primary-foreground) !important;
 }
 
 /* About Section */
