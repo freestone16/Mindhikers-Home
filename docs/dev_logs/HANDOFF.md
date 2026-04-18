@@ -1,6 +1,6 @@
-🕐 Last updated: 2026-04-18 07:25
-🌿 Branch: codex/cyd-stumpel-home-exploration
-📌 Latest commit: `66bfd2d`
+🕐 Last updated: 2026-04-18 08:30
+🌿 Branch: main（已合并）
+📌 Latest commit: `ef5a140`
 🚀 Push status: 已推送至 origin
 
 ## 交接入口
@@ -10,7 +10,7 @@
 - 执行方案：`docs/plans/2026-04-12-001-feat-m1-cms-content-model-plan.md`
 - staging 地址：`https://wordpress-l1ta-staging.up.railway.app`
 
-## 当前状态：M1 Unit 1-7 全部完成 ✅
+## 当前状态：M1 已完成并合并到 main ✅
 
 ### 本次会话完成
 
@@ -67,12 +67,11 @@
 
 ### 下一窗口建议
 
-#### 优先级 P0：M1 收尾提交
-1. 创建 PR 将 `codex/cyd-stumpel-home-exploration` 合并到 `main`
-2. 生产环境部署前验证
+#### 优先级 P0：已完成 ✅
+1. ~~创建 PR 将 `codex/cyd-stumpel-home-exploration` 合并到 `main`~~ ✅ 已完成（直接合并）
 
-#### 优先级 P1：M2 规划
-3. 根据 `docs/plans/2026-04-12-001-feat-m1-cms-content-model-plan.md` 规划 M2 内容
+#### 优先级 P1：M2 规划（下一步）
+2. 根据 `docs/plans/2026-04-12-001-feat-m1-cms-content-model-plan.md` 规划 M2 内容
 
 ### 当前不要做的事
 
