@@ -10,7 +10,11 @@
 - 执行方案：`docs/plans/2026-04-12-001-feat-m1-cms-content-model-plan.md`
 - staging 地址：`https://wordpress-l1ta-staging.up.railway.app`
 
-## 当前状态：M1 已完成并合并到 main ✅
+## 当前状态：M1 后台数据层已完成，前端视觉还原未开始 🔴
+
+> ⚠️ **重要**：M1 只完成了 CMS 数据模型（字段 + 读写逻辑），前台视觉效果非常简陋，与 production 差距巨大。
+> 
+> 详见：`docs/dev_logs/M1_REVIEW_FOR_EXPERT.md`（为外部专家审查准备的完整问题清单）
 
 ### 本次会话完成
 
@@ -70,8 +74,16 @@
 #### 优先级 P0：已完成 ✅
 1. ~~创建 PR 将 `codex/cyd-stumpel-home-exploration` 合并到 `main`~~ ✅ 已完成（直接合并）
 
-#### 优先级 P1：M2 规划（下一步）
-2. 根据 `docs/plans/2026-04-12-001-feat-m1-cms-content-model-plan.md` 规划 M2 内容
+#### 优先级 P0：前端视觉还原（当前 blocker）
+2. 方案选择：
+   - A. 套现成 Astra Starter Template（最快，几小时到 1 天）
+   - B. 重写前端模板 + CSS（最符合初衷，3-5 天）
+3. 等待外部专家审查后决策
+
+#### 优先级 P1：其他遗留问题
+4. Logo 配置、导航完善、右侧信息面板
+5. 运营手册修订
+6. 生产部署
 
 ### 当前不要做的事
 
