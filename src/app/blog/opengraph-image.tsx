@@ -106,69 +106,57 @@ const styles = {
 } as const;
 
 export default async function Image() {
-    try {
-        const fontData = await getFontData();
-        const title = "Blog";
-        const description = "Thoughts on software development, life, and more.";
-        const imageUrl = DATA.avatarUrl
-            ? new URL(DATA.avatarUrl, DATA.url).toString()
-            : undefined;
+    const fontData = await getFontData();
+    const title = "Blog";
+    const description = "Thoughts on software development, life, and more.";
+    const imageUrl = DATA.avatarUrl
+        ? new URL(DATA.avatarUrl, DATA.url).toString()
+        : undefined;
 
-        return new ImageResponse(
-            (
-                <div style={styles.outerWrapper}>
-                    <div style={styles.middleWrapper}>
-                        <div style={styles.wrapper}>
-                            {imageUrl && (
-                                <div style={styles.imageSection}>
-                                    <img src={imageUrl} alt="Blog" style={styles.image} />
-                                </div>
-                            )}
-                            <div style={styles.mainContainer}>
-                                <div style={styles.title}>{title}</div>
-                                {description && (
-                                    <div style={styles.description}>{description}</div>
-                                )}
+    return new ImageResponse(
+        (
+            <div style={styles.outerWrapper}>
+                <div style={styles.middleWrapper}>
+                    <div style={styles.wrapper}>
+                        {imageUrl && (
+                            <div style={styles.imageSection}>
+                                <img src={imageUrl} alt="Blog" style={styles.image} />
                             </div>
+                        )}
+                        <div style={styles.mainContainer}>
+                            <div style={styles.title}>{title}</div>
+                            {description && (
+                                <div style={styles.description}>{description}</div>
+                            )}
                         </div>
                     </div>
                 </div>
-            ),
-            {
-                ...size,
-                fonts: fontData
-                    ? [
-                        {
-                            name: "Cabinet Grotesk",
-                            data: fontData.cabinetGrotesk,
-                            weight: 400,
-                            style: "normal",
-                        },
-                        {
-                            name: "Cabinet Grotesk",
-                            data: fontData.cabinetGrotesk,
-                            weight: 700,
-                            style: "normal",
-                        },
-                        {
-                            name: "Clash Display",
-                            data: fontData.clashDisplay,
-                            weight: 600,
-                            style: "normal",
-                        },
-                    ]
-                    : undefined,
-            }
-        );
-    } catch (error) {
-        console.error("Error generating OpenGraph image:", error);
-        return new Response(
-            `Failed to generate image: ${error instanceof Error ? error.message : "Unknown error"}`,
-            {
-                status: 500,
-            }
-        );
-    }
+            </div>
+        ),
+        {
+            ...size,
+            fonts: fontData
+                ? [
+                    {
+                        name: "Cabinet Grotesk",
+                        data: fontData.cabinetGrotesk,
+                        weight: 400,
+                        style: "normal",
+                    },
+                    {
+                        name: "Cabinet Grotesk",
+                        data: fontData.cabinetGrotesk,
+                        weight: 700,
+                        style: "normal",
+                    },
+                    {
+                        name: "Clash Display",
+                        data: fontData.clashDisplay,
+                        weight: 600,
+                        style: "normal",
+                    },
+                ]
+                : undefined,
+        }
+    );
 }
-
-

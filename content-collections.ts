@@ -3,6 +3,7 @@ import { compileMDX } from "@content-collections/mdx";
 import remarkGfm from "remark-gfm";
 import { z } from "zod";
 import { remarkCodeMeta } from "./src/lib/remark-code-meta";
+import { isValidPublishedDate } from "./src/lib/posts";
 
 const posts = defineCollection({
     name: "posts",
@@ -10,8 +11,15 @@ const posts = defineCollection({
     include: "**/*.mdx",
     schema: z.object({
         title: z.string(),
-        publishedAt: z.string(),
-        updatedAt: z.string().optional(),
+        publishedAt: z.string().refine(isValidPublishedDate, {
+            message: "publishedAt must use YYYY-MM-DD format",
+        }),
+        updatedAt: z
+            .string()
+            .refine(isValidPublishedDate, {
+                message: "updatedAt must use YYYY-MM-DD format",
+            })
+            .optional(),
         author: z.string().optional(),
         summary: z.string(),
         image: z.string().optional(),
@@ -31,4 +39,3 @@ const posts = defineCollection({
 export default defineConfig({
     collections: [posts],
 });
-

@@ -1,10 +1,8 @@
  
-
 import { ImageResponse } from "next/og";
-import { allPosts } from "content-collections";
 import { DATA } from "@/data/resume";
-
-export const runtime = "edge";
+import { getPostBySlug } from "@/lib/cms";
+import { formatDate } from "@/lib/utils";
 
 export const alt = "Blog Post";
 export const size = {
@@ -126,59 +124,14 @@ export default async function Image({
 }: {
     params: Promise<{ slug: string }>;
 }) {
-    try {
-        const fontData = await getFontData();
-        const { slug } = await params;
-        const post = allPosts.find((p) => p._meta.path.replace(/\.mdx$/, "") === slug);
-        const imageUrl = DATA.avatarUrl
-            ? new URL(DATA.avatarUrl, DATA.url).toString()
-            : undefined;
+    const fontData = await getFontData();
+    const { slug } = await params;
+    const post = await getPostBySlug(slug);
+    const imageUrl = DATA.avatarUrl
+        ? new URL(DATA.avatarUrl, DATA.url).toString()
+        : undefined;
 
-        if (!post) {
-            return new ImageResponse(
-                (
-                    <div style={styles.outerWrapper}>
-                        <div style={styles.middleWrapper}>
-                            <div style={styles.wrapper}>
-                                {imageUrl && (
-                                    <div style={styles.imageSection}>
-                                        <img src={imageUrl} alt="Blog Post" style={styles.image} />
-                                    </div>
-                                )}
-                                <div style={styles.mainContainer}>
-                                    <div style={styles.title}>Post Not Found</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ),
-                {
-                    ...size,
-                    fonts: fontData
-                        ? [
-                            {
-                                name: "Clash Display",
-                                data: fontData.clashDisplay,
-                                weight: 600,
-                                style: "normal",
-                            },
-                        ]
-                        : undefined,
-                }
-            );
-        }
-
-        const title = post.title;
-        const description = post.summary || "";
-        const publishedDate = post.publishedAt
-            ? new Date(post.publishedAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                timeZone: "UTC",
-            })
-            : "";
-
+    if (!post) {
         return new ImageResponse(
             (
                 <div style={styles.outerWrapper}>
@@ -186,15 +139,11 @@ export default async function Image({
                         <div style={styles.wrapper}>
                             {imageUrl && (
                                 <div style={styles.imageSection}>
-                                    <img src={imageUrl} alt={title} style={styles.image} />
+                                    <img src={imageUrl} alt="Blog Post" style={styles.image} />
                                 </div>
                             )}
                             <div style={styles.mainContainer}>
-                                <div style={styles.title}>{title}</div>
-                                {description && (
-                                    <div style={styles.description}>{description}</div>
-                                )}
-                                {publishedDate && <div style={styles.date}>{publishedDate}</div>}
+                                <div style={styles.title}>Post Not Found</div>
                             </div>
                         </div>
                     </div>
@@ -205,18 +154,6 @@ export default async function Image({
                 fonts: fontData
                     ? [
                         {
-                            name: "Cabinet Grotesk",
-                            data: fontData.cabinetGrotesk,
-                            weight: 400,
-                            style: "normal",
-                        },
-                        {
-                            name: "Cabinet Grotesk",
-                            data: fontData.cabinetGrotesk,
-                            weight: 700,
-                            style: "normal",
-                        },
-                        {
                             name: "Clash Display",
                             data: fontData.clashDisplay,
                             weight: 600,
@@ -226,15 +163,57 @@ export default async function Image({
                     : undefined,
             }
         );
-    } catch (error) {
-        console.error("Error generating OpenGraph image:", error);
-        return new Response(
-            `Failed to generate image: ${error instanceof Error ? error.message : "Unknown error"}`,
-            {
-                status: 500,
-            }
-        );
     }
+
+    const title = post.title;
+    const description = post.summary || "";
+    const publishedDate = post.publishedAt ? formatDate(post.publishedAt) : "";
+
+    return new ImageResponse(
+        (
+            <div style={styles.outerWrapper}>
+                <div style={styles.middleWrapper}>
+                    <div style={styles.wrapper}>
+                        {imageUrl && (
+                            <div style={styles.imageSection}>
+                                <img src={imageUrl} alt={title} style={styles.image} />
+                            </div>
+                        )}
+                        <div style={styles.mainContainer}>
+                            <div style={styles.title}>{title}</div>
+                            {description && (
+                                <div style={styles.description}>{description}</div>
+                            )}
+                            {publishedDate && <div style={styles.date}>{publishedDate}</div>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ),
+        {
+            ...size,
+            fonts: fontData
+                ? [
+                    {
+                        name: "Cabinet Grotesk",
+                        data: fontData.cabinetGrotesk,
+                        weight: 400,
+                        style: "normal",
+                    },
+                    {
+                        name: "Cabinet Grotesk",
+                        data: fontData.cabinetGrotesk,
+                        weight: 700,
+                        style: "normal",
+                    },
+                    {
+                        name: "Clash Display",
+                        data: fontData.clashDisplay,
+                        weight: 600,
+                        style: "normal",
+                    },
+                ]
+                : undefined,
+        }
+    );
 }
-
-

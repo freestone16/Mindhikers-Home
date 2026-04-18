@@ -14,6 +14,25 @@ function extractLanguage(className?: string): string {
   return match ? match[1] : "plaintext";
 }
 
+function sanitizeShikiHtml(html: string) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  doc.querySelectorAll("script, style, iframe, object, embed, link, meta").forEach((node) => {
+    node.remove();
+  });
+
+  doc.querySelectorAll("*").forEach((element) => {
+    for (const attribute of Array.from(element.attributes)) {
+      if (attribute.name.toLowerCase().startsWith("on")) {
+        element.removeAttribute(attribute.name);
+      }
+    }
+  });
+
+  return doc.querySelector("code")?.innerHTML ?? "";
+}
+
 export function CodeBlock({ children, ...props }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const [{ html, className, title }, setRenderState] = useState<{
@@ -42,10 +61,10 @@ export function CodeBlock({ children, ...props }: CodeBlockProps) {
       defaultColor: false,
     })
       .then((html) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
         setRenderState({
-          html: doc.querySelector("code")?.innerHTML ?? "",
+          // MDX content is repository-controlled, but we still strip unexpected nodes/handlers
+          // before injecting the Shiki HTML into the page.
+          html: sanitizeShikiHtml(html),
           className: nextClassName,
           title: nextTitle,
         });
@@ -107,4 +126,3 @@ export function CodeBlock({ children, ...props }: CodeBlockProps) {
     </div >
   );
 }
-

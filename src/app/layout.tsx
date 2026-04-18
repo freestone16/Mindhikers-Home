@@ -70,7 +70,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light">
           <Navbar />
-          <div className="relative z-10 mx-auto max-w-5xl px-5 pb-20 pt-[4.6rem] sm:px-6 sm:pt-[5rem]">
+          <div className="relative z-10 mx-auto max-w-6xl px-5 pb-20 pt-[4.8rem] sm:px-6 sm:pt-[5.2rem]">
             {children}
           </div>
         </ThemeProvider>

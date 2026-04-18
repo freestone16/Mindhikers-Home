@@ -1,14 +1,18 @@
 import { HomePage } from "@/components/home-page";
-import { getHomeContent } from "@/data/site-content";
+import { getRecentPosts } from "@/lib/cms";
+import { getManagedHomeContent } from "@/lib/cms/homepage";
 import type { Metadata } from "next";
 
-const content = getHomeContent("en");
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getManagedHomeContent("en");
+  return {
+    title: content.metadata.title,
+    description: content.metadata.description,
+  };
+}
 
-export const metadata: Metadata = {
-  title: content.metadata.title,
-  description: content.metadata.description,
-};
-
-export default function EnglishPage() {
-  return <HomePage content={content} />;
+export default async function EnglishPage() {
+  const content = await getManagedHomeContent("en");
+  const recentPosts = await getRecentPosts(3);
+  return <HomePage content={content} recentPosts={recentPosts} />;
 }

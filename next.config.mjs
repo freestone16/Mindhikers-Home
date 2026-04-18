@@ -3,6 +3,20 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const isDevelopment = process.env.NODE_ENV !== "production";
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "form-action 'self' mailto:",
+  "img-src 'self' data: blob: https://images.unsplash.com",
+  "font-src 'self' data:",
+  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
+  "style-src 'self' 'unsafe-inline'",
+  "connect-src 'self' https: ws: wss:",
+  "media-src 'self' https:",
+].join("; ");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -30,6 +44,10 @@ const nextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: contentSecurityPolicy,
           },
         ],
       },

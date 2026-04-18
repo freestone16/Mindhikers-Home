@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.9.0"
   },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "export:homepage-seeds": "esbuild ops/wordpress/export-homepage-seeds.ts --bundle --platform=node --format=cjs --outfile=/tmp/export-homepage-seeds.cjs && node /tmp/export-homepage-seeds.cjs"
   },
   "dependencies": {
     "@content-collections/mdx": "^0.2.2",
@@ -26,11 +27,12 @@
     "content-collections": "^0.2.1",
     "lucide-react": "^0.562.0",
     "motion": "^12.23.27",
-    "next": "16.1.1",
+    "next": "16.1.7",
     "next-themes": "^0.4.6",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-markdown": "^10.1.0",
+    "sanitize-html": "^2.17.0",
     "rehype-pretty-code": "^0.14.1",
     "remark-gfm": "^4.0.1",
     "shiki": "^3.20.0",
@@ -43,13 +45,21 @@
     "@content-collections/core": "^0.13.1",
     "@content-collections/next": "^0.2.10",
     "@tailwindcss/typography": "^0.5.19",
+    "@types/sanitize-html": "^2.16.0",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.2",
-    "eslint-config-next": "16.1.1",
+    "eslint-config-next": "16.1.7",
     "postcss": "^8.5.6",
     "typescript": "^5.9.3",
     "zod": "^4.3.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "picomatch": "4.0.4",
+      "serialize-javascript": "7.0.3",
+      "yaml": "2.8.3"
+    }
   }
 }

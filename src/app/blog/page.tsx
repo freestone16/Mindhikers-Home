@@ -1,5 +1,5 @@
 import BlurFade from "@/components/magicui/blur-fade";
-import { allPosts } from "content-collections";
+import { listPosts } from "@/lib/cms";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { paginate, normalizePage } from "@/lib/pagination";
@@ -28,14 +28,7 @@ export default async function BlogPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: pageParam } = await searchParams;
-
-  const posts = allPosts;
-  const sortedPosts = [...posts].sort((a, b) => {
-    if (new Date(a.publishedAt) > new Date(b.publishedAt)) {
-      return -1;
-    }
-    return 1;
-  });
+  const sortedPosts = await listPosts();
 
   const totalPages = Math.ceil(sortedPosts.length / PAGE_SIZE);
   const currentPage = normalizePage(pageParam, totalPages);
@@ -58,13 +51,12 @@ export default async function BlogPage({
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <div className="flex flex-col gap-5">
               {paginatedPosts.map((post, id) => {
-                const slug = post._meta.path.replace(/\.mdx$/, "");
                 const indexNumber = (pagination.page - 1) * PAGE_SIZE + id + 1;
                 return (
-                  <BlurFade delay={BLUR_FADE_DELAY * 3 + id * 0.05} key={slug}>
+                  <BlurFade delay={BLUR_FADE_DELAY * 3 + id * 0.05} key={post.slug}>
                     <Link
                       className="flex items-start gap-x-2 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                      href={`/blog/${slug}`}
+                      href={`/blog/${post.slug}`}
                     >
                       <span className="text-xs font-mono tabular-nums font-medium mt-[5px]">
                         {String(indexNumber).padStart(2, "0")}.
