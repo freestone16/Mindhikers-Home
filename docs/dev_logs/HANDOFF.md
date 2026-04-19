@@ -1,4 +1,4 @@
-🕐 Last updated: 2026-04-19 19:30
+🕐 Last updated: 2026-04-19 20:45
 🌿 Branch: feat/m1r-headless-pivot（本次优化分支，未合并 main）
 📌 Base commit: `bb8635e`（main HEAD）
 🚀 Push status: 待推送
@@ -14,11 +14,11 @@
 - staging 前端：现有 Next.js Railway 服务
 - staging WP：`https://wordpress-l1ta-staging.up.railway.app`
 
-## 当前状态：Unit 0–7 + 治理修复已提交，准备进入 Plan A 🟡
+## 当前状态：Unit 0–7 + 治理修复已提交，Blog 管道统一进行中 🟡
 
 > 本分支已完成 Unit 0–7 的全部本地代码实现，并经过代码 review → 治理修复 → 提交。
 > **当前工作树干净**，两个功能 commit 已落地。
-> 下一步是 Plan A：Blog 数据管道统一 + Smoke 验收。
+> 当前正在执行 P1：Blog 数据管道统一（Next.js 侧切到自定义端点）。
 
 ## 提交历史（本分支）
 
@@ -63,23 +63,28 @@ bb8635e  ← main HEAD
 
 ## 下一步线头（Plan A）
 
-### P1：Blog 数据管道统一
+### P1：Blog 数据管道统一 — 方案已锁定 ✅
 
-**当前问题**：Blog 仍走 `src/lib/cms/wordpress.ts` 的旧取数路径（WP 原生 `/wp-json/wp/v2/posts`），而非自定义 `m1-rest/blog.php`。
+**PRD 锁定结论**（§8.2）：M1-R 一次性从 MDX 切到 WP Posts，不留尾巴。
+**实施方案锁定**（Unit 4）：Blog 列表/详情走自定义 `m1-rest/blog.php` 端点（`/wp-json/mindhikers/v1/blog`），不走 WP 原生 `/wp-json/wp/v2/posts`。
 
-**需要决策**：
-- 方案 A：继续用 WP 原生 `/wp-json/wp/v2/posts` + `blog-posts` cache tag
-- 方案 B：切到 `m1-rest/blog.php` 统一 headless 数据面
+**具体执行内容**（参见实施方案 Unit 4）：
+1. Next.js 新增 `getBlogListFromWP()` / `getBlogPostFromWP()` fetcher
+2. `src/app/blog/page.tsx` + `src/app/en/blog/page.tsx` 切到自定义端点
+3. `src/app/blog/[slug]/page.tsx` + `src/app/en/blog/[slug]/page.tsx` 切到自定义端点
+4. `src/lib/cms/index.ts` 的 `getRecentPosts(n)` 切换默认源为 WP
+5. `.env.example` 默认 `BLOG_SOURCE=wp`
+6. `content/blog/*.mdx` 封存不删（头顶加 `ARCHIVED` 注释）
 
-选择后需要：统一 fetcher / page / cache / doc。
+**当前状态**：WP 端 `m1-rest/blog.php` 已实装（Unit 1）；Next.js 前台仍走旧路径 `src/lib/cms/wordpress.ts`。
 
-### P1：Homepage ↔ productDetail 解耦
+### ~~P1：Homepage ↔ productDetail 解耦~~ — 已完成 ✅
 
-`src/lib/cms/homepage.ts` 仍把 `productDetail` 作为 homepage payload 的校验项。建议分离为独立 fetch。
+commit `95a74cb` 已将 `isHomeContentReady()` 中对 `productDetail` 的强制校验移除，此线头已收口。
 
 ### P2：Smoke 验收（Unit 8）
 
-验证首页 / Blog / Product / Revalidate 全链路。
+Blog 管道统一完成后，验证首页 / Blog / Product / Revalidate 全链路。
 
 ### P2：生产切换演练（Unit 9）
 
