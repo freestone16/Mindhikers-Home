@@ -121,7 +121,57 @@ function m1_register_carbon_fields(): void
             Field::make('text', 'product_entry_url', __('产品入口链接', 'mindhikers-m1')),
             Field::make('checkbox', 'product_is_featured', __('Featured 产品', 'mindhikers-m1')),
         ]);
+
+    // Revalidate 配置
+    Container::make('theme_options', __('Revalidate 配置', 'mindhikers-m1'))
+        ->set_page_menu_position(35)
+        ->set_icon('dashicons-update')
+        ->add_fields([
+            Field::make('text', 'mh_nextjs_revalidate_url', __('Next.js Revalidate URL', 'mindhikers-m1'))
+                ->set_help_text(__('Example: https://www.mindhikers.com/api/revalidate — 必须与 Next.js 部署地址一致', 'mindhikers-m1'))
+                ->set_default_value('https://www.mindhikers.com/api/revalidate'),
+            Field::make('text', 'mh_revalidate_secret', __('Revalidate Secret', 'mindhikers-m1'))
+                ->set_help_text(__('Must match REVALIDATE_SECRET in Next.js .env — 缺失时 webhook 静默跳过并记录 error_log', 'mindhikers-m1')),
+        ]);
 }
+
+// M1-R REST Endpoints
+add_action('rest_api_init', 'm1_register_rest_routes');
+
+function m1_register_rest_routes(): void
+{
+    require_once __DIR__ . '/m1-rest/helpers.php';
+    require_once __DIR__ . '/m1-rest/homepage.php';
+    require_once __DIR__ . '/m1-rest/product.php';
+    require_once __DIR__ . '/m1-rest/blog.php';
+
+    register_rest_route('mindhikers/v1', '/homepage/(?P<locale>zh|en)', [
+        'methods'             => 'GET',
+        'callback'            => 'm1_rest_homepage',
+        'permission_callback' => '__return_true',
+    ]);
+
+    register_rest_route('mindhikers/v1', '/product/(?P<slug>[a-zA-Z0-9_-]+)', [
+        'methods'             => 'GET',
+        'callback'            => 'm1_rest_product',
+        'permission_callback' => '__return_true',
+    ]);
+
+    register_rest_route('mindhikers/v1', '/blog', [
+        'methods'             => 'GET',
+        'callback'            => 'm1_rest_blog_list',
+        'permission_callback' => '__return_true',
+    ]);
+
+    register_rest_route('mindhikers/v1', '/blog/(?P<slug>[a-zA-Z0-9_-]+)', [
+        'methods'             => 'GET',
+        'callback'            => 'm1_rest_blog_detail',
+        'permission_callback' => '__return_true',
+    ]);
+}
+
+// M1-R Revalidate Webhooks
+require_once __DIR__ . '/m1-rest/revalidate.php';
 
 add_action('admin_init', 'm1_check_carbon_fields');
 

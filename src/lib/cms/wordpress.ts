@@ -1,5 +1,5 @@
 import { normalizePublishedDate } from "@/lib/posts";
-import { BLOG_CACHE_TAG, BLOG_REVALIDATE_SECONDS, getWordPressSiteUrl } from "./constants";
+import { CACHE_TAG_BLOG, BLOG_REVALIDATE_SECONDS, getWordPressSiteUrl } from "./constants";
 import { htmlToPlainText, sanitizeWordPressHtml, truncateText } from "./html";
 import type { CmsPost, CmsPostSummary } from "./types";
 
@@ -103,7 +103,7 @@ async function fetchWordPress<T>(path: string, searchParams?: URLSearchParams) {
     },
     next: {
       revalidate: BLOG_REVALIDATE_SECONDS,
-      tags: [BLOG_CACHE_TAG],
+      tags: [CACHE_TAG_BLOG],
     },
   });
 

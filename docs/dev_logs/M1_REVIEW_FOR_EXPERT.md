@@ -221,7 +221,7 @@ PHP 模板把字段读出来 ≠ 有品牌视觉效果。
 | Staging 后台 | `https://wordpress-l1ta-staging.up.railway.app/wp-admin/` |
 | 生产目标 | `https://mindhikers.com/` |
 | 生产英文 | `https://mindhikers.com/en` |
-| 后台账号 | `mindhikers_admin` / `IW0pGAFhiydfFg3GC5xxgl+L` |
+| 后台账号 | `mindhikers_admin` / 通过安全渠道获取 |
 | M1 执行方案 | `docs/plans/2026-04-12-001-feat-m1-cms-content-model-plan.md` |
 | 运营手册 | `docs/operations-guide.md` |
 | Git 仓库 | `https://github.com/freestone16/Mindhikers-Home` |
