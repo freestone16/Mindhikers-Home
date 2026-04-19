@@ -23,6 +23,7 @@ type ContactLink = {
   href: string;
   label: string;
   note: string;
+  qrImage?: string;
 };
 
 type ProductDetail = {

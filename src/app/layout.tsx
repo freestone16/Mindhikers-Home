@@ -32,6 +32,15 @@ export const metadata: Metadata = {
     url: "https://www.mindhikers.com",
     siteName: "心行者 Mindhikers",
     type: "website",
+    locale: "zh_CN",
+    alternateLocale: ["en_US"],
+  },
+  alternates: {
+    canonical: "/",
+    languages: {
+      "zh-Hans": "/",
+      en: "/en",
+    },
   },
   robots: {
     index: true,

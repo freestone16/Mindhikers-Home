@@ -1,5 +1,6 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { Button } from "@/components/ui/button";
+import { ContactLinkCard } from "@/components/contact-link-card";
 import { HomeContent } from "@/data/site-content";
 import {
   ArrowUpRight,
@@ -383,16 +384,12 @@ export function HomePage({
 
           {content.contact.links.map((item, index) => (
             <BlurFade key={item.href} delay={BLUR_FADE_DELAY * (22 + index)}>
-              <Link
+              <ContactLinkCard
                 href={item.href}
-                className="group flex items-center justify-between rounded-[1.35rem] border border-border/70 bg-white/68 px-5 py-4 backdrop-blur transition-transform hover:-translate-y-0.5"
-              >
-                <div>
-                  <p className="text-sm font-medium text-foreground">{item.label}</p>
-                  <p className="mt-1 text-[13px] text-foreground/62">{item.note}</p>
-                </div>
-                <ArrowUpRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
+                label={item.label}
+                note={item.note}
+                qrImage={item.qrImage}
+              />
             </BlurFade>
           ))}
         </div>
