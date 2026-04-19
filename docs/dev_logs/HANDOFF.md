@@ -1,110 +1,121 @@
-🕐 Last updated: 2026-04-19 12:56
+🕐 Last updated: 2026-04-19 19:30
 🌿 Branch: feat/m1r-headless-pivot（本次优化分支，未合并 main）
 📌 Base commit: `bb8635e`（main HEAD）
 🚀 Push status: 待推送
 
-## 交接入口（codex / opencode 请从这里开始）
+## 交接入口（新会话请从这里开始）
 
 - 工作目录：`/Users/luzhoua/Mindhikers/Mindhikers-Homepage`
 - 工作分支：**`feat/m1r-headless-pivot`**（严禁直接动 `main`）
 - Linear 主线：`MIN-8`（网站上线）→ `MIN-110`（CMS 内容模型）→ 本次 M1-R（Headless 转向）
 - **PRD（必读）**：`docs/plans/2026-04-18_Mindhikers_Homepage_PRD_Revision_v2.md`
 - **实施方案（必读）**：`docs/plans/2026-04-18_Mindhikers_Headless_Pivot_Implementation_Plan.md`
-- **本轮治理日志（新增）**：`docs/dev_logs/2026-04-19.md`
+- **治理日志**：`docs/dev_logs/2026-04-19.md`
 - staging 前端：现有 Next.js Railway 服务
 - staging WP：`https://wordpress-l1ta-staging.up.railway.app`
 
-## 当前状态：M1-R 已完成到 Unit 7，本轮额外完成 review 问题收口 🟡
+## 当前状态：Unit 0–7 + 治理修复已提交，准备进入 Plan A 🟡
 
-> 本分支已完成 Unit 0–7 的本地代码实现，并在本轮会话里对结构/安全 review 提出的阻塞项与高优项做了治理修复。
-> 现在的状态不是“从 Unit 0 重新开始”，而是：**Headless 主链已基本成形，接下来优先做复审、验收与剩余主线补齐。**
+> 本分支已完成 Unit 0–7 的全部本地代码实现，并经过代码 review → 治理修复 → 提交。
+> **当前工作树干净**，两个功能 commit 已落地。
+> 下一步是 Plan A：Blog 数据管道统一 + Smoke 验收。
 
-## 本轮新增修复（2026-04-19）
+## 提交历史（本分支）
 
-### 1. revalidate tag 对齐
+```
+e66cff0  feat(headless): M1-R Units 0-7 implementation       ← 23 files, +1415
+95a74cb  fix(governance): headless review fixes + docs        ← 11 files, +444 -126
+9f053ce  plan: M1-R headless pivot implementation plan
+6259215  prd revision v2.1: headless hybrid pivot
+58c4bdc  handoff: pivot to M1-R headless hybrid
+bb8635e  ← main HEAD
+```
 
-已统一 WP webhook 与 Next.js 实际 cache tag：
+## 已完成的内容
 
-- homepage → `homepage-zh`, `homepage-en`
-- blog → `blog-posts`
-- product → `product-{slug}`
+### Units 0–7 功能实现（commit e66cff0）
 
-修复文件：
+| Unit | 内容 | 关键文件 |
+|------|------|----------|
+| 0 | 环境门控 | `.env.example` |
+| 1 | WP REST 端点 | `wordpress/mu-plugins/m1-rest/` (helpers, homepage, product, blog) |
+| 2 | Next.js 数据契约 | 类型定义在 helpers.php + TS 类型 |
+| 3 | ISR + Revalidate Route | `src/app/api/revalidate/route.ts` |
+| 4 | 产品详情页 | `src/app/product/[slug]/`, `src/app/en/product/[slug]/`, `src/lib/cms/products.ts` |
+| 5 | Contact 模块 + QR | `src/components/contact-link-card.tsx` |
+| 6 | SEO 元数据 + MDX 归档 | `layout.tsx`, `page.tsx`, `en/page.tsx`, 7 MDX files |
+| 7 | WP Revalidate Webhook | `wordpress/mu-plugins/m1-rest/revalidate.php` |
 
-- `src/lib/cms/constants.ts`
-- `src/lib/cms/wordpress.ts`
-- `src/lib/cms/products.ts`
-- `wordpress/mu-plugins/m1-rest/revalidate.php`
+### 治理修复（commit 95a74cb）
 
-### 2. `/api/revalidate` 收口
+1. **Cache tag 对齐** — 统一为 `blog-posts` / `product-{slug}` / `homepage-zh,en`
+2. **`/api/revalidate` 收口** — POST-only + tag allowlist + path whitelist
+3. **WP webhook 可观测性** — 配置缺失日志、context 日志、`MH_REVALIDATE_DEBUG` 开关
+4. **图片 CSP 收紧** — `remotePatterns` + `img-src` 显式域名
+5. **Secret 清理** — 移除 staging 明文密码
+6. **8 条治理规则** — 写入 `docs/rules.md`
 
-- 已改为 **POST-only**
-- 已增加 tag allowlist / 前缀校验
-- 已清理误导性的 `revalidateTag(..., "max")` 用法
+### 已验证
 
-修复文件：
+- `pnpm build` ✅（验证 3 次）
+- 旧 tag grep ✅ 无残留
+- 明文密码 grep ✅ 清除
 
-- `src/app/api/revalidate/route.ts`
+## 下一步线头（Plan A）
 
-### 3. WordPress webhook 可观测性增强
+### P1：Blog 数据管道统一
 
-- 配置缺失会记录日志
-- dispatch 会记录 context + tags
-- `WP_Error` 初始化失败会记录日志
-- 预留 `MH_REVALIDATE_DEBUG` 调试模式
+**当前问题**：Blog 仍走 `src/lib/cms/wordpress.ts` 的旧取数路径（WP 原生 `/wp-json/wp/v2/posts`），而非自定义 `m1-rest/blog.php`。
 
-修复文件：
+**需要决策**：
+- 方案 A：继续用 WP 原生 `/wp-json/wp/v2/posts` + `blog-posts` cache tag
+- 方案 B：切到 `m1-rest/blog.php` 统一 headless 数据面
 
-- `wordpress/mu-plugins/m1-rest/revalidate.php`
-- `wordpress/mu-plugins/mindhikers-m1-core.php`
+选择后需要：统一 fetcher / page / cache / doc。
 
-### 4. WordPress 图片来源配置补齐
+### P1：Homepage ↔ productDetail 解耦
 
-- 已补 `images.remotePatterns`
-- 已收紧 CSP `img-src` 到明确来源模式，而非全量 `https:`
+`src/lib/cms/homepage.ts` 仍把 `productDetail` 作为 homepage payload 的校验项。建议分离为独立 fetch。
 
-修复文件：
+### P2：Smoke 验收（Unit 8）
 
-- `next.config.mjs`
+验证首页 / Blog / Product / Revalidate 全链路。
 
-### 5. 规则与日志沉淀
+### P2：生产切换演练（Unit 9）
 
-- 已把治理结论写入 `docs/rules.md`
-- 已新增当日日志 `docs/dev_logs/2026-04-19.md`
+**必须老卢明确下令后才能动。**
 
-## 当前验证状态
+## 约束与红线
 
-1. `pnpm build` ✅ 通过
-2. 旧 tag grep 复查：未发现 `blog-zh` / `blog-en` / `product-{postId}` 这类旧约定残留 ✅
-3. `/api/revalidate` 构建结果为动态路由 ✅
+1. ❌ 不在 `main` 直接开发
+2. ❌ 未经老卢确认不擅改代码
+3. ❌ 每次 commit 必须有 Linear issue（`refs MIN-xx`）
+4. ❌ commit / push / merge 前必须显式请示
+5. ✅ 治理修复单元（代码 + 对应文档）放在同一个 commit
+6. ✅ 功能实现 vs 过程治理文档分开 commit
+7. ❌ 不要删 `wordpress/mu-plugins/mindhikers-cms-core.php`（旧 headless 插件，保留不启用）
 
-## 仍未完成 / 下一步线头
+## Cache Tag 规范（post-fix，canonical）
 
-### 优先级 P1：先做复审
+| 内容 | Tag | 来源 |
+|------|-----|------|
+| Blog（全量） | `blog-posts` | `CACHE_TAG_BLOG` in constants.ts |
+| Homepage ZH | `homepage-zh` | `getHomepageCacheTag("zh")` |
+| Homepage EN | `homepage-en` | `getHomepageCacheTag("en")` |
+| Product | `product-{slug}` | `getProductCacheTag(slug)` |
 
-1. 对本轮修复后的代码跑一轮 `ce:review`
-2. 确认没有新的结构/安全明显问题
+## 环境变量
 
-### 优先级 P1：继续主线补齐
+| 变量 | 当前值 | 说明 |
+|------|--------|------|
+| `WORDPRESS_API_URL` | production WP | `.env.local` 指向生产 WP |
+| `BLOG_SOURCE` | `wordpress` | Blog 数据来源 |
+| `REVALIDATE_SECRET` | 已设置 | Revalidate 接口密钥 |
 
-1. **Blog 仍未彻底切到自定义 `m1-rest/blog.php` 管道**
-   - 当前 blog 主要仍走 `src/lib/cms/wordpress.ts` 的旧取数路径
-   - 下一步应决定：
-     - 继续沿用 WP 原生 `/wp-json/wp/v2/posts` + `blog-posts` tag
-     - 还是切到 `m1-rest/blog.php` 作为统一 headless 数据面
-2. `src/lib/cms/homepage.ts` 仍把 `productDetail` 视为 homepage payload 的校验项，建议后续解耦
+## 技术栈
 
-### 优先级 P2：验收与交付
-
-1. Unit 8：Smoke 验收 + 文档交付
-2. Unit 9：生产切换演练（必须老卢明确下令后再动）
-
-## 当前不要做的事
-
-1. 不要在 `main` 开发；所有 M1-R 工作继续留在 `feat/m1r-headless-pivot`
-2. 不要提前 commit / push / merge；需要老卢明确确认
-3. 不要重新开 Astra Child 视觉还原支线
-4. 不要在生产环境直接验证 webhook 或缓存失效链路
+- Next.js 16.1.7, React 19, TypeScript, Tailwind 4
+- `revalidateTag` 在 Next.js 16 需要 2 个参数：`(tag: string, profile: string | CacheLifeConfig)` — 使用 `"default"`
 
 ## 后台账号（staging）
 
