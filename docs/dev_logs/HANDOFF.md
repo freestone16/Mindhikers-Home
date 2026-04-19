@@ -1,95 +1,85 @@
-🕐 Last updated: 2026-04-18 08:30
-🌿 Branch: main（已合并）
-📌 Latest commit: `ef5a140`
-🚀 Push status: 已推送至 origin
+🕐 Last updated: 2026-04-19 00:30
+🌿 Branch: feat/m1r-headless-pivot（本次优化分支，未合并 main）
+📌 Base commit: `bb8635e`（main HEAD）
+🚀 Push status: 待推送
 
-## 交接入口
+## 交接入口（codex / opencode 请从这里开始）
 
 - 工作目录：`/Users/luzhoua/Mindhikers/Mindhikers-Homepage`
-- Linear 主线：`MIN-8`（网站上线）→ `MIN-110`（CMS 内容模型）
-- 执行方案：`docs/plans/2026-04-12-001-feat-m1-cms-content-model-plan.md`
-- staging 地址：`https://wordpress-l1ta-staging.up.railway.app`
+- 工作分支：**`feat/m1r-headless-pivot`**（严禁直接动 `main`）
+- Linear 主线：`MIN-8`（网站上线）→ `MIN-110`（CMS 内容模型）→ 本次 M1-R（Headless 转向）
+- **PRD（必读）**：`docs/plans/2026-04-18_Mindhikers_Homepage_PRD_Revision_v2.md`
+- **实施方案（必读）**：`docs/plans/2026-04-18_Mindhikers_Headless_Pivot_Implementation_Plan.md`
+- 历史方案（背景）：`docs/plans/2026-04-12-001-feat-m1-cms-content-model-plan.md`
+- 专家审查背景：`docs/dev_logs/M1_REVIEW_FOR_EXPERT.md`
+- staging 前端：现有 Next.js Railway 服务
+- staging WP：`https://wordpress-l1ta-staging.up.railway.app`
 
-## 当前状态：M1 后台数据层已完成，前端视觉还原未开始 🔴
+## 当前状态：路线已切换至 M1-R Headless Hybrid 🟡
 
-> ⚠️ **重要**：M1 只完成了 CMS 数据模型（字段 + 读写逻辑），前台视觉效果非常简陋，与 production 差距巨大。
-> 
-> 详见：`docs/dev_logs/M1_REVIEW_FOR_EXPERT.md`（为外部专家审查准备的完整问题清单）
+> 上一轮 M1 完成了 CMS 数据层（Carbon Fields + Polylang + Product CPT + 双语 Seed），但 Astra Child 前台视觉简陋无法验收。
+>
+> 本轮决策：**放弃重写 WP 模板视觉，回到现成的 Next.js 前端 + WordPress Headless**。Next.js 前端已 production-grade，CMS 管道 80% 已搭通，只需补 WP REST + webhook + Blog 切 WP Posts 即可收口。
 
-### 本次会话完成
+### 本次会话产出
 
-| Unit | 名称 | 状态 | 说明 |
-|------|------|------|------|
-| 1-5 | 修复完成 | ✅ | 布局修复、按钮文字、Blog 显示、Footer 清理、调试脚本删除 |
-| 6 | 双语渲染验证 + EN 页面收口 | ✅ | `/en/` 完整英文渲染，中文首页不受影响 |
-| 7 | M1 端到端验收 | ✅ | 首页/Blog/Contact 链路验证通过 |
+| 文件 | 用途 |
+|------|------|
+| `docs/plans/2026-04-18_Mindhikers_Homepage_PRD_Revision_v2.md` | PRD v2.1，锁定 Headless Hybrid，取代 2026-04-12 §D4 |
+| `docs/plans/2026-04-18_Mindhikers_Headless_Pivot_Implementation_Plan.md` | 给 codex/opencode 的 M1-R 实施手册（Unit 0–9，6.5 人日 + 1 天 cutover） |
 
-### Unit 6 详细完成项
+### 关键决策（不可回退）
 
-| 修复项 | 状态 | 说明 |
-|--------|------|------|
-| `/en/` 英文首页渲染 | ✅ | 五大区块全部正常显示英文内容 |
-| Product 状态标签双语 | ✅ | `product.php` 根据 `$lang` 切换：构思中→Ideating |
-| Header 按钮双语 | ✅ | `functions.php` 输出缓冲替换：开始联系→Get in Touch |
-| Footer Widget 双语 | ✅ | Widget 数据库保持中文，`functions.php` 对 EN 页面替换为 Contact/Location |
-| 站点标题双语 | ✅ | WP Settings 改为 MindHikers，`functions.php` 输出缓冲处理 meta 标签 |
-| 中文首页不受影响 | ✅ | `/` 页面完整保留中文内容 |
+1. **路线**：Next.js 16 + ISR + WP Headless（REST）；不再做 Astra Child 视觉还原
+2. **部署**：沿用现有 Railway 服务（Next.js staging/prod + WP staging/prod），**不引入 Vercel 或其他平台**
+3. **Blog**：M1-R **一次性**从 MDX 切到 WP Posts，不做两阶段
+4. **回退**：如失败，Next.js 回退到 build-time `src/data/site-content.ts` + Railway deployment rollback
+5. **受众**：后续开发由 codex / opencode AI 编码端承担，不招人
 
-### Unit 7 验收结果
+## 下一窗口起手式（codex / opencode）
 
-| 检查项 | 结果 |
-|--------|------|
-| 中文首页 `/` 200 | ✅ |
-| 英文首页 `/en/` 200 | ✅ |
-| 中文首页五大区块 + 按钮 + Footer 全中文 | ✅ |
-| 英文首页五大区块 + 按钮 + Footer 全英文 | ✅ |
-| Blog 列表 `/blog/` 200 | ✅ |
-| Blog 详情链路正常 | ✅ |
-| Product 页面 `/product/golden-crucible/` 200 | ✅ |
-| Contact 区块可达 | ✅ |
-| 无 PHP Fatal / 500 | ✅ |
+1. 拉最新分支：`git fetch && git checkout feat/m1r-headless-pivot && git pull`
+2. 读 PRD v2.1 → 读实施方案
+3. 从 **Unit 0**（环境准备 + revalidate secret 配置）开始执行
+4. 每个 Unit 结束都要按实施方案中的 Test / Verification 自验
+5. 提交口径：`refs MIN-110 <Unit N>: <摘要>`
+6. 不要合并回 `main`——完成 M1-R 全部 Unit 并经老卢验收后才开 PR
 
-### 新增/变更文件
+## 执行顺序（Unit 0–9）
 
-| 文件 | 位置 | 说明 |
+| Unit | 名称 | 估时 |
 |------|------|------|
-| Child Theme style.css | `wordpress/themes/astra-child/style.css` | flex 覆盖修复 + 按钮颜色 `!important` |
-| Blog 模板 | `wordpress/themes/astra-child/template-parts/blog.php` | 手动 Polylang 过滤 |
-| Product 模板 | `wordpress/themes/astra-child/template-parts/product.php` | 状态标签双语支持 |
-| Functions | `wordpress/themes/astra-child/functions.php` | EN 页面输出缓冲替换逻辑 |
-| Railway 配置 | `railway.json` | 强制 Dockerfile 构建 |
-| 运营指南 | `docs/operations-guide.md` | CMS 日常运营文档 |
+| 0 | 环境 + 密钥（REVALIDATE_SECRET / WP_API_BASE） | 0.5d |
+| 1 | WP REST 端点：homepage / product / blog 列表 + 详情 | 1.5d |
+| 2 | Next.js `lib/cms/*` 补齐（product / blog fetchers） | 1.0d |
+| 3 | ISR 接入 + fallback 稳健化 | 0.5d |
+| 4 | 导航/产品详情/Blog 一次性切 WP Posts | 1.0d |
+| 5 | Cloudflare Access for `homepage-manage.*` | 0.5d |
+| 6 | 运营手册重写（WP 后台改→前台 300s 生效） | 0.5d |
+| 7 | revalidate webhook（WP save_post → Next.js） | 0.5d |
+| 8 | E2E 验证（ZH/EN × 首页/产品/Blog） | 0.5d |
+| 9 | Cutover：Railway 环境变量切换 + 上线 | 1.0d |
 
-### 已删除的临时文件
+## 红线（来自 OldYang skill §☠️）
 
-- `wordpress/mu-plugins/fix-blog-posts.php`
+1. ❌ 不在 `main` 直接开发
+2. ❌ 未经老卢确认不擅改代码
+3. ❌ 每次 commit 必须有 Linear issue（`refs MIN-xx`）
+4. ❌ `commit` / `push` / `merge` 前必须显式请示
+5. ✅ 治理类（HANDOFF / plans / rules）与代码类必须**独立 commit**
+6. ❌ 不要删 `wordpress/mu-plugins/mindhikers-cms-core.php`（旧 headless 插件），保留不启用
 
-### 关键认证信息
+## 当前不要做的事
 
+1. 不要重启 Astra Child 视觉还原工作（方案 B 已放弃）
+2. 不要在 `main` 开发；所有 M1-R 工作都在 `feat/m1r-headless-pivot`
+3. 不要引入 Vercel / Netlify 等新部署平台
+4. 不要把 Blog 切换拆成两阶段
+5. 不要提前取消 staging 的 `noindex`
+6. 不要在生产环境直接试错
+
+## 后台账号（staging）
+
+- WP Admin：`https://wordpress-l1ta-staging.up.railway.app/wp-admin/`
 - 用户名：`mindhikers_admin`
 - 密码：`IW0pGAFhiydfFg3GC5xxgl+L`
-
-### 下一窗口建议
-
-#### 优先级 P0：已完成 ✅
-1. ~~创建 PR 将 `codex/cyd-stumpel-home-exploration` 合并到 `main`~~ ✅ 已完成（直接合并）
-
-#### 优先级 P0：前端视觉还原（当前 blocker）
-2. 方案选择：
-   - A. 套现成 Astra Starter Template（最快，几小时到 1 天）
-   - B. 重写前端模板 + CSS（最符合初衷，3-5 天）
-3. 等待外部专家审查后决策
-
-#### 优先级 P1：其他遗留问题
-4. Logo 配置、导航完善、右侧信息面板
-5. 运营手册修订
-6. 生产部署
-
-### 当前不要做的事
-
-1. 不要回到旧的 Next.js 前台路线
-2. 不要在生产环境直接试错
-3. 不要提前取消 staging 的 `noindex`
-4. 不要把 `/` 和 `/en` 的语言职责重新混在一起
-5. 不要盲改 SureRank 字段名——必须用 `page-seo-checks/fix` 路径
-6. 不要删除 `wordpress/mu-plugins/mindhikers-cms-core.php`（旧 headless 插件），只保留不启用即可
