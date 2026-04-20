@@ -1,7 +1,7 @@
-🕐 Last updated: 2026-04-20 12:30
+🕐 Last updated: 2026-04-20 15:10
 🌿 Branch: `staging`
-📌 Base commit: `fe246ec`（staging HEAD，已推送 origin/staging）
-🚀 Push status: ✅ `refs MIN-162 docs: staging 全链路验收复盘 + 首批 rules.md`
+📌 Base commit: `6cdf528`（staging HEAD，已推送 origin/staging）
+🚀 Push status: ✅ `refs MIN-163 docs: 运维手册重写（Headless 架构，双环境通用）`
 
 ## 当前状态：staging 全链路完整贯通 🟢
 
@@ -28,7 +28,51 @@
 7. ✅ **Revalidate 完整集**：插件 v1.1.0 追加 Carbon Fields Revalidate 字段注册 → WP 后台出现 "Revalidate 配置" 菜单 → 填 URL + Secret → 改 Blog 保存触发 → 前台自动同步
 8. ✅ **治理文档 commit 入 origin/staging**：HANDOFF + 2026-04-20.md + rules.md 首批 5 条
 
-## 🔴 下一会话重点任务：运维手册重写
+## ✅ 本轮已完成（续）
+
+9. ✅ **运维手册重写**：`docs/operations-guide-headless.md` 已落盘，12 章骨架覆盖 Headless 架构双环境
+10. ✅ **旧手册归档**：`docs/operations-guide.md` 顶部加跳转提示，保留为历史
+11. ✅ **MIN-163 commit 已推送 origin/staging**
+
+## 🔴 下一会话重点任务：Production 部署
+
+**Linear issue**：[MIN-164](https://linear.app/mindhikers/issue/MIN-164)（MIN-110 子 issue）
+
+### 背景
+
+staging 已全链路验收通过，运维手册已重写。下一目标：部署到 production。
+
+### production 部署前置 checklist
+
+| # | 事项 | 状态 | 负责 |
+|---|------|------|------|
+| 1 | m1-rest 插件 v1.1.0 装进 production WP | ⏳ 待执行 | 老杨 |
+| 2 | production Revalidate 配置（URL + Secret） | ⏳ 待执行 | 老杨 |
+| 3 | Railway production 环境变量更新 | ⏳ 待执行 | 老杨 |
+| 4 | staging → main 合并 | ⏳ 待老卢验收后 | 老卢决策 |
+| 5 | production 冒烟验证 | ⏳ 待执行 | 老杨 |
+
+### 关键配置（production）
+
+| 配置项 | 值 |
+|--------|-----|
+| Revalidate URL | `https://www.mindhikers.com/api/revalidate` |
+| Revalidate Secret | `be4a02005c65a65b7947c1b8b7d548364a5746121622881393e2afa75e56755c`（新生成 32 字节随机值） |
+| WP CMS 域名 | `homepage-manage.mindhikers.com` |
+
+> ⚠️ **Secret 已生成但尚未写入任何环境**。待老卢确认后，老杨同步到 Railway + WP Admin。
+
+### 风险守门
+
+- production WP 容器同样缺 m1-rest，必须先装插件再合并代码
+- REVALIDATE_SECRET 已新生成，与 staging 不同
+- 域名切换时需评估 Cloudflare / DNS 影响
+
+---
+
+## 历史：下一会话重点任务（已归档）
+
+### ~~运维手册重写~~ → 已完成（MIN-163）
 
 ### 背景
 
