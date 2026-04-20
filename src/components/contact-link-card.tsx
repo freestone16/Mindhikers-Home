@@ -23,7 +23,7 @@ export function ContactLinkCard({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex items-center justify-between rounded-[1.35rem] border border-border/70 bg-white/68 px-5 py-4 backdrop-blur transition-transform hover:-translate-y-0.5"
+        className="group flex items-center justify-between rounded-[1.0rem] border border-border/70 bg-white/68 px-5 py-4 backdrop-blur transition-transform hover:-translate-y-0.5"
       >
         <div>
           <p className="text-sm font-medium text-foreground">{label}</p>
@@ -39,7 +39,7 @@ export function ContactLinkCard({
       <button
         type="button"
         onClick={() => setShowQr(true)}
-        className="group flex w-full items-center justify-between rounded-[1.35rem] border border-border/70 bg-white/68 px-5 py-4 backdrop-blur transition-transform hover:-translate-y-0.5 text-left"
+        className="group flex w-full items-center justify-between rounded-[1.0rem] border border-border/70 bg-white/68 px-5 py-4 backdrop-blur transition-transform hover:-translate-y-0.5 text-left"
       >
         <div>
           <p className="text-sm font-medium text-foreground">{label}</p>
