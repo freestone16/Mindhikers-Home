@@ -1,9 +1,11 @@
-🕐 Last updated: 2026-04-20 15:10
+🕐 Last updated: 2026-04-20 16:30
 🌿 Branch: `staging`
-📌 Base commit: `6cdf528`（staging HEAD，已推送 origin/staging）
-🚀 Push status: ✅ `refs MIN-163 docs: 运维手册重写（Headless 架构，双环境通用）`
+📌 Base commit: `d238666`（staging HEAD，已推送 origin/staging）
+🚀 Push status: ✅ `refs MIN-164 style: UI 微调——模块间距收小、圆角收小、导航字体略大`
 
-## 当前状态：staging 全链路完整贯通 🟢
+## 当前状态：staging 功能闭环，UI 微调待续 🟡
+
+> **注意**：UI 微调（模块间距/圆角/字体）已部署但老卢未完全满意，需下一会话继续调整。
 
 ## 交接入口（新会话请从这里开始）
 
@@ -34,13 +36,27 @@
 10. ✅ **旧手册归档**：`docs/operations-guide.md` 顶部加跳转提示，保留为历史
 11. ✅ **MIN-163 commit 已推送 origin/staging**
 
-## 🔴 下一会话重点任务：Production 部署
+## 🔴 下一会话重点任务
+
+### 优先级 1：UI 微调收尾（老卢未满意）
+
+**当前问题**：
+1. 模块间距缩小后老卢觉得仍不够或变化不明显
+2. 小模块圆角缩小后老卢觉得仍太圆
+3. Blog 卡片标题 `font-medium` 老卢觉得"变粗变丑"
+4. 侧边栏 About/Product/Blog/Contact 字体放大后效果未达预期
+
+**建议下一会话**：
+- 与老卢确认具体期望数值（如圆角到底要多少 rem、间距要多少 px）
+- 或提供 2-3 个版本供老卢选择
+
+### 优先级 2：Production 部署
 
 **Linear issue**：[MIN-164](https://linear.app/mindhikers/issue/MIN-164)（MIN-110 子 issue）
 
-### 背景
+**前置**：UI 微调需老卢验收通过后，再进行 production 部署
 
-staging 已全链路验收通过，运维手册已重写。下一目标：部署到 production。
+**背景**：staging 功能层面已闭环（Blog/Contact/Revalidate/手机竖屏均通），运维手册已重写。
 
 ### production 部署前置 checklist
 
