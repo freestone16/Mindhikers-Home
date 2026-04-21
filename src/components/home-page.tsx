@@ -133,18 +133,7 @@ export function HomePage({
                 </div>
               </div>
 
-              <div className="mt-5 space-y-5">
-                <div className="grid gap-2.5">
-                  <InfoPill
-                    label={content.hero.statusLabel}
-                    value={content.hero.statusValue}
-                  />
-                  <InfoPill
-                    label={content.hero.availabilityLabel}
-                    value={content.hero.availabilityValue}
-                  />
-                </div>
-
+              <div className="mt-5">
                 <div className="rounded-[1.0rem] bg-[linear-gradient(180deg,rgba(241,245,243,0.92),rgba(255,255,255,0.82))] p-4">
                   <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                     {content.hero.panelTitle}

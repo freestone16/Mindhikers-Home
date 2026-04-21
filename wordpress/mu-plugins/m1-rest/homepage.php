@@ -51,6 +51,30 @@ function m1_build_hero(string $locale): array
     $secondaryText = m1_get_theme_option("hero_cta_secondary_text_{$locale}");
     $secondaryUrl  = m1_get_theme_option('hero_cta_secondary_url') ?: '/blog';
 
+    $quickLinks = m1_get_theme_option_complex('hero_quick_links');
+    $quickLinksData = [];
+
+    if (!empty($quickLinks)) {
+        foreach ($quickLinks as $link) {
+            $label = $link["link_label_{$locale}"] ?? '';
+            $url = $link['link_url'] ?? '';
+            $tag = $link["link_tag_{$locale}"] ?? '';
+
+            if ($label && $url) {
+                $quickLinksData[] = [
+                    'label' => $label,
+                    'href'  => $url,
+                    'tag'   => $tag,
+                ];
+            }
+        }
+    }
+
+    // Fallback to static quick links if none configured in WP
+    if (empty($quickLinksData)) {
+        $quickLinksData = $static['quickLinks'];
+    }
+
     return [
         'eyebrow'            => m1_get_theme_option("hero_eyebrow_{$locale}") ?: 'Editorial homepage',
         'title'              => m1_get_theme_option("hero_title_{$locale}") ?: ($locale === 'en'
@@ -66,11 +90,8 @@ function m1_build_hero(string $locale): array
             'label' => $secondaryText ?: ($locale === 'en' ? 'Open the blog' : '进入博客'),
         ],
         'highlights'         => $static['highlights'],
-        'statusLabel'        => $static['statusLabel'],
-        'statusValue'        => $static['statusValue'],
-        'availabilityLabel'  => $static['availabilityLabel'],
-        'availabilityValue'  => $static['availabilityValue'],
         'panelTitle'         => $static['panelTitle'],
+        'quickLinks'         => $quickLinksData,
     ];
 }
 

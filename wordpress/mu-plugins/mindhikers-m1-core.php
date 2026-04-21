@@ -68,6 +68,18 @@ function m1_register_carbon_fields(): void
             Field::make('text', 'hero_cta_secondary_text_en', __('次按钮文字 (EN)', 'mindhikers-m1')),
             Field::make('text', 'hero_cta_secondary_url', __('次按钮链接', 'mindhikers-m1')),
             Field::make('image', 'hero_image', __('配图', 'mindhikers-m1')),
+            Field::make('complex', 'hero_quick_links', __('Quick Links', 'mindhikers-m1'))
+                ->add_fields([
+                    Field::make('text', 'link_label_zh', __('链接文字 (ZH)', 'mindhikers-m1')),
+                    Field::make('text', 'link_label_en', __('链接文字 (EN)', 'mindhikers-m1')),
+                    Field::make('text', 'link_url', __('链接地址', 'mindhikers-m1')),
+                    Field::make('text', 'link_tag_zh', __('标签 (ZH)', 'mindhikers-m1'))
+                        ->set_help_text(__('如：产品、内容、服务', 'mindhikers-m1')),
+                    Field::make('text', 'link_tag_en', __('标签 (EN)', 'mindhikers-m1'))
+                        ->set_help_text(__('如：Product、Content、Service', 'mindhikers-m1')),
+                ])
+                ->set_header_template('<% if (link_label_zh) { %> <%- link_label_zh %> <% } %>')
+                ->set_help_text(__('首页右侧 Quick Links 面板内容，可添加多个链接', 'mindhikers-m1')),
         ]);
 
     // About 管理

@@ -316,21 +316,21 @@ function m1_get_hero_static(string $locale): array
     if ($locale === 'en') {
         return [
             'highlights'         => ['Bilingual entry point', 'Product experiments', 'Research and publishing'],
-            'statusLabel'        => 'Current focus',
-            'statusValue'        => 'Homepage refresh in progress',
-            'availabilityLabel'  => 'Working rhythm',
-            'availabilityValue'  => 'Research, build, write, publish',
-            'panelTitle'         => 'Homepage blocks',
+            'panelTitle'         => 'Quick Links',
+            'quickLinks'         => [
+                ['label' => 'Golden Crucible', 'href' => '/en/golden-crucible', 'tag' => 'Product'],
+                ['label' => 'Latest blog posts', 'href' => '/en/blog', 'tag' => 'Content'],
+            ],
         ];
     }
 
     return [
         'highlights'         => ['双语品牌入口', '产品化实验', '长期写作与研究'],
-        'statusLabel'        => 'Current focus',
-        'statusValue'        => 'Homepage refresh in progress',
-        'availabilityLabel'  => 'Working rhythm',
-        'availabilityValue'  => 'Research, build, write, publish',
-        'panelTitle'         => 'Homepage blocks',
+        'panelTitle'         => 'Quick Links',
+        'quickLinks'         => [
+            ['label' => '黄金坩埚', 'href' => '/golden-crucible', 'tag' => '产品'],
+            ['label' => '博客最新文章', 'href' => '/blog', 'tag' => '内容'],
+        ],
     ];
 }
 
