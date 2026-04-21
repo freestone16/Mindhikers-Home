@@ -111,50 +111,27 @@ export function HomePage({
 
         <div className="grid gap-4">
           <BlurFade delay={BLUR_FADE_DELAY * 6}>
-            <aside className="overflow-hidden rounded-[1.0rem] border border-border/70 bg-white/78 p-5 shadow-[0_20px_60px_rgba(26,34,31,0.06)] backdrop-blur-xl">
-              <div className="flex items-center gap-3 border-b border-border/70 pb-4">
-                <div className="relative size-11 overflow-hidden rounded-2xl border border-border/80 bg-background">
-                  <Image
-                    src="/MindHikers.png"
-                    alt="心行者 Mindhikers"
-                    fill
-                    className="object-cover"
-                    sizes="44px"
-                    priority
-                  />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                    Mindhikers
-                  </p>
-                  <p className="text-sm font-medium text-foreground">
-                    {content.navigation.brand}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-5">
-                <div className="rounded-[1.0rem] bg-[linear-gradient(180deg,rgba(241,245,243,0.92),rgba(255,255,255,0.82))] p-4">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                    {content.hero.panelTitle}
-                  </p>
-                  <div className="mt-3 grid gap-2">
-                    {content.hero.quickLinks.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="group flex items-center justify-between rounded-[0.8rem] border border-transparent bg-white/80 px-3 py-3 text-base text-foreground/80 transition-all hover:border-border/80 hover:bg-white"
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] text-primary">
-                            {item.tag}
-                          </span>
-                          <span>{item.label}</span>
-                        </div>
-                        <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                      </Link>
-                    ))}
-                  </div>
+            <aside className="overflow-hidden rounded-[1.0rem] border border-border/70 bg-white/78 p-6 shadow-[0_20px_60px_rgba(26,34,31,0.06)] backdrop-blur-xl">
+              <div className="rounded-[1.0rem] bg-[linear-gradient(180deg,rgba(241,245,243,0.92),rgba(255,255,255,0.82))] p-5">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {content.hero.panelTitle}
+                </p>
+                <div className="mt-4 grid gap-3">
+                  {content.hero.quickLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="group flex items-center justify-between rounded-[0.9rem] border border-transparent bg-white/80 px-4 py-4 text-[15px] text-foreground/80 transition-all hover:border-border/80 hover:bg-white"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] text-primary">
+                          {item.tag}
+                        </span>
+                        <span>{item.label}</span>
+                      </div>
+                      <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                  ))}
                 </div>
               </div>
             </aside>
