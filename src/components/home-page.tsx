@@ -53,7 +53,7 @@ export function HomePage({
   recentPosts: HomePost[];
 }) {
   return (
-    <main className="space-y-12 pb-16 pt-4 sm:space-y-16 sm:pt-6">
+    <main className="space-y-8 pb-12 pt-4 sm:space-y-11 sm:pt-6">
       <section className="grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.8fr)] lg:gap-10">
         <div className="space-y-8">
           <div className="space-y-5">
