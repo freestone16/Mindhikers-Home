@@ -24,3 +24,15 @@
 2. 如果发现问题可能外溢到隔壁项目，应先冻结当前变更，再输出可同步给隔壁项目的结论与修复建议。
 3. 所有重大平台偏差都要写入 `docs/lessons.md`，避免重复踩坑。
 4. 新产品接入 `mindhikers.com` 体系时，先定子域名边界，再做服务部署，不能反过来先上线服务再抢语义域名。
+
+## Headless 缓存与回刷规则
+
+1. WordPress webhook 发出的 revalidate tag 必须与 Next.js 实际 `fetch(..., { next: { tags } })` 使用的 tag **逐字一致**；命名约定必须集中在同一处维护，禁止 WP 与 Next.js 各自发明一套。
+2. `POST /api/revalidate` 只允许做 **POST-only** 回刷，不允许暴露 GET 形式的副作用接口。
+3. revalidate 接口必须校验 tag 白名单或明确前缀，禁止接受任意 tag 以免错误或恶意清空 ISR 缓存。
+4. WordPress 侧 webhook 即使保持 non-blocking，也必须对“配置缺失、派发开始、请求初始化失败”至少三类事件留下可检索日志，不能静默失败。
+
+## Headless 图片放行规则
+
+1. 任何前台组件改为消费 WordPress 媒体库图片（如封面图、二维码、社交图）时，必须同步核对 `next.config.mjs` 中的 `images.remotePatterns` 与 CSP `img-src`，避免页面功能改完但生产环境被策略拦截。
+2. 允许图片来源时优先写“明确域名/域名模式”，不要为了省事把 CSP 放宽到全量第三方来源。

@@ -1,0 +1,97 @@
+- generic [active] [ref=e1]:
+  - link "跳至内容" [ref=e2] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e12]:
+        - generic:
+          - generic:
+            - navigation "Primary Site Navigation"
+    - generic [ref=e14]:
+      - generic [ref=e17]:
+        - text: Editorial homepage
+        - heading "把研究、产品与表达，排成一个有呼吸感的品牌入口。" [level=1] [ref=e18]
+        - paragraph [ref=e19]: 心行者 Mindhikers 正在把长期创作、内容实验与产品化尝试收拢成一个更完整的首页。它不想像简历，也不想像模板，而是像一个持续更新的工作现场。
+        - generic [ref=e20]:
+          - link "查看当前产品入口" [ref=e21] [cursor=pointer]:
+            - /url: "#product"
+          - link "进入博客" [ref=e22] [cursor=pointer]:
+            - /url: /blog
+      - generic [ref=e24]:
+        - heading "关于心行者" [level=2] [ref=e25]
+        - generic [ref=e26]:
+          - paragraph [ref=e27]: 欢迎来到 心行者 MindHikers。
+          - paragraph [ref=e28]: 老卢深信在 AI 时代人类需要保有自己的黄金精神，找到碳硅共生的边界。
+          - paragraph [ref=e29]: 这是一个以 AI 技术、碳硅共生哲学、脑神经科学（Neuroscience）为支点，撬动人生智慧的知识成长频道。我们专为『知性探索者』设计，致力于将艰深的认知科学、神经科学前沿成果，转化为可执行的行动指南，助你真正实现从'知道'到'做到'的跨越。
+      - generic [ref=e31]:
+        - generic:
+          - heading [level=2]
+          - paragraph
+        - article [ref=e33]:
+          - heading "黄金坩埚" [level=3] [ref=e34]
+          - paragraph [ref=e35]: 围绕研究、写作、表达与创作者工作流展开的首个产品入口。
+          - generic [ref=e36]: 构思中
+      - generic [ref=e38]:
+        - generic:
+          - heading [level=2]
+          - paragraph
+        - paragraph [ref=e39]: 暂无文章。
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - heading "联系" [level=2] [ref=e43]
+          - paragraph [ref=e44]: 如果你想讨论品牌、内容系统、产品实验，或者只是想交换一个更清晰的切题方式，这里是最直接的入口。
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - generic [ref=e47]: 邮箱
+            - link "ops@mindhikers.com" [ref=e49] [cursor=pointer]:
+              - /url: mailto:ops@mindhikers.com
+          - generic [ref=e50]:
+            - generic [ref=e51]: 位置
+            - generic [ref=e52]: 上海 / 远程
+        - generic [ref=e53]:
+          - link "Tw" [ref=e54] [cursor=pointer]:
+            - /url: https://x.com/mindhikers
+          - link "Bi" [ref=e55] [cursor=pointer]:
+            - /url: https://space.bilibili.com/mindhikers
+          - link "微信" [ref=e56] [cursor=pointer]:
+            - /url: "#"
+    - contentinfo [ref=e57]:
+      - generic [ref=e60]:
+        - region "Footer Widget 4" [ref=e62]:
+          - figure [ref=e64]
+        - region "Footer Widget 2" [ref=e66]:
+          - generic [ref=e67]:
+            - heading "联系方式" [level=2] [ref=e68]
+            - generic [ref=e69]:
+              - paragraph [ref=e70]:
+                - strong [ref=e71]: Mindhikers
+              - paragraph [ref=e72]:
+                - text: 邮箱：
+                - strong [ref=e73]: contactmindhiker@gmail.com
+              - paragraph [ref=e74]:
+                - link "英文版入口" [ref=e75] [cursor=pointer]:
+                  - /url: /en/
+        - generic [ref=e76]:
+          - region "Footer Widget 1" [ref=e77]:
+            - generic [ref=e78]:
+              - heading "开始联系" [level=2] [ref=e79]
+              - paragraph [ref=e81]: 如果你想讨论品牌、内容系统、产品实验，或者只是想交换一个更清晰的切题方式，这里是最直接的入口。
+          - region "Footer Widget 3" [ref=e82]:
+            - generic [ref=e83]:
+              - heading "所在" [level=2] [ref=e84]
+              - paragraph [ref=e86]: 上海 / 远程
+      - generic [ref=e89]:
+        - paragraph [ref=e93]: 版权所有 © 2026 心行者 Mindhikers Staging
+        - generic [ref=e97]:
+          - link "Facebook" [ref=e98] [cursor=pointer]:
+            - /url: ""
+            - img [ref=e100]
+          - link "Twitter" [ref=e102] [cursor=pointer]:
+            - /url: ""
+            - img [ref=e104]
+          - link "YouTube" [ref=e106] [cursor=pointer]:
+            - /url: ""
+            - img [ref=e108]
+          - link "Linkedin" [ref=e110] [cursor=pointer]:
+            - /url: ""
+            - img [ref=e112]

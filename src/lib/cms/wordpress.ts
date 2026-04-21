@@ -1,37 +1,39 @@
 import { normalizePublishedDate } from "@/lib/posts";
-import { BLOG_CACHE_TAG, BLOG_REVALIDATE_SECONDS, getWordPressSiteUrl } from "./constants";
+import { CACHE_TAG_BLOG, BLOG_REVALIDATE_SECONDS, getWordPressSiteUrl } from "./constants";
 import { htmlToPlainText, sanitizeWordPressHtml, truncateText } from "./html";
 import type { CmsPost, CmsPostSummary } from "./types";
 
-type WordPressRenderedField = {
-  rendered: string;
-};
+// ---------------------------------------------------------------------------
+// Custom m1-rest endpoint types
+// ---------------------------------------------------------------------------
 
-type WordPressTerm = {
-  id: number;
-  name: string;
-  taxonomy: string;
-};
-
-type WordPressMedia = {
-  source_url?: string;
-};
-
-type WordPressPost = {
-  id: number;
+type M1BlogItemBase = {
   slug: string;
+  title: string;
+  excerpt: string;
   date: string;
-  date_gmt?: string;
-  modified: string;
-  modified_gmt?: string;
-  title: WordPressRenderedField;
-  excerpt: WordPressRenderedField;
-  content: WordPressRenderedField;
-  _embedded?: {
-    "wp:featuredmedia"?: WordPressMedia[];
-    "wp:term"?: WordPressTerm[][];
-  };
+  coverImage: string;
+  categories: { slug: string; name: string }[];
 };
+
+type M1BlogItem = M1BlogItemBase & { href: string };
+
+type M1BlogListResponse = {
+  items: M1BlogItem[];
+  total: number;
+  page: number;
+  perPage: number;
+  totalPages: number;
+};
+
+type M1BlogDetail = M1BlogItemBase & {
+  content: string;
+  author: { name: string; avatar: string };
+};
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 
 const WORDPRESS_POSTS_PER_PAGE = 50;
 
@@ -47,45 +49,37 @@ function getPublishedDate(value: string | undefined) {
   }
 }
 
-function getFeaturedMedia(post: WordPressPost) {
-  return post._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
+function mapCategoryNames(categories: { slug: string; name: string }[]): string[] {
+  return categories.map((c) => c.name);
 }
 
-function getTerms(post: WordPressPost, taxonomy: "category" | "post_tag") {
-  return (
-    post._embedded?.["wp:term"]
-      ?.flat()
-      .filter((term) => term.taxonomy === taxonomy)
-      .map((term) => term.name) ?? []
-  );
-}
-
-function toSummary(post: WordPressPost): CmsPostSummary {
-  const summarySource = post.excerpt.rendered || post.content.rendered || "";
-
+function toSummary(item: M1BlogItemBase): CmsPostSummary {
   return {
-    categories: getTerms(post, "category"),
-    coverImage: getFeaturedMedia(post),
-    id: String(post.id),
-    publishedAt: getPublishedDate(post.date_gmt ?? post.date) ?? normalizePublishedDate(post.date),
-    slug: post.slug,
+    categories: mapCategoryNames(item.categories),
+    coverImage: item.coverImage || undefined,
+    id: item.slug,
+    publishedAt: getPublishedDate(item.date) ?? normalizePublishedDate(item.date),
+    slug: item.slug,
     source: "wordpress",
-    summary: truncateText(htmlToPlainText(summarySource), 220),
-    tags: getTerms(post, "post_tag"),
-    title: htmlToPlainText(post.title.rendered) || "Untitled",
-    updatedAt: getPublishedDate(post.modified_gmt ?? post.modified),
+    summary: truncateText(htmlToPlainText(item.excerpt || ""), 220),
+    tags: [],
+    title: item.title || "Untitled",
   };
 }
 
-function toPost(post: WordPressPost): CmsPost {
+function toPost(detail: M1BlogDetail): CmsPost {
   return {
-    ...toSummary(post),
-    contentHtml: sanitizeWordPressHtml(post.content.rendered ?? ""),
+    ...toSummary(detail),
+    contentHtml: sanitizeWordPressHtml(detail.content ?? ""),
     contentType: "html",
   };
 }
 
-async function fetchWordPress<T>(path: string, searchParams?: URLSearchParams) {
+// ---------------------------------------------------------------------------
+// Fetch wrapper
+// ---------------------------------------------------------------------------
+
+async function fetchM1Blog<T>(path: string, searchParams?: URLSearchParams) {
   const siteUrl = getWordPressSiteUrl();
 
   if (!siteUrl) {
@@ -103,51 +97,55 @@ async function fetchWordPress<T>(path: string, searchParams?: URLSearchParams) {
     },
     next: {
       revalidate: BLOG_REVALIDATE_SECONDS,
-      tags: [BLOG_CACHE_TAG],
+      tags: [CACHE_TAG_BLOG],
     },
   });
 
   if (!response.ok) {
-    throw new Error(`WordPress request failed: ${response.status} ${response.statusText}`);
+    throw new Error(`M1-R blog request failed: ${response.status} ${response.statusText}`);
   }
 
-  return response as Response & {
-    json(): Promise<T>;
-  };
+  return response.json() as Promise<T>;
 }
 
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
+
 export async function listWordPressPosts(): Promise<CmsPostSummary[]> {
-  const posts: WordPressPost[] = [];
+  const allItems: M1BlogItem[] = [];
   let page = 1;
   let totalPages = 1;
 
   do {
-    const searchParams = new URLSearchParams({
-      _embed: "wp:featuredmedia,wp:term",
+    const params = new URLSearchParams({
+      lang: "zh",
       page: String(page),
       per_page: String(WORDPRESS_POSTS_PER_PAGE),
-      status: "publish",
     });
-    const response = await fetchWordPress<WordPressPost[]>("/wp-json/wp/v2/posts", searchParams);
-    const batch = await response.json();
 
-    posts.push(...batch);
-    totalPages = Number.parseInt(response.headers.get("x-wp-totalpages") ?? "1", 10);
+    const data = await fetchM1Blog<M1BlogListResponse>("/wp-json/mindhikers/v1/blog", params);
+
+    allItems.push(...data.items);
+    totalPages = data.totalPages;
     page += 1;
   } while (page <= totalPages);
 
-  return posts.map(toSummary);
+  return allItems.map(toSummary);
 }
 
 export async function getWordPressPostBySlug(slug: string): Promise<CmsPost | null> {
-  const searchParams = new URLSearchParams({
-    _embed: "wp:featuredmedia,wp:term",
-    slug,
-    status: "publish",
-  });
-  const response = await fetchWordPress<WordPressPost[]>("/wp-json/wp/v2/posts", searchParams);
-  const posts = await response.json();
-  const post = posts[0];
+  const params = new URLSearchParams({ lang: "zh" });
 
-  return post ? toPost(post) : null;
+  try {
+    const detail = await fetchM1Blog<M1BlogDetail>(
+      `/wp-json/mindhikers/v1/blog/${encodeURIComponent(slug)}`,
+      params,
+    );
+    return toPost(detail);
+  } catch (error) {
+    // 404 or other fetch errors — treat as "not found"
+    console.warn(`M1-R blog: failed to fetch post "${slug}":`, error);
+    return null;
+  }
 }

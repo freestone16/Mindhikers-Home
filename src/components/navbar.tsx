@@ -14,7 +14,7 @@ export default function Navbar() {
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-[3px] z-40 px-4 sm:px-6">
-      <div className="pointer-events-auto mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-[1.35rem] border border-border/70 bg-background/88 px-3 py-2.5 shadow-[0_12px_40px_rgba(20,24,22,0.08)] backdrop-blur-md sm:px-4">
+      <div className="pointer-events-auto mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-[1.0rem] border border-border/70 bg-background/88 px-3 py-2.5 shadow-[0_12px_40px_rgba(20,24,22,0.08)] backdrop-blur-md sm:px-4">
         <Link
           href={locale === "en" ? "/en" : "/"}
           className="flex items-center gap-3"
@@ -43,7 +43,7 @@ export default function Navbar() {
                 asChild
                 variant="ghost"
                 className={cn(
-                  "h-8 rounded-full px-3 text-[12px] text-muted-foreground hover:bg-accent hover:text-foreground",
+                  "h-8 rounded-full px-3 text-[14px] text-muted-foreground hover:bg-accent hover:text-foreground",
                   active && "bg-accent text-foreground"
                 )}
               >
@@ -55,7 +55,7 @@ export default function Navbar() {
         <Button
           asChild
           variant="outline"
-          className="h-8 rounded-full border-border bg-background/85 px-3 text-[12px]"
+          className="h-8 rounded-full border-border bg-background/85 px-3 text-[13px]"
         >
           <Link href={content.navigation.switchLanguage.href}>
             {content.navigation.switchLanguage.label}

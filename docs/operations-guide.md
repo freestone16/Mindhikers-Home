@@ -1,3 +1,13 @@
+# ⚠️ 本手册已过时（历史保留）
+
+> **状态**：基于旧"WordPress 全栈模板渲染"架构，与当前 **Headless 架构** 不匹配。
+>
+> **请使用新版手册**：[`docs/operations-guide-headless.md`](./operations-guide-headless.md)
+>
+> **保留原因**：历史参考、字段速查表部分仍有价值。
+
+---
+
 # MindHikers Homepage 日常运营指南
 
 > **适用范围**：Mindhikers Homepage WordPress CMS staging / production

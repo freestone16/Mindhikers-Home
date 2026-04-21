@@ -32,6 +32,15 @@ export const metadata: Metadata = {
     url: "https://www.mindhikers.com",
     siteName: "心行者 Mindhikers",
     type: "website",
+    locale: "zh_CN",
+    alternateLocale: ["en_US"],
+  },
+  alternates: {
+    canonical: "/",
+    languages: {
+      "zh-Hans": "/",
+      en: "/en",
+    },
   },
   robots: {
     index: true,
@@ -70,7 +79,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light">
           <Navbar />
-          <div className="relative z-10 mx-auto max-w-6xl px-5 pb-20 pt-[4.8rem] sm:px-6 sm:pt-[5.2rem]">
+          <div className="relative z-10 mx-auto max-w-6xl px-5 pb-20 pt-[2.4rem] sm:px-6 sm:pt-[2.8rem]">
             {children}
           </div>
         </ThemeProvider>

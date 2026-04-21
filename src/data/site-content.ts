@@ -23,6 +23,7 @@ type ContactLink = {
   href: string;
   label: string;
   note: string;
+  qrImage?: string;
 };
 
 type ProductDetail = {
@@ -54,11 +55,8 @@ export type HomeContent = {
     primaryAction: ActionLink;
     secondaryAction: ActionLink;
     highlights: string[];
-    statusLabel: string;
-    statusValue: string;
-    availabilityLabel: string;
-    availabilityValue: string;
     panelTitle: string;
+    quickLinks: { label: string; href: string; tag: string }[];
   };
   about: {
     title: string;
@@ -148,11 +146,11 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
         label: "进入博客",
       },
       highlights: ["双语品牌入口", "产品化实验", "长期写作与研究"],
-      statusLabel: "Current focus",
-      statusValue: "Homepage refresh in progress",
-      availabilityLabel: "Working rhythm",
-      availabilityValue: "Research, build, write, publish",
-      panelTitle: "Homepage blocks",
+      panelTitle: "Quick links",
+      quickLinks: [
+        { label: "黄金坩埚", href: "/golden-crucible", tag: "产品" },
+        { label: "博客最新文章", href: "/blog", tag: "内容" },
+      ],
     },
     about: {
       title: "About",
@@ -301,11 +299,11 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
         label: "Open the blog",
       },
       highlights: ["Bilingual entry point", "Product experiments", "Research and publishing"],
-      statusLabel: "Current focus",
-      statusValue: "Homepage refresh in progress",
-      availabilityLabel: "Working rhythm",
-      availabilityValue: "Research, build, write, publish",
-      panelTitle: "Homepage blocks",
+      panelTitle: "Quick links",
+      quickLinks: [
+        { label: "Golden Crucible", href: "/en/golden-crucible", tag: "Product" },
+        { label: "Latest blog posts", href: "/en/blog", tag: "Content" },
+      ],
     },
     about: {
       title: "About",

@@ -9,6 +9,15 @@ const posts = defineCollection({
     name: "posts",
     directory: "content",
     include: "**/*.mdx",
+    exclude: [
+        "remote-work-productivity.mdx",
+        "typescript-best-practices.mdx",
+        "api-design-principles.mdx",
+        "nextjs-performance-tips.mdx",
+        "testing-react-apps.mdx",
+        "building-design-systems.mdx",
+        "git-workflow-guide.mdx",
+    ],
     schema: z.object({
         title: z.string(),
         publishedAt: z.string().refine(isValidPublishedDate, {

@@ -8,6 +8,16 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: content.metadata.title,
     description: content.metadata.description,
+    alternates: {
+      languages: {
+        "zh-Hans": "/",
+        en: "/en",
+      },
+    },
+    openGraph: {
+      locale: "en_US",
+      alternateLocale: ["zh_CN"],
+    },
   };
 }
 

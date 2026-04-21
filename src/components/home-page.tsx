@@ -1,5 +1,6 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { Button } from "@/components/ui/button";
+import { ContactLinkCard } from "@/components/contact-link-card";
 import { HomeContent } from "@/data/site-content";
 import {
   ArrowUpRight,
@@ -52,7 +53,7 @@ export function HomePage({
   recentPosts: HomePost[];
 }) {
   return (
-    <main className="space-y-16 pb-16 pt-6 sm:space-y-20 sm:pt-10">
+    <main className="space-y-8 pb-12 pt-4 sm:space-y-11 sm:pt-6">
       <section className="grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.8fr)] lg:gap-10">
         <div className="space-y-8">
           <div className="space-y-5">
@@ -110,56 +111,27 @@ export function HomePage({
 
         <div className="grid gap-4">
           <BlurFade delay={BLUR_FADE_DELAY * 6}>
-            <aside className="overflow-hidden rounded-[1.35rem] border border-border/70 bg-white/78 p-5 shadow-[0_20px_60px_rgba(26,34,31,0.06)] backdrop-blur-xl">
-              <div className="flex items-center gap-3 border-b border-border/70 pb-4">
-                <div className="relative size-11 overflow-hidden rounded-2xl border border-border/80 bg-background">
-                  <Image
-                    src="/MindHikers.png"
-                    alt="心行者 Mindhikers"
-                    fill
-                    className="object-cover"
-                    sizes="44px"
-                    priority
-                  />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                    Mindhikers
-                  </p>
-                  <p className="text-sm font-medium text-foreground">
-                    {content.navigation.brand}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-5 space-y-5">
-                <div className="grid gap-2.5">
-                  <InfoPill
-                    label={content.hero.statusLabel}
-                    value={content.hero.statusValue}
-                  />
-                  <InfoPill
-                    label={content.hero.availabilityLabel}
-                    value={content.hero.availabilityValue}
-                  />
-                </div>
-
-                <div className="rounded-[1.35rem] bg-[linear-gradient(180deg,rgba(241,245,243,0.92),rgba(255,255,255,0.82))] p-4">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                    {content.hero.panelTitle}
-                  </p>
-                  <div className="mt-3 grid gap-2">
-                    {content.navigation.links.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="group flex items-center justify-between rounded-[0.8rem] border border-transparent bg-white/80 px-3 py-3 text-sm text-foreground/80 transition-all hover:border-border/80 hover:bg-white"
-                      >
+            <aside className="overflow-hidden rounded-[1.0rem] border border-border/70 bg-white/78 p-6 shadow-[0_20px_60px_rgba(26,34,31,0.06)] backdrop-blur-xl">
+              <div className="rounded-[1.0rem] bg-[linear-gradient(180deg,rgba(241,245,243,0.92),rgba(255,255,255,0.82))] p-5">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {content.hero.panelTitle}
+                </p>
+                <div className="mt-4 grid gap-3">
+                  {content.hero.quickLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="group flex items-center justify-between rounded-[0.9rem] border border-transparent bg-white/80 px-4 py-4 text-[15px] text-foreground/80 transition-all hover:border-border/80 hover:bg-white"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] text-primary">
+                          {item.tag}
+                        </span>
                         <span>{item.label}</span>
-                        <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                      </Link>
-                    ))}
-                  </div>
+                      </div>
+                      <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                  ))}
                 </div>
               </div>
             </aside>
@@ -169,10 +141,10 @@ export function HomePage({
 
       <section
         id="about"
-        className="scroll-mt-[9.5rem] grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)] sm:scroll-mt-[10rem] lg:scroll-mt-[10.5rem]"
+        className="scroll-mt-[5.1rem] grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)] sm:scroll-mt-[5.2rem] lg:scroll-mt-[5.3rem]"
       >
         <BlurFade delay={BLUR_FADE_DELAY * 7}>
-          <div className="rounded-[1.35rem] border border-border/70 bg-white/70 p-6 shadow-[0_18px_55px_rgba(26,34,31,0.05)] backdrop-blur">
+          <div className="rounded-[1.0rem] border border-border/70 bg-white/70 p-6 shadow-[0_18px_55px_rgba(26,34,31,0.05)] backdrop-blur">
             <SectionEyebrow>{content.about.title}</SectionEyebrow>
             <p className="mt-4 max-w-2xl text-2xl leading-tight font-semibold tracking-[-0.03em] text-foreground sm:text-[2rem]">
               {content.about.intro}
@@ -193,7 +165,7 @@ export function HomePage({
         <div className="grid gap-4">
           {content.about.notes.map((note, index) => (
             <BlurFade key={note} delay={BLUR_FADE_DELAY * (8 + index)}>
-              <div className="flex min-h-28 items-start gap-4 rounded-[1.35rem] border border-border/70 bg-white/65 p-5 backdrop-blur">
+              <div className="flex min-h-28 items-start gap-4 rounded-[1.0rem] border border-border/70 bg-white/65 p-5 backdrop-blur">
                 <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <CircleDot className="size-4" />
                 </span>
@@ -222,7 +194,7 @@ export function HomePage({
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.75fr)]">
           <BlurFade delay={BLUR_FADE_DELAY * 12}>
-            <div className="group rounded-[1.35rem] border border-border/70 bg-white/80 p-6 shadow-[0_18px_55px_rgba(26,34,31,0.06)] transition-transform hover:-translate-y-1">
+            <div className="group rounded-[1.0rem] border border-border/70 bg-white/80 p-6 shadow-[0_18px_55px_rgba(26,34,31,0.06)] transition-transform hover:-translate-y-1">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <SectionEyebrow>{content.product.featured.eyebrow}</SectionEyebrow>
@@ -255,7 +227,7 @@ export function HomePage({
           <div className="grid gap-4">
             {content.product.items.map((item, index) => (
               <BlurFade key={item.title} delay={BLUR_FADE_DELAY * (13 + index)}>
-                <div className="rounded-[1.35rem] border border-border/70 bg-white/68 p-5 backdrop-blur">
+                <div className="rounded-[1.0rem] border border-border/70 bg-white/68 p-5 backdrop-blur">
                   <SectionEyebrow>{item.eyebrow}</SectionEyebrow>
                   <h3 className="mt-3 text-lg font-semibold tracking-[-0.02em] text-foreground">
                     {item.title}
@@ -304,14 +276,14 @@ export function HomePage({
               <BlurFade key={post.slug} delay={BLUR_FADE_DELAY * (17 + index)}>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="group flex h-full flex-col justify-between rounded-[1.35rem] border border-border/70 bg-white/70 p-5 backdrop-blur transition-transform hover:-translate-y-1"
+                  className="group flex h-full flex-col justify-between rounded-[1.0rem] border border-border/70 bg-white/70 p-5 backdrop-blur transition-transform hover:-translate-y-1"
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                       <span>{post.publishedAt}</span>
                       <Sparkles className="size-3.5" />
                     </div>
-                    <h3 className="text-xl font-semibold leading-tight tracking-[-0.03em] text-foreground">
+                    <h3 className="text-xl font-medium leading-tight tracking-[-0.03em] text-foreground">
                       {post.title}
                     </h3>
                     <p className="text-[14px] leading-7 text-foreground/70">
@@ -328,7 +300,7 @@ export function HomePage({
           </div>
         ) : (
           <BlurFade delay={BLUR_FADE_DELAY * 17}>
-            <div className="rounded-[1.35rem] border border-border/70 bg-white/70 p-6 text-[14px] text-foreground/68 backdrop-blur">
+            <div className="rounded-[1.0rem] border border-border/70 bg-white/70 p-6 text-[14px] text-foreground/68 backdrop-blur">
               {content.blog.emptyLabel}
             </div>
           </BlurFade>
@@ -337,10 +309,10 @@ export function HomePage({
 
       <section
         id="contact"
-        className="scroll-mt-[5.1rem] grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] sm:scroll-mt-[5.2rem] lg:scroll-mt-[5.3rem]"
+        className="scroll-mt-[5.1rem] grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] sm:scroll-mt-[5.2rem] lg:scroll-mt-[5.3rem] pb-20"
       >
         <BlurFade delay={BLUR_FADE_DELAY * 20}>
-          <div className="rounded-[1.35rem] border border-border/70 bg-[linear-gradient(180deg,rgba(248,250,248,0.95),rgba(255,255,255,0.88))] p-6 shadow-[0_18px_55px_rgba(26,34,31,0.06)]">
+          <div className="rounded-[1.0rem] border border-border/70 bg-[linear-gradient(180deg,rgba(248,250,248,0.95),rgba(255,255,255,0.88))] p-6 shadow-[0_18px_55px_rgba(26,34,31,0.06)]">
             <SectionEyebrow>{content.contact.title}</SectionEyebrow>
             <h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-[2.4rem]">
               {content.contact.headline}
@@ -364,7 +336,7 @@ export function HomePage({
 
         <div className="grid gap-4">
           <BlurFade delay={BLUR_FADE_DELAY * 21}>
-            <div className="rounded-[1.35rem] border border-border/70 bg-white/72 p-5 backdrop-blur">
+            <div className="rounded-[1.0rem] border border-border/70 bg-white/72 p-5 backdrop-blur">
               <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                 <MapPinned className="size-3.5" />
                 {content.contact.locationLabel}
@@ -383,16 +355,12 @@ export function HomePage({
 
           {content.contact.links.map((item, index) => (
             <BlurFade key={item.href} delay={BLUR_FADE_DELAY * (22 + index)}>
-              <Link
+              <ContactLinkCard
                 href={item.href}
-                className="group flex items-center justify-between rounded-[1.35rem] border border-border/70 bg-white/68 px-5 py-4 backdrop-blur transition-transform hover:-translate-y-0.5"
-              >
-                <div>
-                  <p className="text-sm font-medium text-foreground">{item.label}</p>
-                  <p className="mt-1 text-[13px] text-foreground/62">{item.note}</p>
-                </div>
-                <ArrowUpRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
+                label={item.label}
+                note={item.note}
+                qrImage={item.qrImage}
+              />
             </BlurFade>
           ))}
         </div>
