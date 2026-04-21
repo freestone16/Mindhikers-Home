@@ -49,7 +49,8 @@ function isHomeContentReady(payload: unknown, locale: Locale): payload is HomeCo
     hero.title.length === 0 ||
     typeof hero.description !== "string" ||
     !isLink(hero.primaryAction) ||
-    !isLink(hero.secondaryAction)
+    !isLink(hero.secondaryAction) ||
+    !Array.isArray(hero.quickLinks)
   ) {
     return false;
   }

@@ -60,6 +60,7 @@ export type HomeContent = {
     availabilityLabel: string;
     availabilityValue: string;
     panelTitle: string;
+    quickLinks: { label: string; href: string; tag: string }[];
   };
   about: {
     title: string;
@@ -153,7 +154,11 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       statusValue: "Homepage refresh in progress",
       availabilityLabel: "Working rhythm",
       availabilityValue: "Research, build, write, publish",
-      panelTitle: "Homepage blocks",
+      panelTitle: "Quick links",
+      quickLinks: [
+        { label: "黄金坩埚", href: "/golden-crucible", tag: "产品" },
+        { label: "博客最新文章", href: "/blog", tag: "内容" },
+      ],
     },
     about: {
       title: "About",
@@ -306,7 +311,11 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       statusValue: "Homepage refresh in progress",
       availabilityLabel: "Working rhythm",
       availabilityValue: "Research, build, write, publish",
-      panelTitle: "Homepage blocks",
+      panelTitle: "Quick links",
+      quickLinks: [
+        { label: "Golden Crucible", href: "/en/golden-crucible", tag: "Product" },
+        { label: "Latest blog posts", href: "/en/blog", tag: "Content" },
+      ],
     },
     about: {
       title: "About",

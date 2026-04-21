@@ -43,7 +43,7 @@ export default function Navbar() {
                 asChild
                 variant="ghost"
                 className={cn(
-                  "h-8 rounded-full px-3 text-[13px] text-muted-foreground hover:bg-accent hover:text-foreground",
+                  "h-8 rounded-full px-3 text-[14px] text-muted-foreground hover:bg-accent hover:text-foreground",
                   active && "bg-accent text-foreground"
                 )}
               >

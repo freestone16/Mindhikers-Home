@@ -150,13 +150,18 @@ export function HomePage({
                     {content.hero.panelTitle}
                   </p>
                   <div className="mt-3 grid gap-2">
-                    {content.navigation.links.map((item) => (
+                    {content.hero.quickLinks.map((item) => (
                       <Link
                         key={item.href}
                         href={item.href}
                         className="group flex items-center justify-between rounded-[0.8rem] border border-transparent bg-white/80 px-3 py-3 text-base text-foreground/80 transition-all hover:border-border/80 hover:bg-white"
                       >
-                        <span>{item.label}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] text-primary">
+                            {item.tag}
+                          </span>
+                          <span>{item.label}</span>
+                        </div>
                         <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
                       </Link>
                     ))}
@@ -170,7 +175,7 @@ export function HomePage({
 
       <section
         id="about"
-        className="scroll-mt-[9.5rem] grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)] sm:scroll-mt-[10rem] lg:scroll-mt-[10.5rem]"
+        className="scroll-mt-[5.1rem] grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)] sm:scroll-mt-[5.2rem] lg:scroll-mt-[5.3rem]"
       >
         <BlurFade delay={BLUR_FADE_DELAY * 7}>
           <div className="rounded-[1.0rem] border border-border/70 bg-white/70 p-6 shadow-[0_18px_55px_rgba(26,34,31,0.05)] backdrop-blur">
@@ -338,7 +343,7 @@ export function HomePage({
 
       <section
         id="contact"
-        className="scroll-mt-[5.1rem] grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] sm:scroll-mt-[5.2rem] lg:scroll-mt-[5.3rem]"
+        className="scroll-mt-[5.1rem] grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] sm:scroll-mt-[5.2rem] lg:scroll-mt-[5.3rem] pb-20"
       >
         <BlurFade delay={BLUR_FADE_DELAY * 20}>
           <div className="rounded-[1.0rem] border border-border/70 bg-[linear-gradient(180deg,rgba(248,250,248,0.95),rgba(255,255,255,0.88))] p-6 shadow-[0_18px_55px_rgba(26,34,31,0.06)]">
