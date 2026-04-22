@@ -53,14 +53,11 @@ export function HomePage({
   recentPosts: HomePost[];
 }) {
   return (
-    <main className="space-y-8 pb-12 pt-4 sm:space-y-11 sm:pt-6">
+    <main className="space-y-8 pb-12 pt-8 sm:space-y-11 sm:pt-10">
       <section className="grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.8fr)] lg:gap-10">
         <div className="space-y-8">
           <div className="space-y-5">
             <BlurFade delay={BLUR_FADE_DELAY}>
-              <SectionEyebrow>{content.hero.eyebrow}</SectionEyebrow>
-            </BlurFade>
-            <BlurFade delay={BLUR_FADE_DELAY * 2}>
               <h1 className="max-w-4xl text-4xl leading-[0.98] font-semibold tracking-[-0.04em] text-foreground sm:text-5xl xl:text-[4.5rem]">
                 {content.hero.title}
               </h1>
@@ -111,28 +108,26 @@ export function HomePage({
 
         <div className="grid gap-4">
           <BlurFade delay={BLUR_FADE_DELAY * 6}>
-            <aside className="overflow-hidden rounded-[1.0rem] border border-border/70 bg-white/78 p-6 shadow-[0_20px_60px_rgba(26,34,31,0.06)] backdrop-blur-xl">
-              <div className="rounded-[1.0rem] bg-[linear-gradient(180deg,rgba(241,245,243,0.92),rgba(255,255,255,0.82))] p-5">
-                <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                  {content.hero.panelTitle}
-                </p>
-                <div className="mt-4 grid gap-3">
-                  {content.hero.quickLinks.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="group flex items-center justify-between rounded-[0.9rem] border border-transparent bg-white/80 px-4 py-4 text-[15px] text-foreground/80 transition-all hover:border-border/80 hover:bg-white"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] text-primary">
-                          {item.tag}
-                        </span>
-                        <span>{item.label}</span>
-                      </div>
-                      <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                    </Link>
-                  ))}
-                </div>
+            <aside className="overflow-hidden rounded-[1.0rem] border border-border/70 bg-white/78 p-5 shadow-[0_20px_60px_rgba(26,34,31,0.06)] backdrop-blur-xl">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                {content.hero.panelTitle}
+              </p>
+              <div className="mt-4 grid gap-2.5">
+                {content.hero.quickLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="group flex items-center justify-between rounded-[0.75rem] border border-border/60 bg-white/60 px-4 py-3.5 text-[15px] text-foreground/80 transition-all hover:border-border/90 hover:bg-white hover:shadow-sm"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                        {item.tag}
+                      </span>
+                      <span>{item.label}</span>
+                    </div>
+                    <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                ))}
               </div>
             </aside>
           </BlurFade>
