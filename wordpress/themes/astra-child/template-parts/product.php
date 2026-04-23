@@ -10,9 +10,10 @@ if (!defined('ABSPATH')) {
  * Product 区块模板
  *
  * @var array $args
- * @var string $lang
  */
-$lang = isset($args['lang']) && is_string($args['lang']) ? $args['lang'] : 'zh';
+$payload = $args['payload'] ?? [];
+$product = $payload['product'] ?? [];
+$lang = function_exists('pll_current_language') ? pll_current_language('slug') : 'zh';
 
 $products = new WP_Query([
     'post_type' => 'mh_product',
@@ -38,17 +39,20 @@ if ($products->have_posts()) {
 <section class="mh-product-section" id="product">
     <div class="mh-container">
         <div class="mh-section-header mh-section-header--center">
-            <h2 class="mh-product-title"><?php echo esc_html(carbon_get_theme_option("product_title_{$lang}") ?: ''); ?></h2>
-            <p class="mh-product-description"><?php echo esc_html(carbon_get_theme_option("product_desc_{$lang}") ?: ''); ?></p>
+            <?php if (!empty($product['title'])) : ?>
+                <h2 class="mh-product-title"><?php echo esc_html($product['title']); ?></h2>
+            <?php endif; ?>
+            <?php if (!empty($product['description'])) : ?>
+                <p class="mh-product-description"><?php echo esc_html($product['description']); ?></p>
+            <?php endif; ?>
         </div>
         
         <?php if (!empty($filtered_products)) : ?>
             <div class="mh-product-grid">
                 <?php foreach ($filtered_products as $product_post) : ?>
                     <?php
-                    setup_postdata($product_post);
-                    $subtitle = carbon_get_the_post_meta('product_subtitle');
-                    $status = carbon_get_the_post_meta('product_status');
+                    $subtitle = get_post_meta($product_post->ID, 'product_subtitle', true);
+                    $status = get_post_meta($product_post->ID, 'product_status', true);
                     $status_labels_zh = [
                         'idea' => '构思中',
                         'dev' => '开发中',
@@ -64,8 +68,8 @@ if ($products->have_posts()) {
                         'sunset' => 'Sunset',
                     ];
                     $status_map = $lang === 'en' ? $status_labels_en : $status_labels_zh;
-                    $status_label = $status_map[$status] ?? '';
-                    $entry_url = carbon_get_the_post_meta('product_entry_url');
+                    $status_label = is_string($status) && isset($status_map[$status]) ? $status_map[$status] : '';
+                    $entry_url = get_post_meta($product_post->ID, 'product_entry_url', true);
                     ?>
                     
                     <article class="mh-product-card">
@@ -77,7 +81,7 @@ if ($products->have_posts()) {
                         <p class="mh-product-card-description"><?php echo esc_html(get_the_excerpt($product_post)); ?></p>
                         
                         <?php if ($status_label) : ?>
-                            <span class="mh-product-card-status <?php echo $status === 'live' ? 'mh-product-card-status--active' : ''; ?>">
+                            <span class="mh-product-card-status <?php echo esc_attr($status === 'live' ? 'mh-product-card-status--active' : ''); ?>">
                                 <?php echo esc_html($status_label); ?>
                             </span>
                         <?php endif; ?>

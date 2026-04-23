@@ -10,35 +10,47 @@ if (!defined('ABSPATH')) {
  * Hero 区块模板
  *
  * @var array $args
- * @var string $lang
  */
-$lang = isset($args['lang']) && is_string($args['lang']) ? $args['lang'] : 'zh';
+$payload = $args['payload'] ?? [];
+$hero = $payload['hero'] ?? [];
 ?>
 
 <section class="mh-hero-section" id="hero">
     <div class="mh-container">
         <div class="mh-hero-content">
-            <span class="mh-hero-eyebrow"><?php echo esc_html(carbon_get_theme_option("hero_eyebrow_{$lang}") ?: ''); ?></span>
-            <h1 class="mh-hero-title"><?php echo esc_html(carbon_get_theme_option("hero_title_{$lang}") ?: ''); ?></h1>
-            <p class="mh-hero-description"><?php echo esc_html(carbon_get_theme_option("hero_desc_{$lang}") ?: ''); ?></p>
+            <?php if (!empty($hero['eyebrow'])) : ?>
+                <span class="mh-hero-eyebrow"><?php echo esc_html($hero['eyebrow']); ?></span>
+            <?php endif; ?>
+            
+            <?php if (!empty($hero['title'])) : ?>
+                <h1 class="mh-hero-title"><?php echo esc_html($hero['title']); ?></h1>
+            <?php endif; ?>
+            
+            <?php if (!empty($hero['description'])) : ?>
+                <p class="mh-hero-description"><?php echo esc_html($hero['description']); ?></p>
+            <?php endif; ?>
             
             <div class="mh-hero-actions">
-                <?php
-                $primary_text = carbon_get_theme_option("hero_cta_primary_text_{$lang}");
-                $primary_url = carbon_get_theme_option('hero_cta_primary_url');
-                if ($primary_text && $primary_url) :
-                    ?>
-                    <a href="<?php echo esc_url($primary_url); ?>" class="mh-hero-cta-primary"><?php echo esc_html($primary_text); ?></a>
+                <?php if (!empty($hero['primaryAction']['label']) && !empty($hero['primaryAction']['href'])) : ?>
+                    <a href="<?php echo esc_url($hero['primaryAction']['href']); ?>" class="mh-hero-cta-primary">
+                        <?php echo esc_html($hero['primaryAction']['label']); ?>
+                    </a>
                 <?php endif; ?>
                 
-                <?php
-                $secondary_text = carbon_get_theme_option("hero_cta_secondary_text_{$lang}");
-                $secondary_url = carbon_get_theme_option('hero_cta_secondary_url');
-                if ($secondary_text && $secondary_url) :
-                    ?>
-                    <a href="<?php echo esc_url($secondary_url); ?>" class="mh-hero-cta-secondary"><?php echo esc_html($secondary_text); ?></a>
+                <?php if (!empty($hero['secondaryAction']['label']) && !empty($hero['secondaryAction']['href'])) : ?>
+                    <a href="<?php echo esc_url($hero['secondaryAction']['href']); ?>" class="mh-hero-cta-secondary">
+                        <?php echo esc_html($hero['secondaryAction']['label']); ?>
+                    </a>
                 <?php endif; ?>
             </div>
+            
+            <?php if (!empty($hero['highlights'])) : ?>
+                <ul class="mh-hero-highlights">
+                    <?php foreach ($hero['highlights'] as $highlight) : ?>
+                        <li><?php echo esc_html($highlight); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
         </div>
     </div>
 </section>

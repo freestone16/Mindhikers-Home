@@ -1,225 +1,292 @@
-🕐 Last updated: 2026-04-20 16:30
-🌿 Branch: `staging`
-📌 Base commit: `d238666`（staging HEAD，已推送 origin/staging）
-🚀 Push status: ✅ `refs MIN-164 style: UI 微调——模块间距收小、圆角收小、导航字体略大`
-
-## 当前状态：staging 功能闭环，UI 微调待续 🟡
-
-> **注意**：UI 微调（模块间距/圆角/字体）已部署但老卢未完全满意，需下一会话继续调整。
-
-## 交接入口（新会话请从这里开始）
-
-- 工作目录：`/Users/luzhoua/Mindhikers/Mindhikers-Homepage`
-- 工作分支：**`staging`**
-- **PRD（必读）**：`docs/plans/2026-04-18_Mindhikers_Homepage_PRD_Revision_v2.md`
-- **实施方案（必读）**：`docs/plans/2026-04-18_Mindhikers_Headless_Pivot_Implementation_Plan.md`
-- **本轮战果复盘**：`docs/dev_logs/2026-04-20.md`
-- **首批技术规则**：`docs/04_progress/rules.md`
-- staging 前端：`https://mindhikers-homepage-staging.up.railway.app`
-- staging WP：`https://wordpress-l1ta-staging.up.railway.app`
-- Linear 本轮主 issue：[MIN-162](https://linear.app/mindhikers/issue/MIN-162)（MIN-110 子 issue）
-
-## 本轮已完成（2026-04-20）
-
-1. ✅ **头号阻塞破局**：m1-rest 插件通过独立 ZIP 走 WP Admin 上传通道装进 staging WP 容器
-2. ✅ **Blog REST 全通**：`/wp-json/mindhikers/v1/blog` 返回文章 + 分类聚合
-3. ✅ **前台 Blog 列表/详情**（中英文）
-4. ✅ **Contact 区块**（中英文首页 `#contact`）
-5. ✅ **手机竖屏**（iPhone 14 Pro 模拟，5 张页面）
-6. ✅ **Next.js `/api/revalidate` 端点**（curl POST HTTP 200）
-7. ✅ **Revalidate 完整集**：插件 v1.1.0 追加 Carbon Fields Revalidate 字段注册 → WP 后台出现 "Revalidate 配置" 菜单 → 填 URL + Secret → 改 Blog 保存触发 → 前台自动同步
-8. ✅ **治理文档 commit 入 origin/staging**：HANDOFF + 2026-04-20.md + rules.md 首批 5 条
-
-## ✅ 本轮已完成（续）
-
-9. ✅ **运维手册重写**：`docs/operations-guide-headless.md` 已落盘，12 章骨架覆盖 Headless 架构双环境
-10. ✅ **旧手册归档**：`docs/operations-guide.md` 顶部加跳转提示，保留为历史
-11. ✅ **MIN-163 commit 已推送 origin/staging**
-
-## 🔴 下一会话重点任务
-
-### 优先级 1：UI 微调收尾（老卢未满意）
-
-**当前问题**：
-1. 模块间距缩小后老卢觉得仍不够或变化不明显
-2. 小模块圆角缩小后老卢觉得仍太圆
-3. Blog 卡片标题 `font-medium` 老卢觉得"变粗变丑"
-4. 侧边栏 About/Product/Blog/Contact 字体放大后效果未达预期
-
-**建议下一会话**：
-- 与老卢确认具体期望数值（如圆角到底要多少 rem、间距要多少 px）
-- 或提供 2-3 个版本供老卢选择
-
-### 优先级 2：Production 部署
-
-**Linear issue**：[MIN-164](https://linear.app/mindhikers/issue/MIN-164)（MIN-110 子 issue）
-
-**前置**：UI 微调需老卢验收通过后，再进行 production 部署
-
-**背景**：staging 功能层面已闭环（Blog/Contact/Revalidate/手机竖屏均通），运维手册已重写。
-
-### production 部署前置 checklist
-
-| # | 事项 | 状态 | 负责 |
-|---|------|------|------|
-| 1 | m1-rest 插件 v1.1.0 装进 production WP | ⏳ 待执行 | 老杨 |
-| 2 | production Revalidate 配置（URL + Secret） | ⏳ 待执行 | 老杨 |
-| 3 | Railway production 环境变量更新 | ⏳ 待执行 | 老杨 |
-| 4 | staging → main 合并 | ⏳ 待老卢验收后 | 老卢决策 |
-| 5 | production 冒烟验证 | ⏳ 待执行 | 老杨 |
-
-### 关键配置（production）
-
-| 配置项 | 值 |
-|--------|-----|
-| Revalidate URL | `https://www.mindhikers.com/api/revalidate` |
-| Revalidate Secret | `be4a02005c65a65b7947c1b8b7d548364a5746121622881393e2afa75e56755c`（新生成 32 字节随机值） |
-| WP CMS 域名 | `homepage-manage.mindhikers.com` |
-
-> ⚠️ **Secret 已生成但尚未写入任何环境**。待老卢确认后，老杨同步到 Railway + WP Admin。
-
-### 风险守门
-
-- production WP 容器同样缺 m1-rest，必须先装插件再合并代码
-- REVALIDATE_SECRET 已新生成，与 staging 不同
-- 域名切换时需评估 Cloudflare / DNS 影响
+🕐 Last updated: 2026-04-23 (本窗口结束时)
+🌿 Branch: `experiment/wp-traditional-mode`
+📌 Base commit: `c67c2d7`
+🚀 Push status: ❌ 不推远端（本地实验分支）
 
 ---
 
-## 历史：下一会话重点任务（已归档）
+## 当前状态：WP 轻量定制实验 — Units 1-9 代码实施完成 🟡（待 WP 容器验证）
 
-### ~~运维手册重写~~ → 已完成（MIN-163）
+**一句话**：在 `experiment/wp-traditional-mode` 分支上完成了 WP 轻量定制模式的代码改造，让 WordPress 主题能直接读取 CMS Core 的 JSON 数据并渲染首页。代码已就绪，待本地 WP 容器验证。
 
-### 背景
+### 本窗口核心成就
 
-现有 `docs/operations-guide.md`（2026-04-16 更新）是**基于旧"WordPress 全栈模板渲染"架构**写的，与当前 **"WordPress Headless + Next.js 前台"** 架构大面积对不上。交接给下一会话重写。
+1. ✅ **方案制定**：用 ce:plan 制定了 `docs/plans/2026-04-23-001-feat-wp-lightweight-customization-plan.md`
+2. ✅ **Unit 1**：CMS Core 新增数据桥接层 `getHomepageDataForTheme()` + WP Transients 缓存（6 小时 TTL）
+3. ✅ **Unit 2**：`mh_homepage` post type 改为 `public => true`（可查询但不暴露 URL）
+4. ✅ **Unit 3**：重写 `front-page.php` 通过 `mindhikers_get_homepage_data()` 获取数据
+5. ✅ **Units 4-8**：重写 5 个 template-parts（hero/about/product/blog/contact）改用 JSON 数据
+6. ✅ **Unit 9**：清理 Carbon Fields 依赖（注释掉 `require_once`，保留历史文件）
+7. ⏳ **Unit 10**：缓存失效 + 双语验证（需 WP 容器运行）
 
-### 现状审校（由本会话已完成）
+### 关键改动文件
 
-#### 已过时内容（要删/改）
-
-| 章节 | 问题 |
+| 文件 | 改动 |
 |---|---|
-| §1 环境信息速查 | 缺 Next.js staging 前端 URL（现在是两个服务共同撑起网站，不是单一 WP） |
-| §3 首页五大区块内容管理 | 讲"通过 Astra Child Theme PHP 模板渲染"——现在由 Next.js 渲染，WP 只出数据 |
-| §9 样式与品牌视觉维护 | 讲"改 style.css 重新部署 child theme"——现在样式在 Next.js Tailwind，WP 主题样式基本不影响前台 |
-| §10 部署流程 | 讲 Railway SSH 改 PHP / WP Admin 上传主题 zip——实际主线是 Next.js 仓库 git push 触发 Railway 自动构建 |
-| §11.1 / §11.2 / §11.4 / §11.5 | 排错方向都指向 front-page.php、child theme，与 Next.js 前台无关 |
-| §12 紧急回滚 | "切回 Astra 父主题"回滚失去意义 |
-| §13 红线 #6 "删除 mindhikers-cms-core.php" | 措辞基于旧方案 |
-| §14.3 模板文件与数据源映射 | 讲 PHP template-parts——对应新架构是 Next.js React 组件 + REST API |
+| `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php` | +数据桥接层 `getHomepageDataForTheme()`、`clearHomepageTransient()`、全局函数 `mindhikers_get_homepage_data()`；`public => true`；缓存失效钩子 |
+| `wordpress/themes/astra-child/front-page.php` | 改用 `mindhikers_get_homepage_data()` 传递 payload |
+| `wordpress/themes/astra-child/template-parts/hero.php` | 从 Carbon Fields 改为 `$payload['hero']` |
+| `wordpress/themes/astra-child/template-parts/about.php` | 从 Carbon Fields 改为 `$payload['about']` |
+| `wordpress/themes/astra-child/template-parts/product.php` | 从 Carbon Fields 改为 `$payload['product']` + 标准 post meta |
+| `wordpress/themes/astra-child/template-parts/blog.php` | 从 Carbon Fields 改为 `$payload['blog']` |
+| `wordpress/themes/astra-child/template-parts/contact.php` | 从 Carbon Fields 改为 `$payload['contact']` |
+| `wordpress/themes/astra-child/functions.php` | 注释掉 Carbon Fields require |
 
-#### 新架构缺失内容（要补）
+### 技术决策
 
-1. **Headless 数据链路全貌**：WP Carbon Fields → `/wp-json/mindhikers/v1/*` → Next.js `src/lib/cms/*.ts` → React 组件 → 用户
-2. **m1-rest 插件运维**：独立 ZIP 上传通道、函数名唯一前缀策略、容器重建会丢失的预警、当前 v1.1.0 位置 `/tmp/m1-rest.zip`（本地非入仓物，长期要固化）
-3. **Revalidate webhook 链路**：WP 后台两个字段 + Railway `REVALIDATE_SECRET` 环境变量 + `src/lib/cms/constants.ts` Cache Tag 白名单（`blog-posts` / `homepage-zh` / `homepage-en` / `product-{slug}`）
-4. **两个 Railway 服务的职责分工**：`Mindhikers-Homepage`（Next.js 渲染）vs `WordPress-L1ta`（纯 CMS），各自的 Variables、部署方式、重启影响
-5. **变更生效方式对照表**（见下节"模块维护地图"）
+- **数据零迁移**：保留 `mh_homepage` JSON meta，主题直接读取
+- **缓存策略**：WP Transients，按 locale 分离，6 小时 TTL，save_post 时失效
+- **主题切换安全**：任何主题调用 `mindhikers_get_homepage_data($locale)` 即可获取数据
+- **双语支持**：通过 `pll_current_language()` 或默认 'zh'，与 CMS Core `locale` meta 对应
+- **REST API 兼容**：现有 `mindhikers/v1/homepage/{locale}` 完全不变，Next.js 可并行运行
 
-### 重写方案 —— 推荐走 B
+---
 
-- **A.** 在旧手册顶部插"⚠️ 架构变更说明 (2026-04-20)"过期告示，标注失效章节 —— 5 分钟，但治标不治本
-- **B.** 【推荐】另起新手册 `docs/operations-guide-headless.md`，按新架构重写；旧手册加头部跳转提示，保留作为历史 —— 1~2 小时
-- **C.** 直接原地推倒重写 —— 风险较大，历史信息丢失
+## 📋 下一窗口开工 checklist
 
-### 重写手册骨架建议
+### 必做（验证）
 
-新手册应该包含的章节（供下一会话参考）：
+1. [ ] 启动本地 WP 容器（`docker-compose up` 或本地 WP 环境）
+2. [ ] 确保 `mh_homepage` post 存在（zh 和 en 各一个）
+3. [ ] 访问 WP 前台首页 → 确认 5 个区块渲染正常
+4. [ ] 编辑 CMS 内容 → 保存 → 确认前台 5 秒内更新（缓存失效）
+5. [ ] 切换语言（Polylang）→ 确认双语内容互不干扰
 
-1. 架构总览（两个 Railway 服务 + 数据流向图）
-2. 模块维护地图（见下节"几个模块都在哪儿维护"，直接搬进来）
-3. 内容编辑日常流程（WP Admin 各菜单的用途）
-4. Revalidate 链路工作原理 + 故障排查
-5. m1-rest 插件部署流程（独立 ZIP 通道 + 固化路径）
-6. 前台代码开发流程（分支 / 部署 / 环境变量）
-7. 变更生效对照表（文案改 vs 代码改 vs 样式改）
-8. 常见问题排错（基于新架构）
-9. 紧急回滚（基于新架构）
-10. 红线与禁忌（基于新架构）
-11. 字段速查表（可从旧手册 §14 直接搬运，那部分还有效）
+### 应做（完善）
 
-## 📍 几个模块都在哪儿维护（下一会话直接搬进新手册）
+6. [ ] 测试主题切换：临时激活其他 WP 主题，调用 `mindhikers_get_homepage_data()` 验证数据可访问
+7. [ ] 检查 REST API `mindhikers/v1/homepage/zh` 响应是否不变
+8. [ ] 评估是否合并到 staging（老卢决策）
+
+---
+
+## ⚠️ 关键认知纠正（本窗口踩过的大坑，请务必记住）
+
+### 1. REST 路由真正的注册点**不在 m1-rest 插件**
+
+- 之前 HANDOFF 把 m1-rest 写成"REST API 注册核心"——**错**
+- 真正注册 `/wp-json/mindhikers/v1/homepage/{locale}` 的是 `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php:190`
+- m1-rest v1.4.0 包里**根本没有 `register_rest_route` 调用**，它只是个半成品数据格式化工具（有 `m1_build_hero` 但没挂上路由）
+- 这就是为什么装了 v1.4.0 但 API 响应没变
+
+### 2. Railway WP 容器**不通过 git push 部署代码**
+
+- `ops/mindhikers-cms-runtime/Dockerfile` 只有 5 行，**没有 COPY wordpress/mu-plugins/**
+- mu-plugins 被冻结在 Railway 持久 Volume 里，仓库改动对容器零影响
+- 之前以为"push 就更新 WP 代码"——**错**，这是 P1 架构债
+
+### 3. 本仓库 `wordpress/` 目录的真实作用**模糊**
+
+- 之前以为它是 WP 容器的源，实则 Dockerfile 不引用它
+- 只作为参考/存档存在；m1-rest 子目录已在本窗口删除（c67c2d7）
+- 需要下个窗口明确定位：要么接入 Dockerfile，要么加 README 说明用途
+
+### 4. m1-rest v1.4.0 本身是半成品
+
+- 有：插件入口 `m1-rest.php`（版本号 1.4.0）、`homepage.php` 含 quickLinks 逻辑、`revalidate.php`
+- 缺：**register_rest_route**（导致装了也没用）+ **Revalidate 配置后台菜单**（导致 URL/Secret 无法在 WP Admin 填写）
+- 即：它只是一堆辅助函数，没有"挂钩"到 WP
+
+---
+
+## 🧯 当前 Production 依赖的 Code Snippets（重要！切勿删除）
+
+在 Production WP Admin → Snippets 下，当前有 3 个补丁：
+
+| 名称 | 用途 | 状态 | 是否可删 |
+|---|---|---|---|
+| `mhs` | 一次性尝试清理旧 m1-rest 目录 | Run Once 已执行 | ✅ 可删除 |
+| **`mhs02`** | **重注册 `/homepage/(?P<locale>zh\|en)` 路由，override=true，调 `m1_build_hero` 返回新 schema** | **🔴 Active，产线依赖中** | ❌ **绝不能删**（删了 API 立刻退回旧 schema） |
+| `mhs03` | 一次性写入 `mh_nextjs_revalidate_url` 与 `mh_revalidate_secret` option | Run Once 已执行 | ✅ 可删除 |
+
+**`mhs02` 替代方案**：待中长期架构修复后，把等效逻辑回迁到 `mindhikers-cms-core/bootstrap.php` 或在 m1-rest 里补齐 `register_rest_route`，才能下线此 snippet。
+
+---
+
+## 🔄 本窗口实验分支状态
+
+**分支**: `experiment/wp-traditional-mode`
+**目标**: 验证 WP 轻量定制模式（主题直接读取 CMS Core JSON）
+**代码完成度**: 9/10 Units（Units 1-9 完成，Unit 10 待验证）
+**是否可合并**: 需先通过 Unit 10 验证（WP 容器运行）
+
+---
+
+---
+
+## 🏗️ 架构债清单（中长期任务，按优先级）
+
+### P1 · WP 容器无代码部署通道 🔴
+
+- **问题**：`ops/mindhikers-cms-runtime/Dockerfile` 不 COPY mu-plugins，仓库是展示橱窗而非源
+- **影响**：所有 WP 代码变更都要走手动 ZIP 上传 / Code Snippets 补丁，不可追溯、不可 revert
+- **方案方向**：改 Dockerfile 把 `wordpress/mu-plugins/mindhikers-cms-core` 直接 COPY 进镜像；或改走 composer 拉 git repo
+- **阻塞**：需评估 Railway 持久 Volume 与镜像 COPY 的优先级关系（mu-plugins 是否在 Volume 内）
+
+### P2 · m1-rest 插件半成品 🟠
+
+- **问题**：v1.4.0 缺 `register_rest_route` + 缺后台菜单
+- **两个选择**：
+  - **选 A**：把 m1-rest 补完整（补 route 注册 + Carbon Fields 后台菜单），走正式插件渠道
+  - **选 B**：放弃 m1-rest，所有逻辑回迁到 `mindhikers-cms-core`，一个 mu-plugin 搞定
+- **推荐 B**：避免两套插件互相抢函数名（本轮就差点翻车）
+
+### P3 · 运维手册与实际架构脱节 🟠
+
+- 本轮发现的认知误区未沉淀：`wordpress/` 目录用途、Dockerfile 不 COPY、route 真正注册点
+- 需在 `docs/operations-guide-headless.md` 加"容器部署通道现状"一节
+
+### P4 · `/api/revalidate` 路由 tag 分支有问题 🟡
+
+- 现象：POST 传 `{"tag":"homepage-zh"}`，Next.js 响应 `tag: "blog-posts"`（走了 legacy 路径分支）
+- 位置：`src/app/api/revalidate/route.ts:50-60`
+- 可能原因：Railway/CDN 剥离 body，或 `isValidCacheTag` 校验误拒
+- 影响：轻微——legacy 分支照样调 revalidatePath("/" + "/en")，页面能刷新；但 tag 精准失效没实现
+
+### P5 · `wordpress/` 目录定位不清 🟡
+
+- 仓库里有 `wordpress/mu-plugins/mindhikers-cms-core/` 但容器不用
+- 需要：加 README 说明"此为参考，容器实际运行在 Railway Volume 内"，或直接接入 Dockerfile
+
+### P6 · 仓库根目录堆了 4 个 m1-rest zip 🟢
+
+```
+m1-rest-v1.2.0.zip
+m1-rest-v1.3.0.zip
+m1-rest-v1.3.1.zip
+m1-rest-v1.4.0.zip
+```
+- 应加 `.gitignore` 过滤 `m1-rest-v*.zip`
+
+### P7 · `rules.md` / `operations-guide` 关于 "push 即部署 WP" 的错误描述 🟢
+
+- 需修正为"WP 容器当前不走 git 部署，需手动 ZIP 或 Dockerfile 改造"
+
+---
+
+## 📋 下一窗口开工 checklist
+
+### 必做（短）
+
+1. [ ] 验证 Railway production Next.js 已部署完新 main 分支（`95008e6`）
+2. [ ] 访问 https://www.mindhikers.com（无痕窗口）核对 Quick Links 模块显示正确
+3. [ ] 如未显示，去 WP Admin → Snippets 确认 `mhs02` 仍 Active；然后 `curl -X POST https://www.mindhikers.com/api/revalidate -H "x-revalidate-secret: <prod-secret>" -H "Content-Type: application/json" -d '{}'` 手动触发
+4. [ ] 把 `m1-rest-v*.zip` 加入 `.gitignore`（P6）
+
+### 应做（中）
+
+5. [ ] 开 Linear issue "P2 · 合并 m1-rest 逻辑到 mindhikers-cms-core 并去掉 Code Snippets"（推荐方案 B）
+6. [ ] 开 Linear issue "P1 · Dockerfile COPY mu-plugins，建立 git → 容器部署通道"
+7. [ ] 写 `docs/plans/2026-04-2x_WP_Deployment_Channel_Refactor.md` 方案
+
+### 应做（长）
+
+8. [ ] 修 `/api/revalidate` tag 分支（P4）
+9. [ ] `wordpress/` 目录加 README 或接入构建（P5）
+10. [ ] 修正 `rules.md` + `operations-guide-headless.md`（P3 / P7）
+
+---
+
+## 🔑 关键配置（Production）
+
+| 配置项 | 值 / 位置 |
+|---|---|
+| Next.js 域名 | `https://www.mindhikers.com` |
+| WP CMS 域名 | `https://homepage-manage.mindhikers.com` |
+| Railway Next.js 服务 | `Mindhikers-Homepage`（production 环境） |
+| Railway WP 服务 | `WordPress-L1ta`（production 环境） |
+| `REVALIDATE_SECRET` | Railway Variables + WP options `mh_revalidate_secret`（两侧同步，本窗口已配齐） |
+| `WORDPRESS_API_URL` | `https://homepage-manage.mindhikers.com/wp-json/mindhikers/v1`（本窗口新加） |
+| `BLOG_SOURCE` | `wordpress`（本窗口新加） |
+| 真正的 REST 路由注册点 | `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php:190`（mu-plugin） |
+| 当前 production 路由实际源 | WP Code Snippets → `mhs02`（override 注册）🔴 |
+
+---
+
+## 🗺️ 模块维护地图（纠正版）
 
 | 要改的东西 | 在哪改 | 生效方式 |
 |---|---|---|
-| 首页文案/图片（Hero/About/Contact） | WP Admin → 对应"管理"菜单 | 保存后自动触发 Revalidate webhook → 前台 5 秒内更新 |
+| 首页文案/图片（Hero/About/Contact/Quick Links） | WP Admin → Theme Options | 保存 → `carbon_fields_theme_options_container_saved` 钩子 → Revalidate webhook → 前台 5 秒内更新 |
 | 博客文章 | WP Admin → 文章 | 同上（tag: `blog-posts`） |
 | 产品 | WP Admin → 产品 | 同上（tag: `product-{slug}` + `homepage-zh/en`） |
-| 前台外观/布局/交互 | 代码仓库 `src/components/**/*.tsx` + `src/app/**/*.tsx` | git push → Railway 自动构建 Next.js |
-| 前台样式/配色/字体 | `src/app/globals.css` + Tailwind 配置 | 同上 |
-| WP REST API 逻辑（返回字段、查询条件） | 仓库 `wordpress/mu-plugins/m1-rest/` | ⚠️ 改完必须重新打 ZIP 从 WP Admin 上传；容器封闭，git push 不生效 |
-| WP CPT / Carbon Fields 字段定义 | 仓库 `wordpress/mu-plugins/mindhikers-m1-core.php` | ⚠️ 同上，需走独立插件上传路径 |
-| Revalidate Secret | **两处同步**：Railway `Mindhikers-Homepage` → Variables `REVALIDATE_SECRET` + WP Admin → Revalidate 配置 → Secret 字段 | 改完 Railway 端触发 Next.js 重部署 |
-| 域名 / SSL | Railway Dashboard → 对应服务 → Settings → Domains | 立即生效 |
-| 环境变量 | Railway Dashboard → 各服务 → Variables 标签 | 改完触发重部署 |
+| 前台布局/交互 | 本仓库 `src/**` | `main` 分支 push → Railway Next.js 自动构建 |
+| 前台样式 | `src/app/globals.css` + Tailwind | 同上 |
+| **WP REST API 逻辑** | **真实源：Railway WP 容器 Volume 内的 mu-plugins（不在本仓库）** | **当前唯一手段：Code Snippets 补丁 或 WP Admin 上传插件 ZIP；git push 对 WP 零作用** |
+| Revalidate Secret | Railway Variables + WP Admin 或直接 update_option | 改完 Railway 端 → Next.js 重部署；WP 端立即生效 |
 
-### 一句话总结（下一会话开头可直接引用）
+---
 
-- **内容**（文字/图片/博客/产品）在 **WP Admin**
-- **前台代码**（布局/交互/样式）在 **Next.js 仓库**（即本 repo）
-- **WP 插件代码**（REST API、字段定义）在仓库 `wordpress/mu-plugins/`，但**部署通道特殊**——必须打 ZIP 走 WP Admin 上传
-- **配置**（URL/Secret/环境变量）在 **Railway Dashboard**
+## 📜 本窗口完整时间线（详版）
 
-## 其他待办（按优先级排序）
+### Phase 1 · 诊断（起点）
 
-### 1. 运维手册重写（上面已展开）
-**建议 issue**：新开 Linear issue 挂 MIN-110 下，由下一会话执行
+- 现象：staging 前端 Quick Links 渲染正常，但 production 前端显示旧面板
+- 起初猜测：Railway production 未部署最新代码
+- **转折 1**：读 `src/components/home-page.tsx` → 发现 main 分支版本不消费 `quickLinks` 字段 → 意识到代码没合过去
+- **转折 2**：读 WP production API 响应 → schema 仍是旧的（statusLabel/availabilityLabel），说明 WP 端也没更新
 
-### 2. 定时炸弹：m1-rest 插件固化到仓库 + Dockerfile
-- **风险**：当前 m1-rest 是手工 WP Admin 上传的 v1.1.0（`/tmp/m1-rest.zip`），staging WP 容器若被 Railway 重建，插件会丢
-- **长期方案**：按 ce-plan 流程开新 Linear issue，把 m1-rest 作为普通插件纳入镜像构建（Dockerfile COPY 到 `wp-content/plugins/`）
-- **临时止血**：已在截图留档位置 `/tmp/m1-rest.zip` 和源码 `/tmp/m1-rest-pkg/m1-rest/`（非入仓）
+### Phase 2 · 架构考古
 
-### 3. 合并 staging → main → production
-- 前置：上述运维手册 + 插件固化完成
-- 注意：production WP 容器同样缺 m1-rest，合并前要先按同样方式把 ZIP 装进 production WP
-- production 端 `REVALIDATE_SECRET` 也要配齐，URL 改为 `https://www.mindhikers.com/api/revalidate`
+- 老卢把 `wordpress/mu-plugins/m1-rest/` 目录误删 → 老杨一度以为是代码遗失
+- 读 `ops/mindhikers-cms-runtime/Dockerfile` → 震惊：**5 行，只配 Apache，不 COPY 任何 WP 代码**
+- 结论：仓库的 `wordpress/` 目录是展示橱窗，Railway 容器的 WP 代码在持久 Volume 里，永不被 git 更新
+- 进一步审查 `/tmp/m1-rest-v1.4.0-inspect/`：发现 v1.4.0 **没有 register_rest_route 调用**
 
-## 约束与红线（老杨纪律）
+### Phase 3 · 真正注册点定位
+
+- 在 `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php:190` 找到真正的 `register_rest_route`
+- 但此文件也不在容器镜像里，只是本地参考
+- 容器内实际运行的 mu-plugin 代码无法 diff，只能 override
+
+### Phase 4 · 紧急方案落地（三个 Code Snippet）
+
+- **mhs**（Run Once）：清理旧 m1-rest 目录（无实际影响但留痕）
+- **mhs02**（Active）：核心补丁——`add_action('rest_api_init', ..., 100)` 注册 homepage 路由 `override=true`，调 `m1_build_hero` 返新 schema → production API 立刻返回 quickLinks
+- **mhs03**（Run Once）：`update_option('mh_nextjs_revalidate_url', ...)` + `update_option('mh_revalidate_secret', ...)` → Revalidate webhook 配置就位
+
+### Phase 5 · Next.js 端环境补齐 + 合并
+
+- 诊断 webhook 返 500："REVALIDATE_SECRET is not configured"
+- 老卢加 `REVALIDATE_SECRET` 到 Railway production → 500 依然（根因是 production 还缺 `WORDPRESS_API_URL` + `BLOG_SOURCE`）
+- 补齐这 3 个环境变量，webhook 返 200
+- 尝试 `git merge --ff-only staging` 到 main 失败（main 有 `8744c4f refs MIN-110 fix: switch production builder from DOCKERFILE to RAILPACK` 领先）
+- 老卢决策 B 方案：`git merge --no-ff staging` → merge commit `95008e6`，推送 origin/main
+- Railway production Next.js 自动触发构建
+
+---
+
+## ⚙️ 技术事实速查
+
+- Next.js 16 `revalidateTag` 签名：`(tag: string, profile: string | CacheLifeConfig)`，第二参用 `"default"`
+- Cache Tag 清单（`src/lib/cms/constants.ts`）：`blog-posts` / `homepage-zh` / `homepage-en` / `product-{slug}`
+- WP mu-plugins 加载早于 plugins，同名 function 冲突会 fatal
+- Railway systemic vars（从 staging 继承的那些）在 production 环境页显示"从 staging 带过来"，**不能直接改**；需要用 "+ New Variable" 显式覆盖
+
+---
+
+## 🚧 红线（本轮再次确认）
 
 1. ❌ 不在 `main` 直接开发
-2. ❌ 未经老卢确认不擅改代码
-3. ❌ 每次 commit 必须有 Linear issue（`refs MIN-xx`）
-4. ❌ commit / push / merge 前必须显式请示
-5. ✅ 治理文档与代码变更分开 commit（本轮示范：MIN-162 纯文档 commit）
-6. ✅ 敏感凭证落会话后尽快轮换（本轮 `REVALIDATE_SECRET` 老卢决定暂不轮换）
+2. ❌ 每次 commit 必须 `refs MIN-xx`（本轮所有 commit 都挂 MIN-164）
+3. ❌ commit / push / merge 前显式请示老卢（本轮 no-ff merge 是老卢批准的 B 方案）
+4. ✅ 治理文档与代码分开 commit
+5. ✅ **新增**：绝不删除 production Code Snippets 中的 `mhs02`（会立即打穿产线）
+
+---
 
 ## Cache Tag 规范
 
 | 内容 | Tag | 来源 |
-|------|-----|------|
-| Blog（全量） | `blog-posts` | `CACHE_TAG_BLOG` in constants.ts |
+|---|---|---|
+| Blog（全量） | `blog-posts` | `CACHE_TAG_BLOG` |
 | Homepage ZH | `homepage-zh` | `getHomepageCacheTag("zh")` |
 | Homepage EN | `homepage-en` | `getHomepageCacheTag("en")` |
 | Product | `product-{slug}` | `getProductCacheTag(slug)` |
 
-## Railway 环境
+---
 
-| 环境 | Next.js 服务 | WP 服务 | 域名 |
-|------|-------------|---------|------|
-| production | `Mindhikers-Homepage` ✅ | `WordPress-L1ta` ✅ | `www.mindhikers.com` + `homepage-manage.mindhikers.com` |
-| staging | `Mindhikers-Homepage` ✅ | `WordPress-L1ta` ✅ | `mindhikers-homepage-staging.up.railway.app` + `wordpress-l1ta-staging.up.railway.app` |
+## 📌 Linear
 
-## 技术栈
-
-- Next.js 16.1.7, React 19, TypeScript, Tailwind 4
-- `revalidateTag` 在 Next.js 16 需要 2 个参数：`(tag: string, profile: string \| CacheLifeConfig)` —— 使用 `"default"`
-- WP 插件加载顺序：`mu-plugins/*` 早于 `plugins/*`；同名 container/function 会冲突（本轮教训，详见 rules.md WP-001/WP-002）
-
-## 后台账号（staging）
-
-- WP Admin：`https://wordpress-l1ta-staging.up.railway.app/wp-admin/`
-- 用户名：`mindhikers_admin`
-- 密码：不要入仓；通过安全渠道获取
-
-## 本轮产物清单
-
-### 已入仓（commit `fe246ec`）
-- `docs/dev_logs/HANDOFF.md`（本文件）
-- `docs/dev_logs/2026-04-20.md`
-- `docs/04_progress/rules.md`（新目录）
-
-### 未入仓（本地 /tmp，后续 issue 固化）
-- `/tmp/m1-rest-pkg/m1-rest/` —— 插件源码（含新造的 `m1-rest.php` 主入口）
-- `/tmp/m1-rest.zip` —— v1.1.0（SHA `0d05227b`），当前 staging WP 运行的是这版
+- 本轮主 issue：[MIN-164](https://linear.app/mindhikers/issue/MIN-164)
+- 建议新开子 issue：P1（Dockerfile）+ P2（插件合并）+ P3/P4/P5/P7（文档与小修）

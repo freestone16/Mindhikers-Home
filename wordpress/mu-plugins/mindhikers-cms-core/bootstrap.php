@@ -104,6 +104,50 @@ final class Mindhikers_Cms_Core
         $this->registerMeta();
     }
 
+    /**
+     * Get homepage data for theme rendering with caching support.
+     *
+     * @param string $locale 'zh' or 'en'
+     * @return array Normalized homepage payload
+     */
+    public function getHomepageDataForTheme(string $locale = 'zh'): array
+    {
+        $locale = $this->sanitizeLocale($locale);
+        $cacheKey = "mindhikers_homepage_data_{$locale}";
+
+        $cached = get_transient($cacheKey);
+        if (is_array($cached)) {
+            return $cached;
+        }
+
+        $post = $this->findHomepagePostByLocale($locale);
+
+        if (!$post instanceof WP_Post) {
+            $data = $this->getDefaultHomepagePayload($locale);
+            set_transient($cacheKey, $data, 6 * HOUR_IN_SECONDS);
+            return $data;
+        }
+
+        $rawPayload = (string) get_post_meta($post->ID, $this->homepagePayloadMeta, true);
+        $payload = $this->decodeJsonPayload($rawPayload);
+        $data = $this->normalizeHomepagePayload(is_array($payload) ? $payload : [], $locale);
+
+        set_transient($cacheKey, $data, 6 * HOUR_IN_SECONDS);
+
+        return $data;
+    }
+
+    /**
+     * Clear homepage transient cache for a specific locale.
+     *
+     * @param string $locale 'zh' or 'en'
+     */
+    public function clearHomepageTransient(string $locale = 'zh'): void
+    {
+        $locale = $this->sanitizeLocale($locale);
+        delete_transient("mindhikers_homepage_data_{$locale}");
+    }
+
     public function registerPostType(): void
     {
         register_post_type($this->homepagePostType, [
@@ -115,7 +159,8 @@ final class Mindhikers_Cms_Core
                 'edit_item' => __('Edit Homepage Entry', 'mindhikers-cms-core'),
                 'view_item' => __('View Homepage Entry', 'mindhikers-cms-core'),
             ],
-            'public' => false,
+            'public' => true,
+            'publicly_queryable' => false,
             'show_ui' => true,
             'show_in_menu' => true,
             'show_in_rest' => true,
@@ -318,6 +363,8 @@ final class Mindhikers_Cms_Core
             return;
         }
 
+        $this->clearHomepageTransient($locale);
+
         $this->triggerRevalidate([
             'entity' => 'homepage',
             'locale' => $locale,
@@ -331,9 +378,16 @@ final class Mindhikers_Cms_Core
             return;
         }
 
+        if (serialize($oldValue) === serialize($value)) {
+            return;
+        }
+
         $this->triggerRevalidate([
             'entity' => 'site-settings',
         ]);
+
+        $this->clearHomepageTransient('zh');
+        $this->clearHomepageTransient('en');
     }
 
     public function getSiteSettings(WP_REST_Request $request): WP_REST_Response
@@ -608,7 +662,7 @@ final class Mindhikers_Cms_Core
             return;
         }
 
-        wp_remote_post($endpoint, [
+        $response = wp_remote_post($endpoint, [
             'timeout' => 10,
             'headers' => [
                 'Content-Type' => 'application/json',
@@ -616,6 +670,12 @@ final class Mindhikers_Cms_Core
             ],
             'body' => $body,
         ]);
+
+        if (is_wp_error($response)) {
+            error_log('Mindhikers CMS Core: revalidate failed: ' . $response->get_error_message());
+        } elseif (wp_remote_retrieve_response_code($response) >= 400) {
+            error_log('Mindhikers CMS Core: revalidate returned HTTP ' . wp_remote_retrieve_response_code($response));
+        }
     }
 
     private function getDefaultSiteSettings(): array
@@ -818,5 +878,34 @@ final class Mindhikers_Cms_Core
         }
 
         return trim(wp_strip_all_tags((string) $value));
+    }
+
+    public static function getInstance(): ?self
+    {
+        return self::$instance;
+    }
+}
+
+/**
+ * Global helper: Get homepage data for theme rendering.
+ *
+ * @param string $locale 'zh' or 'en'
+ * @return array Normalized homepage payload
+ */
+if (!function_exists('mindhikers_get_homepage_data')) {
+    function mindhikers_get_homepage_data(string $locale = 'zh'): array
+    {
+        $core = Mindhikers_Cms_Core::getInstance();
+        if (!$core instanceof Mindhikers_Cms_Core) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                _doing_it_wrong(
+                    __FUNCTION__,
+                    'Mindhikers_Cms_Core has not been booted. Ensure the mu-plugin is loaded.',
+                    '1.0.0'
+                );
+            }
+            return [];
+        }
+        return $core->getHomepageDataForTheme($locale);
     }
 }
