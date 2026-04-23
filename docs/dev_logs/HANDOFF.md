@@ -42,21 +42,50 @@
 
 ---
 
+## 📦 本窗口部署包（已生成，待用户上传）
+
+### 文件位置
+
+| 文件 | 路径 | 用途 |
+|---|---|---|
+| 主题 ZIP | `/tmp/astra-child-wp-lightweight.zip` | Astra Child 主题（读取 JSON 数据） |
+| Code Snippet | `wordpress/mu-plugins/mindhikers-cms-core/snippet-wp-lightweight-bridge.php` | 数据桥接层 + 缓存 + 全局函数 |
+
+### 部署步骤（由老卢执行）
+
+1. **上传主题**
+   - 访问 `https://wordpress-l1ta-staging.up.railway.app/wp-admin`
+   - 外观 → 主题 → 添加新主题 → 上传主题 → 选择 `astra-child-wp-lightweight.zip`
+   - 安装并激活
+
+2. **添加 Code Snippet**
+   - WP Admin → Snippets → Add New
+   - 标题：`mhs04-wp-lightweight-bridge`
+   - 代码：复制 `snippet-wp-lightweight-bridge.php` 内容
+   - 勾选 "Run snippet everywhere"
+   - Save Changes and Activate
+
+3. **验证**
+   - 访问前台首页，确认 5 个区块渲染
+   - 编辑 CMS 内容 → 保存 → 刷新前台，确认缓存失效
+   - 切换语言（如有 Polylang），确认双语独立
+
+---
+
 ## 📋 下一窗口开工 checklist
 
-### 必做（验证）
+### 必做（验证）— 等老卢部署后
 
-1. [ ] 启动本地 WP 容器（`docker-compose up` 或本地 WP 环境）
-2. [ ] 确保 `mh_homepage` post 存在（zh 和 en 各一个）
-3. [ ] 访问 WP 前台首页 → 确认 5 个区块渲染正常
-4. [ ] 编辑 CMS 内容 → 保存 → 确认前台 5 秒内更新（缓存失效）
-5. [ ] 切换语言（Polylang）→ 确认双语内容互不干扰
+1. [ ] 确认 staging 前台 5 个区块渲染正常
+2. [ ] 编辑 CMS → 保存 → 前台 5 秒内更新（缓存失效）
+3. [ ] 切换语言 → 双语内容互不干扰
+4. [ ] REST API `mindhikers/v1/homepage/zh` 响应不变
 
 ### 应做（完善）
 
-6. [ ] 测试主题切换：临时激活其他 WP 主题，调用 `mindhikers_get_homepage_data()` 验证数据可访问
-7. [ ] 检查 REST API `mindhikers/v1/homepage/zh` 响应是否不变
-8. [ ] 评估是否合并到 staging（老卢决策）
+5. [ ] 测试主题切换：临时激活其他主题，验证 `mindhikers_get_homepage_data()` 可用
+6. [ ] 评估是否合并到 staging/production（老卢决策）
+7. [ ] 如需生产化：建立 git → WP 容器自动部署通道（P1 架构债）
 
 ---
 
@@ -107,8 +136,9 @@
 
 **分支**: `experiment/wp-traditional-mode`
 **目标**: 验证 WP 轻量定制模式（主题直接读取 CMS Core JSON）
-**代码完成度**: 9/10 Units（Units 1-9 完成，Unit 10 待验证）
-**是否可合并**: 需先通过 Unit 10 验证（WP 容器运行）
+**代码完成度**: 9/10 Units（Units 1-9 完成，Unit 10 待用户部署后验证）
+**提交记录**: `be0f8ee` feat: WP lightweight customization mode
+**是否可合并**: 需老卢部署到 staging 并验证通过后决策
 
 ---
 
