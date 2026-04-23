@@ -1,13 +1,21 @@
-🕐 Last updated: 2026-04-23 (本窗口结束时)
+🕐 Last updated: 2026-04-23 13:25
 🌿 Branch: `experiment/wp-traditional-mode`
-📌 Base commit: `c67c2d7`
+📌 Base commit: `3370c37`
 🚀 Push status: ❌ 不推远端（本地实验分支）
 
 ---
 
-## 当前状态：WP 轻量定制实验 — Units 1-9 代码实施完成 🟡（待 WP 容器验证）
+## 当前状态：WP 轻量定制实验 — Units 1-9 代码实施完成 🔴（验证阻塞，需外部支援）
 
-**一句话**：在 `experiment/wp-traditional-mode` 分支上完成了 WP 轻量定制模式的代码改造，让 WordPress 主题能直接读取 CMS Core 的 JSON 数据并渲染首页。代码已就绪，待本地 WP 容器验证。
+**一句话**：代码已完成，但 Railway 容器只读文件系统导致无法部署验证。需要解决容器写权限或改用本地 Docker 验证。
+
+### 本窗口核心结论
+
+1. ✅ **路线 C 决策确认**：老卢选择混合架构（Next.js + WP 主题双前台）
+2. ✅ **隐患评估完成**：6 项隐患已识别，无致命问题，但需满足两个前提（验证通过 + 建立切换机制）
+3. ✅ **部署包已生成**：ZIP 和 Snippet 代码已就绪，放在项目目录
+4. ❌ **验证失败**：Railway 容器只读，无法上传主题/安装插件/修改文件
+5. ❌ **切换机制未决**：A（手动 DNS）vs B（Cloudflare Worker）待老卢最终选择
 
 ### 本窗口核心成就
 
@@ -31,6 +39,8 @@
 | `wordpress/themes/astra-child/template-parts/blog.php` | 从 Carbon Fields 改为 `$payload['blog']` |
 | `wordpress/themes/astra-child/template-parts/contact.php` | 从 Carbon Fields 改为 `$payload['contact']` |
 | `wordpress/themes/astra-child/functions.php` | 注释掉 Carbon Fields require |
+| `dist/astra-child-wp-lightweight.zip` | 主题部署包（本地存放，不再放 /tmp） |
+| `wordpress/mu-plugins/mindhikers-cms-core/snippet-wp-lightweight-bridge.php` | Code Snippet 代码，用于注入数据桥接层 |
 
 ### 技术决策
 
@@ -42,20 +52,34 @@
 
 ---
 
-## 📦 本窗口部署包（已生成，待用户上传）
+## 🔴 本窗口阻塞问题（需外部支援解决）
 
-### 文件位置
+### 问题描述
+
+Railway staging 容器（`WordPress-L1ta`）文件系统为**只读**，导致无法通过 WP Admin 部署主题或插件。
+
+### 已尝试的部署方式及失败原因
+
+| # | 方式 | 失败原因 |
+|---|---|---|
+| 1 | WP Admin → 外观 → 上传主题 ZIP | 文件权限拒绝（"由于某些文件无法被复制，更新无法进行"） |
+| 2 | 删除旧主题后重新上传 | 无删除按钮，文件系统只读 |
+| 3 | 主题文件编辑器修改代码 | 菜单不存在（被禁用或容器只读） |
+| 4 | 安装 Code Snippets 插件 | 只读文件系统，无法写入 `wp-content/plugins/` |
+| 5 | Railway CLI 进入容器改文件 | Railway 不支持持久化 SSH 会话 |
+
+### 部署包位置（代码已就绪）
 
 | 文件 | 路径 | 用途 |
 |---|---|---|
-| 主题 ZIP | `/tmp/astra-child-wp-lightweight.zip` | Astra Child 主题（读取 JSON 数据） |
+| 主题 ZIP | `dist/astra-child-wp-lightweight.zip` | Astra Child 主题（读取 JSON 数据） |
 | Code Snippet | `wordpress/mu-plugins/mindhikers-cms-core/snippet-wp-lightweight-bridge.php` | 数据桥接层 + 缓存 + 全局函数 |
 
-### 部署步骤（由老卢执行）
+### 验证步骤（待容器写权限解决后执行）
 
 1. **上传主题**
    - 访问 `https://wordpress-l1ta-staging.up.railway.app/wp-admin`
-   - 外观 → 主题 → 添加新主题 → 上传主题 → 选择 `astra-child-wp-lightweight.zip`
+   - 外观 → 主题 → 添加新主题 → 上传主题 → 选择 `dist/astra-child-wp-lightweight.zip`
    - 安装并激活
 
 2. **添加 Code Snippet**
@@ -65,7 +89,7 @@
    - 勾选 "Run snippet everywhere"
    - Save Changes and Activate
 
-3. **验证**
+3. **验证清单**
    - 访问前台首页，确认 5 个区块渲染
    - 编辑 CMS 内容 → 保存 → 刷新前台，确认缓存失效
    - 切换语言（如有 Polylang），确认双语独立
@@ -74,18 +98,25 @@
 
 ## 📋 下一窗口开工 checklist
 
-### 必做（验证）— 等老卢部署后
+### 🔴 阻塞项（需先解决）
 
-1. [ ] 确认 staging 前台 5 个区块渲染正常
-2. [ ] 编辑 CMS → 保存 → 前台 5 秒内更新（缓存失效）
-3. [ ] 切换语言 → 双语内容互不干扰
-4. [ ] REST API `mindhikers/v1/homepage/zh` 响应不变
+1. [ ] **解决 Railway 容器只读文件系统问题**
+   - 方案 A：联系 Railway 支持，申请容器写权限或调整 Dockerfile
+   - 方案 B：改用本地 Docker 验证（需要本地有 Docker 环境）
+   - 方案 C：修改 Railway Dockerfile，把主题文件 COPY 进镜像后重新部署
+
+### 必做（验证）— 等容器写权限解决后
+
+2. [ ] 确认 staging 前台 5 个区块渲染正常
+3. [ ] 编辑 CMS → 保存 → 前台 5 秒内更新（缓存失效）
+4. [ ] 切换语言 → 双语内容互不干扰
+5. [ ] REST API `mindhikers/v1/homepage/zh` 响应不变
 
 ### 应做（完善）
 
-5. [ ] 测试主题切换：临时激活其他主题，验证 `mindhikers_get_homepage_data()` 可用
-6. [ ] 评估是否合并到 staging/production（老卢决策）
-7. [ ] 如需生产化：建立 git → WP 容器自动部署通道（P1 架构债）
+6. [ ] 测试主题切换：临时激活其他主题，验证 `mindhikers_get_homepage_data()` 可用
+7. [ ] 评估是否合并到 staging/production（老卢决策）
+8. [ ] 如需生产化：建立 git → WP 容器自动部署通道（P1 架构债）
 
 ---
 
@@ -144,14 +175,29 @@
 
 ---
 
+## 🔄 本窗口实验分支状态
+
+**分支**: `experiment/wp-traditional-mode`
+**目标**: 验证 WP 轻量定制模式（主题直接读取 CMS Core JSON）
+**代码完成度**: 9/10 Units（Units 1-9 完成，Unit 10 待容器写权限解决后验证）
+**提交记录**: `3370c37` docs: Update HANDOFF with deployment package and next steps
+**是否可合并**: ❌ 未验证，暂不合入 main
+**阻塞原因**: Railway 容器只读文件系统，无法部署主题和插件
+
+---
+
 ## 🏗️ 架构债清单（中长期任务，按优先级）
 
-### P1 · WP 容器无代码部署通道 🔴
+### P1 · WP 容器无代码部署通道 🔴【本轮恶化】
 
 - **问题**：`ops/mindhikers-cms-runtime/Dockerfile` 不 COPY mu-plugins，仓库是展示橱窗而非源
+- **本轮新发现**：Railway 容器文件系统完全只读，WP Admin 无法上传主题、安装插件、修改文件
 - **影响**：所有 WP 代码变更都要走手动 ZIP 上传 / Code Snippets 补丁，不可追溯、不可 revert
-- **方案方向**：改 Dockerfile 把 `wordpress/mu-plugins/mindhikers-cms-core` 直接 COPY 进镜像；或改走 composer 拉 git repo
-- **阻塞**：需评估 Railway 持久 Volume 与镜像 COPY 的优先级关系（mu-plugins 是否在 Volume 内）
+- **方案方向**：
+  - 方案 A：改 Dockerfile 把 `wordpress/mu-plugins/mindhikers-cms-core` 和主题直接 COPY 进镜像后重新部署
+  - 方案 B：联系 Railway 支持，申请容器持久化 Volume 写权限
+  - 方案 C：本地 Docker 验证通过后，直接合并代码到仓库，不改 Railway 容器
+- **阻塞**：需老卢决策采用哪种方案
 
 ### P2 · m1-rest 插件半成品 🟠
 
