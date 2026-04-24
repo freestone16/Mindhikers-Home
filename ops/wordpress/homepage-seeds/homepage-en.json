@@ -2,7 +2,7 @@
   "locale": "en",
   "metadata": {
     "title": "心行者 Mindhikers",
-    "description": "心行者 Mindhikers is a bilingual brand home for product experiments, writing, and a quieter long-form creative practice."
+    "description": "MindHikers researches complex questions, creates clear expression, and experiments with productized creative workflows."
   },
   "navigation": {
     "brand": "心行者 Mindhikers",
@@ -30,75 +30,83 @@
     }
   },
   "hero": {
-    "eyebrow": "Editorial homepage",
-    "title": "A brand home for research, products, and writing that still feels alive.",
-    "description": "心行者 Mindhikers is becoming a quieter but more expressive front page for long-form creation, product experiments, and the kind of internet work that benefits from rhythm, not clutter.",
+    "eyebrow": "MindHikers",
+    "title": "MindHikers",
+    "description": "Research. Create. Productize.",
     "primaryAction": {
       "href": "#product",
-      "label": "See the current product entry"
+      "label": "Explore Products"
     },
     "secondaryAction": {
       "href": "/blog",
-      "label": "Open the blog"
+      "label": "Read Blog"
     },
     "highlights": [
-      "Bilingual entry point",
-      "Product experiments",
-      "Research and publishing"
+      "Research complex questions",
+      "Create clear expression",
+      "Productize workflows"
     ],
-    "statusLabel": "Current focus",
-    "statusValue": "Homepage refresh in progress",
-    "availabilityLabel": "Working rhythm",
-    "availabilityValue": "Research, build, write, publish",
-    "panelTitle": "Homepage blocks"
+    "panelTitle": "Quick links",
+    "quickLinks": [
+      {
+        "label": "Golden Crucible",
+        "href": "/en/golden-crucible",
+        "tag": "Product"
+      },
+      {
+        "label": "Carbon-Silicon Evolution",
+        "href": "/blog",
+        "tag": "Writing"
+      }
+    ]
   },
   "about": {
     "title": "About",
-    "intro": "心行者 Mindhikers is not meant to read like a resume page. It is a brand homepage for making, thinking, and publishing in public with more intention.",
+    "intro": "MindHikers is a one-person studio doing two things:",
     "paragraphs": [
-      "The goal is to make room for product entries, recent writing, research threads, and future collaborations without collapsing everything into a single static summary.",
-      "This refresh leans toward the feeling of an actively edited studio homepage: sections behave like columns, entry points feel like programming blocks, and motion supports reading instead of distracting from it."
+      "Content: deep-dive research and storytelling on YouTube and Bilibili for intellectually curious audiences navigating the AI era.",
+      "Products: turning creative workflows and research methods into tools. Built for ourselves first, then shared."
     ],
     "notes": [
-      "Remove the template-like self-introduction",
-      "Keep motion light but visible",
-      "Make product, blog, and contact pathways obvious"
+      "In an age where AI writes, draws, and thinks for you, the scarcest human quality is knowing who you are.",
+      "Pain is the standard of truth; friction is where growth happens.",
+      "Anchor first, then climb."
     ]
   },
   "product": {
     "title": "Product",
-    "description": "Start with one concrete release at the center of the page, then let the broader system grow around it.",
-    "headline": "The middle of the homepage should feel like a live program block, not a spec sheet.",
+    "description": "A product experiment around research, writing, expression, and creator workflows.",
+    "headline": "The Crucible",
     "featured": {
       "eyebrow": "Featured release",
-      "title": "Golden Crucible",
-      "description": "The first product entry under Mindhikers, built around research, writing, expression, and creator workflows. It is both a page and a signal of where the brand is heading.",
+      "title": "The Crucible",
+      "description": "A product experiment around research, writing, expression, and creator workflows. Currently open: AI-assisted deep writing workflow, knowledge management templates, and a creator productivity toolkit.",
       "href": "/en/golden-crucible",
       "ctaLabel": "Open product page",
       "meta": "Live now"
     },
     "items": [
       {
-        "eyebrow": "Brand system",
-        "title": "Bilingual homepage structure",
-        "description": "A calm bilingual structure gives Chinese and English readers their own clear point of entry."
+        "eyebrow": "Workflow",
+        "title": "AI-assisted deep writing workflow",
+        "description": "A reusable process for research, outlining, drafting, revision, and publishing."
       },
       {
-        "eyebrow": "Content flow",
-        "title": "Blog and research columns",
-        "description": "The homepage will gradually connect to writing and research so the site feels like a publication, not a frozen launch page."
+        "eyebrow": "Templates",
+        "title": "Knowledge management templates",
+        "description": "Durable systems for collecting, reviewing, and extending long-term research threads."
       },
       {
-        "eyebrow": "Contact surface",
-        "title": "Collaboration window",
-        "description": "Contact should feel natural and visible without breaking the visual rhythm of the homepage."
+        "eyebrow": "Toolkit",
+        "title": "Creator productivity toolkit",
+        "description": "Lightweight tools for topics, expression, source management, and publishing rhythm."
       }
     ]
   },
   "blog": {
-    "title": "Blog",
-    "description": "Writing will sit closer to the front of the brand. The homepage surfaces a small selection, while the archive lives in the full blog.",
-    "headline": "Bring recent writing onto the homepage instead of hiding the thinking deeper in the site.",
+    "title": "Content flow",
+    "description": "Three Carbon-Silicon Evolution essays are live, exploring education, embodied experience, and moral growth in the AI age.",
+    "headline": "Carbon-Silicon Evolution",
     "cta": {
       "href": "/blog",
       "label": "Browse all posts"
@@ -108,19 +116,19 @@
   },
   "contact": {
     "title": "Contact",
-    "description": "If you want to talk about brand, editorial systems, product experiments, or a more thoughtful corner of the internet, this is the cleanest place to start.",
-    "headline": "Let contact feel like a continuation of the page, not a mandatory form block at the bottom.",
+    "description": "We welcome content partnerships, product collaborations, and thoughtful internet projects.",
+    "headline": "Have a collaboration idea, or just want to chat?",
     "emailLabel": "Email",
-    "email": "contactmindhiker@gmail.com",
+    "email": "hello@mindhikers.com",
     "locationLabel": "Base",
     "location": "Shanghai / Remote",
     "availabilityLabel": "Open to",
-    "availability": "Editorial collaboration, product experiments, thoughtful internet projects",
+    "availability": "Content partnerships · Product collaborations · Thoughtful internet projects",
     "links": [
       {
-        "href": "mailto:contactmindhiker@gmail.com",
+        "href": "mailto:hello@mindhikers.com",
         "label": "Send email",
-        "note": "The fastest way to start a conversation"
+        "note": "hello@mindhikers.com"
       },
       {
         "href": "/",

@@ -6,16 +6,16 @@ import { paginate, normalizePage } from "@/lib/pagination";
 import { ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Blog",
-  description: "Thoughts on software development, life, and more.",
+  title: "碳硅进化论",
+  description: "MindHikers 关于 AI 时代教育、肉身经验与伦理成长的系列文章。",
   openGraph: {
-    title: "Blog",
-    description: "Thoughts on software development, life, and more.",
+    title: "碳硅进化论",
+    description: "MindHikers 关于 AI 时代教育、肉身经验与伦理成长的系列文章。",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog",
-    description: "Thoughts on software development, life, and more.",
+    title: "碳硅进化论",
+    description: "MindHikers 关于 AI 时代教育、肉身经验与伦理成长的系列文章。",
   },
 };
 
@@ -40,9 +40,9 @@ export default async function BlogPage({
   return (
     <section id="blog">
       <BlurFade delay={BLUR_FADE_DELAY}>
-        <h1 className="text-2xl font-semibold tracking-tight mb-2">Blog <span className="ml-1 bg-card border border-border rounded-md px-2 py-1 text-muted-foreground text-sm">{sortedPosts.length} posts</span></h1>
+        <h1 className="text-2xl font-semibold tracking-tight mb-2">碳硅进化论 <span className="ml-1 bg-card border border-border rounded-md px-2 py-1 text-muted-foreground text-sm">{sortedPosts.length} posts</span></h1>
         <p className="text-sm text-muted-foreground mb-8">
-          My thoughts on software development, life, and more.
+          MindHikers 关于 AI 时代教育、肉身经验与伦理成长的系列文章。
         </p>
       </BlurFade>
 
@@ -123,7 +123,7 @@ export default async function BlogPage({
         <BlurFade delay={BLUR_FADE_DELAY * 2}>
           <div className="flex flex-col items-center justify-center py-12 px-4 border border-border rounded-xl">
             <p className="text-muted-foreground text-center">
-              No blog posts yet. Check back soon!
+              碳硅进化论系列文章正在上线中。
             </p>
           </div>
         </BlurFade>

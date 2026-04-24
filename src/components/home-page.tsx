@@ -22,6 +22,35 @@ type HomePost = {
   summary: string;
 };
 
+const ENGLISH_HOME_POSTS: Record<string, Pick<HomePost, "title" | "summary">> = {
+  "carbon-silicon-01-obsolete-machine": {
+    title: "Don't Raise Your Child Into an Obsolete Machine",
+    summary:
+      'Four "anti-fragile" capacities every child needs — through the lens of neuroscience and AI training.',
+  },
+  "carbon-silicon-02-embodied-philosophy": {
+    title: "From Taipei 101 to Your Doorstep — Embodied Philosophy in the AI Age",
+    summary:
+      "In an age where AI can simulate everything, what remains truly irreplaceable about being human?",
+  },
+  "carbon-silicon-03-ethics-cleanroom": {
+    title: "The Ethics Cleanroom — How AI's Constant Approval Erodes Children's Moral Growth",
+    summary:
+      "AI isn't corrupting children — it's quietly replacing the struggles that make them grow.",
+  },
+};
+
+function localizeHomePosts(posts: HomePost[], locale: HomeContent["locale"]) {
+  if (locale !== "en") {
+    return posts;
+  }
+
+  return posts.map((post) => ({
+    ...post,
+    ...ENGLISH_HOME_POSTS[post.slug],
+  }));
+}
+
 function SectionEyebrow({ children }: { children: React.ReactNode }) {
   return (
     <p className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
@@ -52,6 +81,8 @@ export function HomePage({
   content: HomeContent;
   recentPosts: HomePost[];
 }) {
+  const visiblePosts = localizeHomePosts(recentPosts, content.locale);
+
   return (
     <main className="space-y-8 pb-12 pt-4 sm:space-y-11 sm:pt-6">
       <section className="grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.8fr)] lg:gap-10">
@@ -270,9 +301,9 @@ export function HomePage({
           </div>
         </BlurFade>
 
-        {recentPosts.length > 0 ? (
+        {visiblePosts.length > 0 ? (
           <div className="grid gap-4 lg:grid-cols-3">
-            {recentPosts.map((post, index) => (
+            {visiblePosts.map((post, index) => (
               <BlurFade key={post.slug} delay={BLUR_FADE_DELAY * (17 + index)}>
                 <Link
                   href={`/blog/${post.slug}`}

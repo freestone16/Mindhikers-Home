@@ -117,7 +117,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
     metadata: {
       title: BRAND,
       description:
-        "心行者 Mindhikers 是一个双语品牌主页，用来承载内容、产品实验、博客输出与长期创作协作。",
+        "心行者 MindHikers：研究复杂问题，制作清晰表达，实验产品化路径。",
     },
     navigation: {
       brand: BRAND,
@@ -129,107 +129,97 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       ],
       switchLanguage: {
         href: "/en",
-        label: "EN",
+        label: "English",
       },
     },
     hero: {
-      eyebrow: "Editorial homepage",
-      title: "把研究、产品与表达，排成一个有呼吸感的品牌入口。",
-      description:
-        "心行者 Mindhikers 正在把长期创作、内容实验与产品化尝试收拢成一个更完整的首页。它不想像简历，也不想像模板，而是像一个持续更新的工作现场。",
+      eyebrow: "MindHikers",
+      title: "心行者 MindHikers",
+      description: "研究复杂问题 · 制作清晰表达 · 实验产品化路径",
       primaryAction: {
         href: "#product",
-        label: "查看当前产品入口",
+        label: "查看产品",
       },
       secondaryAction: {
         href: "/blog",
-        label: "进入博客",
+        label: "阅读博客",
       },
-      highlights: ["双语品牌入口", "产品化实验", "长期写作与研究"],
+      highlights: ["研究复杂问题", "制作清晰表达", "实验产品化路径"],
       panelTitle: "Quick links",
       quickLinks: [
         { label: "黄金坩埚", href: "/golden-crucible", tag: "产品" },
-        { label: "博客最新文章", href: "/blog", tag: "内容" },
+        { label: "碳硅进化论", href: "/blog", tag: "文章" },
       ],
     },
     about: {
       title: "About",
-      intro:
-        "心行者 Mindhikers 不是一张展示履历的页面，而是一个兼顾思考、制作与对外发布的品牌主页。",
+      intro: "MindHikers 是一间一人工作室，主营两件事：",
       paragraphs: [
-        "我们希望首页既能承接产品入口，也能容纳博客、研究线索和下一步动作，而不是把所有信息压成一页静态介绍。",
-        "这次改版会更靠近一种“持续编排中的工作室主页”气质：内容像栏目，入口像节目单，动效和节奏帮助信息呼吸，而不是成为噱头。",
+        "做内容：在 YouTube / Bilibili 上研究并讲述复杂议题，面向中文世界的知性探索者。",
+        "做产品：把创作工作流和研究方法沉淀成工具，先自用，再分享。",
       ],
       notes: [
-        "去掉模板味的自我介绍",
-        "保留轻量但明确的动效层次",
-        "让产品、博客、联系入口一眼可见",
+        "AI 替你写、替你画、替你思考的时代，人类最稀缺的不是效率，是知道自己是谁。",
+        "痛感是真实的标准，摩擦是生长的时刻。",
+        "先锚定，后攀爬。",
       ],
     },
     product: {
       title: "Product",
-      description:
-        "先把一个足够真实的产品入口放在首页中央，再围绕它挂出内容、工作流和后续生长点。",
-      headline: "首页中段应该像一个正在播出的栏目，而不是说明书。",
+      description: "一个围绕研究、写作、表达与创作者工作流展开的产品实验。",
+      headline: "黄金坩埚",
       featured: {
         eyebrow: "Featured release",
         title: "黄金坩埚",
-        description:
-          "围绕研究、写作、表达与创作者工作流展开的首个产品入口。它承担的不只是一个页面，而是 Mindhikers 第一批品牌化实验的落点。",
+        description: "一个围绕研究、写作、表达与创作者工作流展开的产品实验。2026年5月待开放：AI 辅助深度写作工作流、知识管理模板、创作者效率工具集。",
         href: "/golden-crucible",
         ctaLabel: "打开产品页",
-        meta: "Live now",
+        meta: "已上线",
       },
       items: [
         {
-          eyebrow: "Brand system",
-          title: "双语首页结构",
-          description:
-            "首页会同时承担中文与英文入口，让不同受众都能快速找到切入点。",
+          eyebrow: "Workflow",
+          title: "AI 辅助深度写作工作流",
+          description: "把研究、提纲、草稿、修改和发布拆成可以复用的创作流程。",
         },
         {
-          eyebrow: "Content flow",
-          title: "博客与研究栏目",
-          description:
-            "后续会把 blog 与研究内容接入首页，让站点像持续更新的出版物，而不只是产品单页。",
+          eyebrow: "Templates",
+          title: "知识管理模板",
+          description: "把长期研究线索整理成可检索、可复盘、可继续生长的主题资产。",
         },
         {
-          eyebrow: "Contact surface",
-          title: "合作与联系窗口",
-          description:
-            "把联系入口做得更自然，既能留住潜在合作，也不破坏整体节奏。",
+          eyebrow: "Toolkit",
+          title: "创作者效率工具集",
+          description: "围绕选题、表达、资料管理和发布节奏沉淀轻量工具。",
         },
       ],
     },
     blog: {
-      title: "Blog",
-      description:
-        "这里会逐步积累方法、写作和产品思考。首页先展示最近几篇，完整归档放在博客页里。",
-      headline: "让首页直接露出最近的写作，而不是把内容藏在站点深处。",
+      title: "Content flow",
+      description: "三篇「碳硅进化论」文章已经上线，讨论 AI 时代的教育、肉身经验与伦理成长。",
+      headline: "碳硅进化论",
       cta: {
         href: "/blog",
         label: "查看全部文章",
       },
-      emptyLabel: "博客内容还在整理中，很快会补上第一批文章。",
-      readArticleLabel: "Read article",
+      emptyLabel: "碳硅进化论系列文章正在上线中。",
+      readArticleLabel: "阅读全文",
     },
     contact: {
       title: "Contact",
-      description:
-        "如果你想讨论品牌、内容、产品实验，或者只是想交换一个更清晰的切题方式，这里是最直接的入口。",
-      headline:
-        "把联系入口做得像一段自然的续篇，而不是页面底部的表单义务。",
+      description: "我们欢迎内容共创、产品化合作，以及 thoughtful internet projects。",
+      headline: "有合作想法，或者单纯想聊聊？",
       emailLabel: "Email",
-      email: "contactmindhiker@gmail.com",
+      email: "hello@mindhikers.com",
       locationLabel: "Base",
       location: "Shanghai / Remote",
       availabilityLabel: "Open to",
-      availability: "Editorial collaboration, product experiments, thoughtful internet projects",
+      availability: "内容共创（访谈、联名研究、播客） · 产品化合作（工具、模板、课程） · thoughtful internet projects",
       links: [
         {
-          href: "mailto:contactmindhiker@gmail.com",
+          href: "mailto:hello@mindhikers.com",
           label: "发邮件",
-          note: "最快的合作入口",
+          note: "hello@mindhikers.com",
         },
         {
           href: "/en",
@@ -238,7 +228,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
         },
         {
           href: "/blog",
-          label: "Recent writing",
+          label: "碳硅进化论",
           note: "先从文章理解我们的工作方式",
         },
       ],
@@ -270,7 +260,7 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
     metadata: {
       title: BRAND,
       description:
-        "心行者 Mindhikers is a bilingual brand home for product experiments, writing, and a quieter long-form creative practice.",
+        "MindHikers researches complex questions, creates clear expression, and experiments with productized creative workflows.",
     },
     navigation: {
       brand: BRAND,
@@ -286,81 +276,71 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
       },
     },
     hero: {
-      eyebrow: "Editorial homepage",
-      title: "A brand home for research, products, and writing that still feels alive.",
-      description:
-        "心行者 Mindhikers is becoming a quieter but more expressive front page for long-form creation, product experiments, and the kind of internet work that benefits from rhythm, not clutter.",
+      eyebrow: "MindHikers",
+      title: "MindHikers",
+      description: "Research. Create. Productize.",
       primaryAction: {
         href: "#product",
-        label: "See the current product entry",
+        label: "Explore Products",
       },
       secondaryAction: {
         href: "/blog",
-        label: "Open the blog",
+        label: "Read Blog",
       },
-      highlights: ["Bilingual entry point", "Product experiments", "Research and publishing"],
+      highlights: ["Research complex questions", "Create clear expression", "Productize workflows"],
       panelTitle: "Quick links",
       quickLinks: [
         { label: "Golden Crucible", href: "/en/golden-crucible", tag: "Product" },
-        { label: "Latest blog posts", href: "/en/blog", tag: "Content" },
+        { label: "Carbon-Silicon Evolution", href: "/blog", tag: "Writing" },
       ],
     },
     about: {
       title: "About",
-      intro:
-        "心行者 Mindhikers is not meant to read like a resume page. It is a brand homepage for making, thinking, and publishing in public with more intention.",
+      intro: "MindHikers is a one-person studio doing two things:",
       paragraphs: [
-        "The goal is to make room for product entries, recent writing, research threads, and future collaborations without collapsing everything into a single static summary.",
-        "This refresh leans toward the feeling of an actively edited studio homepage: sections behave like columns, entry points feel like programming blocks, and motion supports reading instead of distracting from it.",
+        "Content: deep-dive research and storytelling on YouTube and Bilibili for intellectually curious audiences navigating the AI era.",
+        "Products: turning creative workflows and research methods into tools. Built for ourselves first, then shared.",
       ],
       notes: [
-        "Remove the template-like self-introduction",
-        "Keep motion light but visible",
-        "Make product, blog, and contact pathways obvious",
+        "In an age where AI writes, draws, and thinks for you, the scarcest human quality is knowing who you are.",
+        "Pain is the standard of truth; friction is where growth happens.",
+        "Anchor first, then climb.",
       ],
     },
     product: {
       title: "Product",
-      description:
-        "Start with one concrete release at the center of the page, then let the broader system grow around it.",
-      headline:
-        "The middle of the homepage should feel like a live program block, not a spec sheet.",
+      description: "A product experiment around research, writing, expression, and creator workflows.",
+      headline: "The Crucible",
       featured: {
         eyebrow: "Featured release",
-        title: "Golden Crucible",
-        description:
-          "The first product entry under Mindhikers, built around research, writing, expression, and creator workflows. It is both a page and a signal of where the brand is heading.",
+        title: "The Crucible",
+        description: "A product experiment around research, writing, expression, and creator workflows. Currently open: AI-assisted deep writing workflow, knowledge management templates, and a creator productivity toolkit.",
         href: "/en/golden-crucible",
         ctaLabel: "Open product page",
         meta: "Live now",
       },
       items: [
         {
-          eyebrow: "Brand system",
-          title: "Bilingual homepage structure",
-          description:
-            "A calm bilingual structure gives Chinese and English readers their own clear point of entry.",
+          eyebrow: "Workflow",
+          title: "AI-assisted deep writing workflow",
+          description: "A reusable process for research, outlining, drafting, revision, and publishing.",
         },
         {
-          eyebrow: "Content flow",
-          title: "Blog and research columns",
-          description:
-            "The homepage will gradually connect to writing and research so the site feels like a publication, not a frozen launch page.",
+          eyebrow: "Templates",
+          title: "Knowledge management templates",
+          description: "Durable systems for collecting, reviewing, and extending long-term research threads.",
         },
         {
-          eyebrow: "Contact surface",
-          title: "Collaboration window",
-          description:
-            "Contact should feel natural and visible without breaking the visual rhythm of the homepage.",
+          eyebrow: "Toolkit",
+          title: "Creator productivity toolkit",
+          description: "Lightweight tools for topics, expression, source management, and publishing rhythm.",
         },
       ],
     },
     blog: {
-      title: "Blog",
-      description:
-        "Writing will sit closer to the front of the brand. The homepage surfaces a small selection, while the archive lives in the full blog.",
-      headline:
-        "Bring recent writing onto the homepage instead of hiding the thinking deeper in the site.",
+      title: "Content flow",
+      description: "Three Carbon-Silicon Evolution essays are live, exploring education, embodied experience, and moral growth in the AI age.",
+      headline: "Carbon-Silicon Evolution",
       cta: {
         href: "/blog",
         label: "Browse all posts",
@@ -370,21 +350,19 @@ export const SITE_CONTENT: Record<Locale, HomeContent> = {
     },
     contact: {
       title: "Contact",
-      description:
-        "If you want to talk about brand, editorial systems, product experiments, or a more thoughtful corner of the internet, this is the cleanest place to start.",
-      headline:
-        "Let contact feel like a continuation of the page, not a mandatory form block at the bottom.",
+      description: "We welcome content partnerships, product collaborations, and thoughtful internet projects.",
+      headline: "Have a collaboration idea, or just want to chat?",
       emailLabel: "Email",
-      email: "contactmindhiker@gmail.com",
+      email: "hello@mindhikers.com",
       locationLabel: "Base",
       location: "Shanghai / Remote",
       availabilityLabel: "Open to",
-      availability: "Editorial collaboration, product experiments, thoughtful internet projects",
+      availability: "Content partnerships · Product collaborations · Thoughtful internet projects",
       links: [
         {
-          href: "mailto:contactmindhiker@gmail.com",
+          href: "mailto:hello@mindhikers.com",
           label: "Send email",
-          note: "The fastest way to start a conversation",
+          note: "hello@mindhikers.com",
         },
         {
           href: "/",

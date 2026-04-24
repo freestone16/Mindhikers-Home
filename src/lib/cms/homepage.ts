@@ -1,6 +1,14 @@
 import { getHomeContent, type HomeContent, type Locale } from "@/data/site-content";
 import { BLOG_REVALIDATE_SECONDS, getHomepageCacheTag, getWordPressSiteUrl, isWordPressConfigured } from "./constants";
 
+type HomepageSourceMode = "local" | "wordpress";
+
+function getHomepageSourceMode(): HomepageSourceMode {
+  return process.env.HOMEPAGE_SOURCE?.trim().toLowerCase() === "wordpress"
+    ? "wordpress"
+    : "local";
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -122,6 +130,10 @@ async function fetchWordPressHomepage(locale: Locale): Promise<HomeContent | nul
 
 export async function getManagedHomeContent(locale: Locale): Promise<HomeContent> {
   const fallback = getHomeContent(locale);
+
+  if (getHomepageSourceMode() === "local") {
+    return fallback;
+  }
 
   try {
     const payload = await fetchWordPressHomepage(locale);
