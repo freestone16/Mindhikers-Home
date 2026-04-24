@@ -8,6 +8,8 @@ if (class_exists('Mindhikers_Cms_Core')) {
     return;
 }
 
+require_once __DIR__ . '/src/compat/m1-rest-functions.php';
+
 final class Mindhikers_Cms_Core
 {
     private static ?self $instance = null;
@@ -744,6 +746,7 @@ final class Mindhikers_Cms_Core
                 'availabilityLabel' => $this->normalizeText($payload['hero']['availabilityLabel'] ?? ''),
                 'availabilityValue' => $this->normalizeText($payload['hero']['availabilityValue'] ?? ''),
                 'panelTitle' => $this->normalizeText($payload['hero']['panelTitle'] ?? ''),
+                'quickLinks' => $this->normalizeQuickLinks($payload['hero']['quickLinks'] ?? []),
             ],
             'about' => [
                 'title' => $this->normalizeText($payload['about']['title'] ?? ''),
@@ -816,6 +819,25 @@ final class Mindhikers_Cms_Core
                 'href' => esc_url_raw((string) ($link['href'] ?? '')),
                 'label' => $this->normalizeText($link['label'] ?? ''),
                 'note' => $this->normalizeText($link['note'] ?? ''),
+                'qrImage' => esc_url_raw((string) ($link['qrImage'] ?? '')),
+            ];
+        }
+
+        return $normalized;
+    }
+
+    private function normalizeQuickLinks(array $links): array
+    {
+        $normalized = [];
+        foreach ($links as $link) {
+            if (!is_array($link)) {
+                continue;
+            }
+
+            $normalized[] = [
+                'href' => esc_url_raw((string) ($link['href'] ?? '')),
+                'label' => $this->normalizeText($link['label'] ?? ''),
+                'tag' => $this->normalizeText($link['tag'] ?? ''),
             ];
         }
 
