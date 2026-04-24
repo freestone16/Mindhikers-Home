@@ -1,0 +1,16 @@
+.git
+.next
+.playwright-mcp
+node_modules
+coverage
+build
+out
+
+.DS_Store
+*.log
+*.zip
+/staging-homepage-full.png
+
+.env
+.env.*
+!.env.example

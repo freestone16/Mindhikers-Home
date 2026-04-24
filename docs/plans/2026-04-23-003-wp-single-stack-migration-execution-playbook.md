@@ -343,18 +343,22 @@ ls docs/archive/2026-04-23_wp_snippets/
    # 产出：wordpress/plugins-bundled/carbon-fields/
    ```
 
-   如果 wordpress.org 没有 3.6.9（碳字段通常从 composer 安装），改用：
+   如果 wordpress.org 没有 3.6.9，使用 Carbon Fields 官方 plugin loader 仓库：
+   ```bash
+   cd wordpress/plugins-bundled
+   curl -L -o carbon-fields-plugin.zip "https://github.com/htmlburger/carbon-fields-plugin/archive/refs/tags/v3.6.9.zip"
+   unzip -q carbon-fields-plugin.zip
+   mv carbon-fields-plugin-3.6.9 carbon-fields
+   rm carbon-fields-plugin.zip
+   # Dockerfile build 阶段会在 carbon-fields/ 内执行 composer install，
+   # 安装 htmlburger/carbon-fields:3.6.9 到 vendor/
+   ```
+
+   若需要本地预装 vendor，改用：
    ```bash
    cd wordpress/plugins-bundled
    mkdir carbon-fields && cd carbon-fields
-   composer require htmlburger/carbon-fields:3.6.9 --no-dev --prefer-dist
-   # 产出：wordpress/plugins-bundled/carbon-fields/vendor/htmlburger/carbon-fields/
-   ```
-
-   🛑 **卡点**：若 composer 方式产出不是标准 plugin 结构，改为从 GitHub release 获取：
-   ```bash
-   curl -L -o cf.zip "https://github.com/htmlburger/carbon-fields/archive/refs/tags/3.6.9.zip"
-   unzip -q cf.zip && mv carbon-fields-3.6.9 carbon-fields && rm cf.zip
+   composer require htmlburger/carbon-fields-plugin:v3.6.9 --no-dev --prefer-dist
    ```
 
 3. 下载 Polylang 3.8.2：
@@ -368,15 +372,15 @@ ls docs/archive/2026-04-23_wp_snippets/
 
 4. 校验入口文件存在：
    ```bash
-   test -f wordpress/plugins-bundled/carbon-fields/carbon-fields.php && echo "CF OK"
+   test -f wordpress/plugins-bundled/carbon-fields/carbon-fields-plugin.php && echo "CF OK"
    test -f wordpress/plugins-bundled/polylang/polylang.php && echo "PL OK"
    ```
 
 ### 验证
 
-- `wordpress/plugins-bundled/carbon-fields/carbon-fields.php` 存在
+- `wordpress/plugins-bundled/carbon-fields/carbon-fields-plugin.php` 存在
 - `wordpress/plugins-bundled/polylang/polylang.php` 存在
-- 两个目录的总大小合理（Carbon Fields ~5MB，Polylang ~10MB）
+- 两个目录的总大小合理（Carbon Fields 源码较小，build 阶段会安装 vendor；Polylang ~3-10MB）
 
 ### 回退
 
@@ -387,7 +391,7 @@ ls docs/archive/2026-04-23_wp_snippets/
 ```
 refs MIN-30 feat(wp): bundle carbon-fields 3.6.9 and polylang 3.8.2 into repo
 
-- Add wordpress/plugins-bundled/carbon-fields/ (from wordpress.org 3.6.9)
+- Add wordpress/plugins-bundled/carbon-fields/ (Carbon Fields plugin loader v3.6.9; Docker build installs vendor)
 - Add wordpress/plugins-bundled/polylang/ (from wordpress.org 3.8.2)
 - These plugins are version-locked and will be COPY'd into the Docker image (P1.2)
 - Other plugins remain in Volume for admin-panel upgrade flexibility
