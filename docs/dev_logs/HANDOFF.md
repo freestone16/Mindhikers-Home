@@ -1,4 +1,4 @@
-🕐 Last updated: 2026-04-24 10:17 CST
+🕐 Last updated: 2026-04-24 13:27 CST
 🌿 Branch: `experiment/wp-traditional-mode`
 📌 Base commit: `3370c37`
 🚀 Push status: ❌ 未 push；本地 Phase 1 commits 已完成，等待老卢决定是否推远端/接 staging
@@ -8,6 +8,8 @@
 ## 当前状态：003 Phase 1 本地代码准备已提交，等待远端/staging 决策
 
 一句话：WP 单栈迁移已经从文档进入本地实现；Carbon Fields/Polylang bundled、Dockerfile COPY、Volume sync、homepage quickLinks schema 兼容都已完成并本地验证。下一步不是继续大改代码，而是由老卢决定是否 push `experiment/wp-traditional-mode` 并把 Railway staging WordPress 服务接到这个分支验证。
+
+给新窗口的第一句话：先不要碰 production，也不要继续大改；先问老卢是否允许 push `experiment/wp-traditional-mode` 进入 Railway staging 验证。
 
 ---
 
@@ -38,6 +40,10 @@
    - contact links 保留 `qrImage`
    - 新增 `src/compat/m1-rest-functions.php`
    - M1 REST 兼容函数延迟到 `plugins_loaded` 注册，避免 M1 REST 插件仍激活时函数重名 fatal
+
+5. `7ddd43b refs MIN-30 docs: save Phase 1 handoff`
+   - 保存 Phase 1 本地验证结果
+   - 标记剩余未提交文件与下一步 staging 入口
 
 ---
 
@@ -98,6 +104,11 @@
    - staging 视觉截图
    - 如果作为验收 baseline，应迁到 `docs/evidence/`；否则不提交
 
+7. `contents/`
+   - 当前含 `黄金精神 Human Golden Spirit.md` 与 `blog-01.md`
+   - 像是内容灌入素材/博客草稿
+   - 新窗口先不要默认提交或删除；等老卢确认它们是否属于 Phase 4 Blog 内容迁移素材
+
 ---
 
 ## 下一步建议
@@ -118,6 +129,21 @@ git push origin experiment/wp-traditional-mode
 2. Build Context 设为仓库根
 3. Dockerfile Path 设为 `ops/mindhikers-cms-runtime/Dockerfile`
 4. 观察 Deploy Logs 是否出现 `[mh-sync-bundle] done.`
+
+### 离生产还有多远
+
+当前只是本地 Phase 1 通过，离最终生产还差：
+
+1. push 实验分支
+2. Railway staging 接分支并部署
+3. staging 验证 WP Admin / plugins / REST / uploads / Next.js API 消费
+4. production Volume + MariaDB 备份
+5. production 部署
+6. 证明 mu-plugin schema 与 `mhs02` 等价
+7. 再退役 snippets / Code Snippets
+8. 全站验收后才进入 DNS 切换
+
+粗略判断：离“可谨慎推 production 部署”还差 1-2 个认真验证窗口；离“最终 DNS 切换并稳定收口”还差 2-4 个窗口。
 
 ### P1：staging 验证清单
 
