@@ -1,0 +1,125 @@
+- generic [active] [ref=e1]:
+  - link "跳至内容" [ref=e2] [cursor=pointer]:
+    - /url: "#content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e11]:
+        - navigation "Primary Site Navigation" [ref=e15]:
+          - list [ref=e17]:
+            - listitem [ref=e18]:
+              - link "Home" [ref=e19] [cursor=pointer]:
+                - /url: https://wordpress-l1ta-staging.up.railway.app/
+        - button "开始联系" [ref=e22] [cursor=pointer]:
+          - generic [ref=e23]: 开始联系
+    - generic [ref=e25]:
+      - generic [ref=e28]:
+        - text: Editorial homepage
+        - heading "把研究、产品与表达，排成一个有呼吸感的品牌入口。" [level=1] [ref=e29]
+        - paragraph [ref=e30]: 心行者 Mindhikers 正在把长期创作、内容实验与产品化尝试收拢成一个更完整的首页。它不想像简历，也不想像模板，而是像一个持续更新的工作现场。
+        - generic [ref=e31]:
+          - link "查看当前产品入口" [ref=e32] [cursor=pointer]:
+            - /url: "#product"
+          - link "进入博客" [ref=e33] [cursor=pointer]:
+            - /url: /blog
+      - generic [ref=e35]:
+        - heading "关于心行者" [level=2] [ref=e36]
+        - generic [ref=e37]:
+          - paragraph [ref=e38]: 欢迎来到 心行者 MindHikers。
+          - paragraph [ref=e39]: 老卢深信在 AI 时代人类需要保有自己的黄金精神，找到碳硅共生的边界。
+          - paragraph [ref=e40]: 这是一个以 AI 技术、碳硅共生哲学、脑神经科学（Neuroscience）为支点，撬动人生智慧的知识成长频道。我们专为『知性探索者』设计，致力于将艰深的认知科学、神经科学前沿成果，转化为可执行的行动指南，助你真正实现从'知道'到'做到'的跨越。
+      - generic [ref=e42]:
+        - generic:
+          - heading [level=2]
+          - paragraph
+        - article [ref=e44]:
+          - heading "黄金坩埚" [level=3] [ref=e45]
+          - paragraph [ref=e46]: 围绕研究、写作、表达与创作者工作流展开的首个产品入口。
+          - generic [ref=e47]: 构思中
+      - generic [ref=e49]:
+        - generic:
+          - heading [level=2]
+          - paragraph
+        - generic [ref=e50]:
+          - article [ref=e51]:
+            - generic [ref=e52]:
+              - text: AI 技术
+              - 'heading "1Testing React Applications: A Practical Guide" [level=3] [ref=e53]':
+                - 'link "1Testing React Applications: A Practical Guide" [ref=e54] [cursor=pointer]':
+                  - /url: https://wordpress-l1ta-staging.up.railway.app/testing-react-applications-a-practical-guide/
+              - paragraph [ref=e55]: From unit tests to E2E—learn how to build confidence in your React applications with comprehensive testing.
+              - text: 2024年12月14日
+          - article [ref=e56]:
+            - generic [ref=e57]:
+              - text: AI 技术
+              - heading "REST API Design Principles That Stand the Test of Time" [level=3] [ref=e58]:
+                - link "REST API Design Principles That Stand the Test of Time" [ref=e59] [cursor=pointer]:
+                  - /url: https://wordpress-l1ta-staging.up.railway.app/rest-api-design-principles-that-stand-the-test-of-time/
+              - paragraph [ref=e60]: Learn how to design APIs that developers love to use and are easy to maintain.
+              - text: 2024年12月12日
+          - article [ref=e61]:
+            - generic [ref=e62]:
+              - text: AI 技术
+              - 'heading "Git Workflow Guide: From Chaos to Clarity" [level=3] [ref=e63]':
+                - 'link "Git Workflow Guide: From Chaos to Clarity" [ref=e64] [cursor=pointer]':
+                  - /url: https://wordpress-l1ta-staging.up.railway.app/git-workflow-guide-from-chaos-to-clarity/
+              - paragraph [ref=e65]: Master Git workflows that keep your team productive and your codebase healthy.
+              - text: 2024年12月10日
+      - generic [ref=e67]:
+        - generic [ref=e68]:
+          - heading "联系" [level=2] [ref=e69]
+          - paragraph [ref=e70]: 如果你想讨论品牌、内容系统、产品实验，或者只是想交换一个更清晰的切题方式，这里是最直接的入口。
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - generic [ref=e73]: 邮箱
+            - link "ops@mindhikers.com" [ref=e75] [cursor=pointer]:
+              - /url: mailto:ops@mindhikers.com
+          - generic [ref=e76]:
+            - generic [ref=e77]: 位置
+            - generic [ref=e78]: 上海 / 远程
+        - generic [ref=e79]:
+          - link "Tw" [ref=e80] [cursor=pointer]:
+            - /url: https://x.com/mindhikers
+          - link "Bi" [ref=e81] [cursor=pointer]:
+            - /url: https://space.bilibili.com/mindhikers
+          - link "微信" [ref=e82] [cursor=pointer]:
+            - /url: "#"
+    - contentinfo [ref=e83]:
+      - generic [ref=e86]:
+        - region "Footer Widget 4" [ref=e88]:
+          - figure [ref=e90]
+        - region "Footer Widget 2" [ref=e92]:
+          - generic [ref=e93]:
+            - heading "联系方式" [level=2] [ref=e94]
+            - generic [ref=e95]:
+              - paragraph [ref=e96]:
+                - strong [ref=e97]: Mindhikers
+              - paragraph [ref=e98]:
+                - text: 邮箱：
+                - strong [ref=e99]: ops@mindhikers.com
+              - paragraph [ref=e100]:
+                - link "英文版入口" [ref=e101] [cursor=pointer]:
+                  - /url: /en/
+        - generic [ref=e102]:
+          - region "Footer Widget 1" [ref=e103]:
+            - generic [ref=e104]:
+              - heading "开始联系" [level=2] [ref=e105]
+              - paragraph [ref=e107]: 如果你想讨论品牌、内容系统、产品实验，或者只是想交换一个更清晰的切题方式，这里是最直接的入口。
+          - region "Footer Widget 3" [ref=e108]:
+            - generic [ref=e109]:
+              - heading "所在" [level=2] [ref=e110]
+              - paragraph [ref=e112]: 上海 / 远程
+      - generic [ref=e115]:
+        - paragraph [ref=e119]: 版权所有 © 2026 MindHikers
+        - generic [ref=e123]:
+          - link "Facebook" [ref=e124] [cursor=pointer]:
+            - /url: ""
+            - img [ref=e126]
+          - link "Twitter" [ref=e128] [cursor=pointer]:
+            - /url: ""
+            - img [ref=e130]
+          - link "YouTube" [ref=e132] [cursor=pointer]:
+            - /url: ""
+            - img [ref=e134]
+          - link "Linkedin" [ref=e136] [cursor=pointer]:
+            - /url: ""
+            - img [ref=e138]

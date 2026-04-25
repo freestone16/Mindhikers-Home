@@ -126,6 +126,13 @@
     background-attachment: fixed;
   }
 
+  .dark body {
+    background-image:
+      radial-gradient(circle at top left, rgba(64, 111, 93, 0.25), transparent 30%),
+      radial-gradient(circle at 85% 18%, rgba(80, 60, 40, 0.2), transparent 28%),
+      linear-gradient(180deg, rgba(30, 32, 35, 0.98), rgba(20, 22, 25, 1));
+  }
+
   body::before {
     content: "";
     position: fixed;

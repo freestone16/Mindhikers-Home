@@ -40,41 +40,30 @@ echo "[mh-sync-bundle] done."
 echo "[mh-sync-bundle] themes dir listing:"
 ls -la "$TARGET/themes/" || true
 
-cat > "$WP_ROOT/debug-probe.php" << 'PROBE'
+cat > "$WP_ROOT/run-seed.php" << 'SEEDRUNNER'
 <?php
 header('Content-Type: text/plain; charset=utf-8');
 $root = dirname(__FILE__);
-echo "=== WordPress Content Diagnostic ===\n\n";
-echo "Themes:\n";
-foreach (glob("$root/wp-content/themes/*") as $t) { echo "  " . basename($t) . "\n"; }
-echo "\nMu-plugins:\n";
-foreach (glob("$root/wp-content/mu-plugins/*") as $m) { echo "  " . basename($m) . "\n"; }
-echo "\nPlugins:\n";
-foreach (glob("$root/wp-content/plugins/*") as $p) { echo "  " . basename($p) . "\n"; }
-echo "\nAstra parent style.css exists: " . (file_exists("$root/wp-content/themes/astra/style.css") ? "YES" : "NO") . "\n";
-echo "Astra child style.css exists: " . (file_exists("$root/wp-content/themes/astra-child/style.css") ? "YES" : "NO") . "\n";
+$seedFile = "$root/wp-content/mu-plugins/mindhikers-cms-core/m1-seed.php";
 
-$log = "$root/wp-content/debug.log";
-echo "\n=== PHP Error Log (last 50 lines) ===\n";
-if (file_exists($log)) {
-    $lines = file($log);
-    foreach (array_slice($lines, -50) as $line) { echo $line; }
-} else {
-    echo "No debug.log found.\n";
+if (!file_exists($seedFile)) {
+    echo "Seed file not found at: $seedFile\n";
+    echo "Checking alternative locations...\n";
+    $alt = "$root/wp-content/plugins/m1-rest/m1-seed.php";
+    if (file_exists($alt)) {
+        $seedFile = $alt;
+    } else {
+        echo "No seed file found.\n";
+        exit(1);
+    }
 }
 
-ini_set('display_errors', '1');
-error_reporting(E_ALL);
-echo "\n=== WordPress Bootstrap Test ===\n";
-try {
-    define('WP_DEBUG', true);
-    define('WP_DEBUG_DISPLAY', false);
-    require_once "$root/wp-load.php";
-    echo "WP loaded OK. Theme: " . wp_get_theme()->get('Name') . "\n";
-} catch (Throwable $e) {
-    echo "FATAL: " . get_class($e) . ": " . $e->getMessage() . "\n";
-    echo "File: " . $e->getFile() . ":" . $e->getLine() . "\n";
-    echo "Trace:\n" . $e->getTraceAsString() . "\n";
-}
-PROBE
-chown www-data:www-data "$WP_ROOT/debug-probe.php" || true
+echo "Running seed from: $seedFile\n\n";
+require_once $seedFile;
+echo "\nSeed execution completed.\n";
+
+// Self-destruct for security
+unlink(__FILE__);
+echo "Cleaned up runner.\n";
+SEEDRUNNER
+chown www-data:www-data "$WP_ROOT/run-seed.php" || true

@@ -1,5 +1,6 @@
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -77,11 +78,12 @@ export default function RootLayout({
           clashDisplay.variable
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="light">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <Navbar />
           <div className="relative z-10 mx-auto max-w-6xl px-5 pb-20 pt-[2.4rem] sm:px-6 sm:pt-[2.8rem]">
             {children}
           </div>
+          <ThemeToggle />
         </ThemeProvider>
       </body>
     </html>
