@@ -91,7 +91,7 @@ echo "Theme options seeded (ZH).\n";
 // 2. Product CPT: 黄金坩埚 ZH + EN
 // ============================================
 
-\$zh_product_id = wp_insert_post([
+$zh_product_id = wp_insert_post([
     'post_type'   => 'mh_product',
     'post_title'  => '黄金坩埚',
     'post_content' => '一个围绕研究、写作、表达与创作者工作流展开的产品实验。2026年5月待开放：AI 辅助深度写作工作流、知识管理模板、创作者效率工具集。',
@@ -100,22 +100,22 @@ echo "Theme options seeded (ZH).\n";
     'post_name'   => 'golden-crucible',
 ]);
 
-if (\$zh_product_id && !is_wp_error(\$zh_product_id)) {
-    carbon_set_post_meta(\$zh_product_id, 'product_subtitle', '已上线');
-    carbon_set_post_meta(\$zh_product_id, 'product_status', 'live');
-    carbon_set_post_meta(\$zh_product_id, 'product_entry_url', '/golden-crucible');
-    carbon_set_post_meta(\$zh_product_id, 'product_is_featured', true);
-    echo "ZH Product created: {\$zh_product_id}\n";
+if ($zh_product_id && !is_wp_error($zh_product_id)) {
+    carbon_set_post_meta($zh_product_id, 'product_subtitle', '已上线');
+    carbon_set_post_meta($zh_product_id, 'product_status', 'live');
+    carbon_set_post_meta($zh_product_id, 'product_entry_url', '/golden-crucible');
+    carbon_set_post_meta($zh_product_id, 'product_is_featured', true);
+    echo "ZH Product created: {$zh_product_id}\n";
 
     if (function_exists('pll_set_post_language')) {
-        pll_set_post_language(\$zh_product_id, 'zh');
+        pll_set_post_language($zh_product_id, 'zh');
     }
 } else {
     echo "Failed to create ZH product\n";
-    \$zh_product_id = 0;
+    $zh_product_id = 0;
 }
 
-\$en_product_id = wp_insert_post([
+$en_product_id = wp_insert_post([
     'post_type'   => 'mh_product',
     'post_title'  => 'Golden Crucible',
     'post_content' => 'A product experiment around research, writing, expression, and creator workflows. Coming May 2026: AI-assisted deep writing workflow, knowledge management templates, creator efficiency toolkit.',
@@ -124,21 +124,21 @@ if (\$zh_product_id && !is_wp_error(\$zh_product_id)) {
     'post_name'   => 'golden-crucible',
 ]);
 
-if (\$en_product_id && !is_wp_error(\$en_product_id)) {
-    carbon_set_post_meta(\$en_product_id, 'product_subtitle', 'Live now');
-    carbon_set_post_meta(\$en_product_id, 'product_status', 'live');
-    carbon_set_post_meta(\$en_product_id, 'product_entry_url', '/en/golden-crucible');
-    carbon_set_post_meta(\$en_product_id, 'product_is_featured', false);
-    echo "EN Product created: {\$en_product_id}\n";
+if ($en_product_id && !is_wp_error($en_product_id)) {
+    carbon_set_post_meta($en_product_id, 'product_subtitle', 'Live now');
+    carbon_set_post_meta($en_product_id, 'product_status', 'live');
+    carbon_set_post_meta($en_product_id, 'product_entry_url', '/en/golden-crucible');
+    carbon_set_post_meta($en_product_id, 'product_is_featured', false);
+    echo "EN Product created: {$en_product_id}\n";
 
     if (function_exists('pll_set_post_language')) {
-        pll_set_post_language(\$en_product_id, 'en');
+        pll_set_post_language($en_product_id, 'en');
     }
 
-    if (\$zh_product_id && function_exists('pll_save_post_translations')) {
+    if ($zh_product_id && function_exists('pll_save_post_translations')) {
         pll_save_post_translations([
-            'zh' => \$zh_product_id,
-            'en' => \$en_product_id,
+            'zh' => $zh_product_id,
+            'en' => $en_product_id,
         ]);
         echo "Polylang translation linked.\n";
     }
