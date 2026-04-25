@@ -13,6 +13,10 @@ fi
 echo "[mh-sync-bundle] syncing mu-plugins..."
 mkdir -p "$TARGET/mu-plugins"
 cp -rf "$BUNDLE/mu-plugins/." "$TARGET/mu-plugins/"
+if [ -f "$TARGET/mu-plugins/m1-seed.php" ]; then
+  echo "[mh-sync-bundle] removing m1-seed.php from mu-plugins (it is a CLI script, not a plugin)"
+  rm -f "$TARGET/mu-plugins/m1-seed.php"
+fi
 
 echo "[mh-sync-bundle] syncing themes..."
 mkdir -p "$TARGET/themes"

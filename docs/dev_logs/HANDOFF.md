@@ -1,11 +1,11 @@
-🕐 Last updated: 2026-04-25 15:15 CST
+🕐 Last updated: 2026-04-25 15:40 CST
 🌿 Branch: `experiment/wp-traditional-mode`
-📌 Latest commit: `d8fc902` refs MIN-30 fix(ops): remove rm -rf from mu-plugins/themes sync
+📌 Latest commit: `ecbfeae` refs MIN-30 fix(wp): bundle Astra parent theme to restore from rm-rf deletion
 🚀 Push status: ✅ 已 push，等待 Railway staging 自动部署恢复
 
 ---
 
-## 当前状态：staging WordPress 白屏，已回退 rm-rf，等待部署恢复
+## 当前状态：staging WordPress 白屏，已提交 Astra 父主题修复，等待部署恢复
 
 一句话：WP 单栈迁移 Phase 1 Dockerfile 部署已成功，但在清理 Volume 旧文件时引入了 `rm -rf`，删除了 Astra 父主题导致 WordPress 致命错误/白屏。已回退 `sync-bundle.sh` 移除 `rm-rf`，当前等待 `d8fc902` 部署恢复网站访问。
 
