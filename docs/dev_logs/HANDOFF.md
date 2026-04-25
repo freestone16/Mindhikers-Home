@@ -1,15 +1,15 @@
-🕐 Last updated: 2026-04-25 12:30 CST
+🕐 Last updated: 2026-04-25 15:15 CST
 🌿 Branch: `experiment/wp-traditional-mode`
-📌 Base commit: `3370c37`
-🚀 Push status: ✅ 已 push（含 Dockerfile VOLUME 修复）
+📌 Latest commit: `d8fc902` refs MIN-30 fix(ops): remove rm -rf from mu-plugins/themes sync
+🚀 Push status: ✅ 已 push，等待 Railway staging 自动部署恢复
 
 ---
 
-## 当前状态：003 Phase 1 代码已 push，Railway staging 首次部署失败已修复，等待重新部署
+## 当前状态：staging WordPress 白屏，已回退 rm-rf，等待部署恢复
 
-一句话：WP 单栈迁移 Phase 1 代码已推送到 `experiment/wp-traditional-mode`。老卢已在 Dashboard 把 `WordPress-L1ta` 的 Source 从 Docker Image 切换到 Git Repo + `experiment/wp-traditional-mode` 分支。首次部署失败原因是 Dockerfile 包含 Railway 不支持的 `VOLUME` 指令，已删除并重新 push。现在等 Railway 自动检测文件变更并触发新部署。
+一句话：WP 单栈迁移 Phase 1 Dockerfile 部署已成功，但在清理 Volume 旧文件时引入了 `rm -rf`，删除了 Astra 父主题导致 WordPress 致命错误/白屏。已回退 `sync-bundle.sh` 移除 `rm-rf`，当前等待 `d8fc902` 部署恢复网站访问。
 
-给新窗口的第一句话：先不要碰 production；当前等 Railway staging 新部署完成，观察 Deploy Logs 是否出现 `[mh-sync-bundle] done.`。
+给新窗口的第一句话：当前 staging WordPress 可能仍白屏，请等待 Railway 部署 `d8fc902` 完成（约 1-2 分钟），然后检查网站是否恢复，再按下面的排错步骤继续。
 
 ---
 
@@ -24,97 +24,117 @@
 5. `7ddd43b refs MIN-30 docs: save Phase 1 handoff`
 6. `e28460d refs MIN-30 docs: update handoff after push`
 7. `94c9127 refs MIN-30 fix(ops): use DOCKERFILE builder with correct dockerfilePath`
-   - 修复 `railway.json`：builder 从 `RAILPACK` 改为 `DOCKERFILE`
-   - 指定 `dockerfilePath: ops/mindhikers-cms-runtime/Dockerfile`
-8. `1be92c3 refs MIN-30 fix(ops): remove unsupported VOLUME directive for Railway Dockerfile builder`
-   - 删除 Dockerfile 第 30 行 `VOLUME ["/var/www/html/wp-content/uploads"]`
-   - Railway Dockerfile 构建器不支持 `VOLUME` 指令，导致构建失败
-   - Volume 挂载已通过 Dashboard 的 `wordpress-volume-vRzA` 配置，无需 Dockerfile 声明
+8. `1be92c3 refs MIN-30 fix(ops): remove unsupported VOLUME directive`
+9. `bab5e84 refs MIN-30 docs: update handoff with Dockerfile VOLUME fix`
+10. `efe8a30 refs MIN-30 fix(wp): remove fix-blog-posts.php`
+    - 该文件在 mu-plugins 中，每次请求都输出文字污染 REST API
+11. `4ad2a84 refs MIN-30 fix(ops): clear mu-plugins/themes before sync`
+    - ❌ **导致白屏！** 在 `sync-bundle.sh` 中加 `rm -rf` 清空 mu-plugins/themes
+    - 删除了 Volume 中的 Astra 父主题（不在仓库里）→ WordPress fatal error
+12. `d8fc902 refs MIN-30 fix(ops): remove rm -rf from mu-plugins/themes sync`
+    - 回退 `4ad2a84`，移除 `rm -rf`，恢复为只复制不删除
 
-### 本次会话操作记录
+### 本次会话关键操作时间线
 
-- ✅ `git push origin experiment/wp-traditional-mode`（首次 push 5 个 Phase 1 commit）
-- ✅ 协助老卢在 Railway Dashboard 切换 `WordPress-L1ta` Source
-  - 从 `wordpress:latest` Docker Image → Git Repo `freestone16/Mindhikers-Home`
-  - Branch: `experiment/wp-traditional-mode`
-  - Root Directory: `/`
-- ✅ 发现 Dashboard Build 标签页显示 Builder 被锁定为 `Railpack`（由 `railway.json` 控制）
-- ✅ 修复 `railway.json`：builder → DOCKERFILE，增加 dockerfilePath
-- ✅ 重新 push `railway.json` 修复
-- ❌ 首次部署失败（commit `94c9127`，34 分钟前）
-  - 错误：`dockerfile invalid: docker VOLUME at Line 30 is not supported, use Railway Volumes`
-  - 原因：Railway Dockerfile 构建器不支持 `VOLUME` 指令
-- ✅ 修复 Dockerfile：删除第 30 行 `VOLUME ["/var/www/html/wp-content/uploads"]`
-- ✅ 重新 push Dockerfile 修复（commit `1be92c3`）
+- ✅ Dashboard 切换 Source：Docker Image → Git Repo (`experiment/wp-traditional-mode`)
+- ✅ 修复 `railway.json`：builder → DOCKERFILE
+- ✅ 修复 Dockerfile：删除不支持的 `VOLUME` 指令
+- ✅ 首次部署成功（`bab5e84`），服务 Online
+- ⚠️ 发现 REST API 被 `fix-blog-posts.php` 污染
+- ✅ 删除 `fix-blog-posts.php` 并 push（`efe8a30`）
+- ❌ 为清理旧文件，在 `sync-bundle.sh` 加 `rm -rf`（`4ad2a84`）
+- ❌ **白屏**：`rm -rf` 删除了 Astra 父主题 → WordPress fatal error
+- ✅ 回退 `rm -rf`（`d8fc902`），当前等待部署恢复
 
 ---
 
-## 已验证
+## 白屏原因（供新窗口参考）
 
-本地 Docker 已启动并验证通过（见上次 handoff）。
+**`rm -rf "$TARGET/themes/"*`** 删除了 Astra 父主题。
+
+- 仓库 `wordpress/themes/` 只有 `astra-child`
+- Astra 父主题通过 WP Admin 安装，**不在仓库里**
+- `astra-child` 依赖父主题，删除后 WordPress 找不到 → fatal error
+
+**教训**：`rm -rf` 在 Volume sync 场景下是危险操作，必须知道 Volume 里有什么才能删。
 
 ---
 
 ## 当前未提交文件
 
-这些文件刻意没有混入 commit：
-
-1. `src/app/globals.css` / `src/app/layout.tsx` / `src/components/theme-toggle.tsx` — dark mode 实验，与 WP 迁移无关
+1. `src/app/globals.css` / `src/app/layout.tsx` / `src/components/theme-toggle.tsx` — dark mode 实验
 2. `.playwright-mcp/*` — 浏览器验证产物
 3. `m1-rest-v*.zip` — 历史部署包
 4. `staging-homepage-full.png` — staging 截图
-5. `contents/` — 博客草稿，等老卢确认
+5. `contents/` — 博客草稿
 
 ---
 
-## 下一步：观察 Railway staging 部署
+## 下一步：新窗口排错清单
 
-### 当前预期
+### P0：确认网站恢复
 
-Railway 应该已检测到 `1be92c3` 变更，自动触发新部署。Builder 类型为 `Dockerfile`，且不再包含 `VOLUME` 指令。
+1. 等 Railway 部署 `d8fc902` 完成（Dashboard 看状态）
+2. `curl -I https://wordpress-l1ta-staging.up.railway.app/` → 确认返回 200
+3. 浏览器打开 `https://wordpress-l1ta-staging.up.railway.app/wp-admin` → 确认可登录
 
-### 需要观察的日志关键字
+### P1：清理 Volume 中的 `fix-blog-posts.php`
 
-Deploy Logs 里找：
-- `Step 1/xx : FROM ...` — Docker build 开始
-- `composer install` — Carbon Fields 依赖安装
-- `[mh-sync-bundle] installing WordPress core`
-- `[mh-sync-bundle] syncing mu-plugins`
-- `[mh-sync-bundle] syncing themes`
-- `[mh-sync-bundle] syncing bundled plugins`
-- **`[mh-sync-bundle] done.`** ← 关键成功标志
+**问题**：`efe8a30` 删除了仓库里的 `fix-blog-posts.php`，但由于 `sync-bundle.sh` 只复制不删除，**Volume 中可能还残留这个文件**。
 
-### 如果部署失败
+**方案 A（推荐）**：
+1. 确认当前部署后 `fix-blog-posts.php` 是否还在污染输出
+2. 如果在，手动通过 WP Admin 文件管理器或 SSH 删除 `/var/www/html/wp-content/mu-plugins/fix-blog-posts.php`
 
-可能原因：
-1. `dockerfilePath` 路径错误 → 检查 `ops/mindhikers-cms-runtime/Dockerfile` 是否存在于仓库
-2. Build context 问题 → 检查 Root Directory 是否为 `/`
-3. Volume 冲突 → 检查 `/var/www/html` 的 volume mount 是否与新镜像冲突
+**方案 B**：
+1. 临时修改 `sync-bundle.sh` 在 mu-plugins sync 时显式删除 `fix-blog-posts.php`（最小改动）
 
-### P1：staging 验证清单（部署成功后）
+### P2：验证 REST API
 
-1. WP Admin 可登录 — `/wp-admin`
-2. 插件列表看到 Carbon Fields + Polylang
-3. 主题列表看到当前 Astra Child
-4. `/wp-json/mindhikers/v1/homepage/zh` 返回 200
-5. JSON 内含 `hero.quickLinks`
-6. uploads 下历史图片 URL 正常
-7. 前台 Next.js 仍能消费 API，不丢 Quick Links
+```bash
+curl "https://wordpress-l1ta-staging.up.railway.app/wp-json/mindhikers/v1/homepage/zh"
+```
 
-### 离生产还有多远
+- 应返回 200 + 干净的 JSON
+- JSON 内含 `hero.quickLinks`
+
+### P3：Must-Use 插件检查
+
+WP Admin → 插件 → Must-Use：
+- 确认有 `Mindhikers CMS Core`
+
+### P4：完整 P1 验证清单
+
+1. WP Admin 可登录
+2. 插件列表有 Carbon Fields + Polylang
+3. 主题列表有 Astra Child
+4. REST API `/wp-json/mindhikers/v1/homepage/zh` 返回 200
+5. JSON 含 `hero.quickLinks`
+6. uploads 图片正常
+7. 前台 Next.js 消费 API 正常
+
+### P5：如果仍有问题
+
+- 检查 Deploy Logs 是否有 `[mh-sync-bundle] done.`
+- 检查 WordPress 错误日志（WP Admin → 工具 → 站点健康，或 volume 中的 `wp-content/debug.log`）
+- 确认 `mindhikers-cms-core.php` 是否成功加载
+
+---
+
+## 离生产还有多远
 
 1. ✅ push 实验分支
 2. ✅ Railway staging Source 切换到 Git Repo
-3. ✅ `railway.json` Builder 修复为 DOCKERFILE
-4. ⏳ 等待 Railway 自动部署
-5. ⏳ staging 验证通过
-6. ⏳ production Volume + MariaDB 备份
-7. ⏳ production 部署
-8. ⏳ 证明 mu-plugin schema 与 `mhs02` 等价
-9. ⏳ 退役 snippets / Code Snippets
-10. ⏳ 全站验收 + DNS 切换
-
-粗略判断：离“可谨慎推 production 部署”还差 1-2 个认真验证窗口；离“最终 DNS 切换并稳定收口”还差 2-4 个窗口。
+3. ✅ Dockerfile build 成功
+4. ✅ 服务 Online
+5. ⏳ 清理 fix-blog-posts.php 污染
+6. ⏳ REST API 验证通过
+7. ⏳ 完整 P1 验证
+8. ⏳ production Volume + MariaDB 备份
+9. ⏳ production 部署
+10. ⏳ 证明 mu-plugin schema 与 `mhs02` 等价
+11. ⏳ 退役 snippets / Code Snippets
+12. ⏳ 全站验收 + DNS 切换
 
 ---
 
@@ -124,13 +144,16 @@ Deploy Logs 里找：
 2. 所有后续 commit 继续使用 `refs MIN-30`。
 3. push / merge / production 操作前必须再次问老卢。
 4. production `mhs02` snippet 仍是红线，Phase 2 完成等价接管前绝不能删。
-5. Next.js dark mode 改动不是 003 主线，不能混入 WP 单栈迁移 commit。
+5. **Volume sync 场景中，不确认 Volume 内容前绝不使用 `rm -rf`。**
 
 ---
 
 ## 给新窗口的上下文
 
-当前分支：`experiment/wp-traditional-mode`
-当前目标：等待 Railway staging 自动部署，验证 `[mh-sync-bundle] done.`
-已知问题：Railway CLI 暂时连不上（Connection reset by peer），Dashboard 操作是主要手段
-下一个阻塞：部署成功后执行 P1 验证清单
+- 当前分支：`experiment/wp-traditional-mode`
+- 当前 commit：`d8fc902`
+- 当前问题：staging WordPress 可能白屏，等 `d8fc902` 部署恢复
+- 核心待解决：`fix-blog-posts.php` 残留污染 REST API
+- 验证目标：P1 清单全部通过
+- 工具限制：Railway CLI 连不上，主要用 Dashboard + curl
+- 注意：Astra 父主题不在仓库里，任何删除 themes/ 目录的操作都危险
