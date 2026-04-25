@@ -1,11 +1,13 @@
-🕐 Last updated: 2026-04-25 15:40 CST
+🕐 Last updated: 2026-04-25 15:55 CST
 🌿 Branch: `experiment/wp-traditional-mode`
-📌 Latest commit: `ecbfeae` refs MIN-30 fix(wp): bundle Astra parent theme to restore from rm-rf deletion
+📌 Latest commit: `5985655` refs MIN-30 fix(wp): move m1-seed.php out of mu-plugins to prevent fatal error on Carbon Fields boot
 🚀 Push status: ✅ 已 push，等待 Railway staging 自动部署恢复
 
 ---
 
-## 当前状态：staging WordPress 白屏，已提交 Astra 父主题修复，等待部署恢复
+## 当前状态：staging WordPress 致命错误已定位并修复，等待部署恢复
+
+一句话：Astra 父主题已恢复，但发现新的 fatal error：`m1-seed.php` 作为 mu-plugin 在 WordPress 启动时尝试 boot Carbon Fields，但此时 Carbon Fields 的 autoload 尚未加载。已将 `m1-seed.php` 移出 mu-plugins 并更新 sync-bundle.sh 清理 Volume 中的残留文件，当前等待 `5985655` 部署完成。
 
 一句话：WP 单栈迁移 Phase 1 Dockerfile 部署已成功，但在清理 Volume 旧文件时引入了 `rm -rf`，删除了 Astra 父主题导致 WordPress 致命错误/白屏。已回退 `sync-bundle.sh` 移除 `rm-rf`，当前等待 `d8fc902` 部署恢复网站访问。
 

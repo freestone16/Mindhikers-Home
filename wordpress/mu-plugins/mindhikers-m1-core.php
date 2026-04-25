@@ -152,10 +152,11 @@ add_action('rest_api_init', 'm1_register_rest_routes');
 
 function m1_register_rest_routes(): void
 {
-    require_once __DIR__ . '/m1-rest/helpers.php';
-    require_once __DIR__ . '/m1-rest/homepage.php';
-    require_once __DIR__ . '/m1-rest/product.php';
-    require_once __DIR__ . '/m1-rest/blog.php';
+    $m1_rest_dir = WP_PLUGIN_DIR . '/m1-rest';
+    require_once $m1_rest_dir . '/helpers.php';
+    require_once $m1_rest_dir . '/homepage.php';
+    require_once $m1_rest_dir . '/product.php';
+    require_once $m1_rest_dir . '/blog.php';
 
     register_rest_route('mindhikers/v1', '/homepage/(?P<locale>zh|en)', [
         'methods'             => 'GET',
@@ -183,7 +184,9 @@ function m1_register_rest_routes(): void
 }
 
 // M1-R Revalidate Webhooks
-require_once __DIR__ . '/m1-rest/revalidate.php';
+if (is_dir(WP_PLUGIN_DIR . '/m1-rest')) {
+    require_once WP_PLUGIN_DIR . '/m1-rest/revalidate.php';
+}
 
 add_action('admin_init', 'm1_check_carbon_fields');
 
