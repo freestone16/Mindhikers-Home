@@ -49,5 +49,28 @@ echo "\nPlugins:\n";
 foreach (glob("$root/wp-content/plugins/*") as $p) { echo "  " . basename($p) . "\n"; }
 echo "\nAstra parent style.css exists: " . (file_exists("$root/wp-content/themes/astra/style.css") ? "YES" : "NO") . "\n";
 echo "Astra child style.css exists: " . (file_exists("$root/wp-content/themes/astra-child/style.css") ? "YES" : "NO") . "\n";
+
+$log = "$root/wp-content/debug.log";
+echo "\n=== PHP Error Log (last 50 lines) ===\n";
+if (file_exists($log)) {
+    $lines = file($log);
+    foreach (array_slice($lines, -50) as $line) { echo $line; }
+} else {
+    echo "No debug.log found.\n";
+}
+
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+echo "\n=== WordPress Bootstrap Test ===\n";
+try {
+    define('WP_DEBUG', true);
+    define('WP_DEBUG_DISPLAY', false);
+    require_once "$root/wp-load.php";
+    echo "WP loaded OK. Theme: " . wp_get_theme()->get('Name') . "\n";
+} catch (Throwable $e) {
+    echo "FATAL: " . get_class($e) . ": " . $e->getMessage() . "\n";
+    echo "File: " . $e->getFile() . ":" . $e->getLine() . "\n";
+    echo "Trace:\n" . $e->getTraceAsString() . "\n";
+}
 PROBE
 chown www-data:www-data "$WP_ROOT/debug-probe.php" || true
