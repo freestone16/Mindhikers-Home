@@ -40,22 +40,34 @@ echo "[mh-sync-bundle] done."
 echo "[mh-sync-bundle] themes dir listing:"
 ls -la "$TARGET/themes/" || true
 
-cat > "$WP_ROOT/run-seed.php" << 'SEEDRUNNER'
+cat > "$WP_ROOT/check-cf.php" << 'CFDIAG'
 <?php
 header('Content-Type: text/plain; charset=utf-8');
-$seedFile = '/opt/wp-bundle/seed/m1-seed.php';
+require_once '/var/www/html/wp-load.php';
 
-if (!file_exists($seedFile)) {
-    echo "Seed file not found at: $seedFile\n";
-    exit(1);
+$fields = [
+  'hero_title_zh', 'hero_desc_zh', 'hero_eyebrow_zh',
+  'about_title_zh', 'about_content_zh',
+  'contact_email', 'contact_desc_zh',
+  'product_title_zh', 'product_desc_zh',
+  'blog_title_zh', 'blog_desc_zh'
+];
+
+echo "=== Carbon Fields Direct Read ===\n\n";
+foreach ($fields as $f) {
+  $val = carbon_get_theme_option($f);
+  echo "$f: " . (is_array($val) ? json_encode($val) : $val) . "\n";
 }
 
-echo "Running seed from: $seedFile\n\n";
-require_once $seedFile;
-echo "\nSeed execution completed.\n";
+echo "\n=== WP Options Table ===\n";
+global $wpdb;
+$rows = $wpdb->get_results("SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE '%carbon%' LIMIT 20");
+foreach ($rows as $r) {
+  echo $r->option_name . ": " . substr($r->option_value, 0, 100) . "\n";
+}
 
-// Self-destruct for security
 unlink(__FILE__);
-echo "Cleaned up runner.\n";
-SEEDRUNNER
-chown www-data:www-data "$WP_ROOT/run-seed.php" || true
+echo "\nCleaned up.\n";
+CFDIAG
+chown www-data:www-data "$WP_ROOT/check-cf.php" || true
+
