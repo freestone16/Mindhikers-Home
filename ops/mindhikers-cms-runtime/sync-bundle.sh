@@ -43,12 +43,16 @@ ls -la "$TARGET/themes/" || true
 cat > "$WP_ROOT/check-rest.php" << 'CFDIAG'
 <?php
 header('Content-Type: text/plain; charset=utf-8');
-$restFile = WP_PLUGIN_DIR . '/m1-rest/homepage.php';
+$restFile = '/var/www/html/wp-content/plugins/m1-rest/homepage.php';
 echo "=== m1-rest/homepage.php ===\n";
 if (file_exists($restFile)) {
     echo file_get_contents($restFile);
 } else {
     echo "File not found: $restFile\n";
+    echo "Checking plugins dir:\n";
+    foreach (glob('/var/www/html/wp-content/plugins/*') as $p) {
+        echo "  " . basename($p) . "\n";
+    }
 }
 unlink(__FILE__);
 echo "\nCleaned up.\n";
