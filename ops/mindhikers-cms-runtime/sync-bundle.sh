@@ -43,19 +43,11 @@ ls -la "$TARGET/themes/" || true
 cat > "$WP_ROOT/run-seed.php" << 'SEEDRUNNER'
 <?php
 header('Content-Type: text/plain; charset=utf-8');
-$root = dirname(__FILE__);
-$seedFile = "$root/wp-content/mu-plugins/mindhikers-cms-core/m1-seed.php";
+$seedFile = '/opt/wp-bundle/seed/m1-seed.php';
 
 if (!file_exists($seedFile)) {
     echo "Seed file not found at: $seedFile\n";
-    echo "Checking alternative locations...\n";
-    $alt = "$root/wp-content/plugins/m1-rest/m1-seed.php";
-    if (file_exists($alt)) {
-        $seedFile = $alt;
-    } else {
-        echo "No seed file found.\n";
-        exit(1);
-    }
+    exit(1);
 }
 
 echo "Running seed from: $seedFile\n\n";
