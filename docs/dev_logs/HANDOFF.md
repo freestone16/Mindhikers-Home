@@ -1,21 +1,21 @@
-🕐 Last updated: 2026-04-24 13:27 CST
+🕐 Last updated: 2026-04-25 10:45 CST
 🌿 Branch: `experiment/wp-traditional-mode`
 📌 Base commit: `3370c37`
-🚀 Push status: ❌ 未 push；本地 Phase 1 commits 已完成，等待老卢决定是否推远端/接 staging
+🚀 Push status: ✅ 已 push 到远端；等待老卢配置 Railway staging
 
 ---
 
-## 当前状态：003 Phase 1 本地代码准备已提交，等待远端/staging 决策
+## 当前状态：003 Phase 1 本地代码已 push，等待 Railway staging 部署
 
-一句话：WP 单栈迁移已经从文档进入本地实现；Carbon Fields/Polylang bundled、Dockerfile COPY、Volume sync、homepage quickLinks schema 兼容都已完成并本地验证。下一步不是继续大改代码，而是由老卢决定是否 push `experiment/wp-traditional-mode` 并把 Railway staging WordPress 服务接到这个分支验证。
+一句话：WP 单栈迁移 Phase 1 代码已推送到 `experiment/wp-traditional-mode`。下一步由老卢在 Railway staging 控制台把 `WordPress-L1ta` 服务接到这个分支，观察 build 和 deploy 是否通过。
 
-给新窗口的第一句话：先不要碰 production，也不要继续大改；先问老卢是否允许 push `experiment/wp-traditional-mode` 进入 Railway staging 验证。
+给新窗口的第一句话：先不要碰 production；当前等 Railway staging 部署结果，如果老卢还没配 staging，提醒老卢按下面步骤配置。
 
 ---
 
 ## 本窗口完成内容
 
-### 已提交 commit
+### 已提交 commit（已 push）
 
 1. `5546d7c refs MIN-30 docs: add WP single-stack migration playbook`
    - 落盘 002/003 迁移方案与 handoff
@@ -44,6 +44,11 @@
 5. `7ddd43b refs MIN-30 docs: save Phase 1 handoff`
    - 保存 Phase 1 本地验证结果
    - 标记剩余未提交文件与下一步 staging 入口
+
+### 本次会话新增操作
+
+- ✅ `git push origin experiment/wp-traditional-mode` — 分支已推送到 GitHub
+- PR 链接：https://github.com/freestone16/Mindhikers-Home/pull/new/experiment/wp-traditional-mode
 
 ---
 
@@ -113,47 +118,44 @@
 
 ## 下一步建议
 
-### P0：等老卢确认是否 push
+### P0：Railway staging 配置（等老卢操作）
 
-当前本地已完成 Phase 1 的前三个代码 commit，但还没有 push。
+老卢需要在 Railway staging 控制台：
 
-如果老卢同意进入 staging：
-
-```bash
-git push origin experiment/wp-traditional-mode
-```
-
-然后需要老卢在 Railway staging：
-
-1. `WordPress-L1ta` 服务 Source/Branch 切到 `experiment/wp-traditional-mode`
-2. Build Context 设为仓库根
-3. Dockerfile Path 设为 `ops/mindhikers-cms-runtime/Dockerfile`
-4. 观察 Deploy Logs 是否出现 `[mh-sync-bundle] done.`
-
-### 离生产还有多远
-
-当前只是本地 Phase 1 通过，离最终生产还差：
-
-1. push 实验分支
-2. Railway staging 接分支并部署
-3. staging 验证 WP Admin / plugins / REST / uploads / Next.js API 消费
-4. production Volume + MariaDB 备份
-5. production 部署
-6. 证明 mu-plugin schema 与 `mhs02` 等价
-7. 再退役 snippets / Code Snippets
-8. 全站验收后才进入 DNS 切换
-
-粗略判断：离“可谨慎推 production 部署”还差 1-2 个认真验证窗口；离“最终 DNS 切换并稳定收口”还差 2-4 个窗口。
+1. 进入 `WordPress-L1ta` 服务
+2. Settings → Source → Branch 切到 `experiment/wp-traditional-mode`
+3. Build Context 设为**仓库根目录**（`/`）
+4. Dockerfile Path 设为 `ops/mindhikers-cms-runtime/Dockerfile`
+5. 保存，触发 Deploy
+6. 观察 Deploy Logs 是否出现 `[mh-sync-bundle] done.`
+7. `curl -I <staging-url>` 确认返回 200/302
 
 ### P1：staging 验证清单
 
-1. WP Admin 可登录
+部署成功后验证：
+
+1. WP Admin 可登录 — `/wp-admin`
 2. 插件列表看到 Carbon Fields + Polylang
 3. 主题列表看到当前 Astra Child
 4. `/wp-json/mindhikers/v1/homepage/zh` 返回 200
 5. JSON 内含 `hero.quickLinks`
 6. uploads 下历史图片 URL 正常
 7. 前台 Next.js 仍能消费 API，不丢 Quick Links
+
+### 离生产还有多远
+
+当前本地 Phase 1 已 push，离最终生产还差：
+
+1. ✅ push 实验分支（本次完成）
+2. ⏳ Railway staging 接分支并部署
+3. ⏳ staging 验证 WP Admin / plugins / REST / uploads / Next.js API 消费
+4. ⏳ production Volume + MariaDB 备份
+5. ⏳ production 部署
+6. ⏳ 证明 mu-plugin schema 与 `mhs02` 等价
+7. ⏳ 再退役 snippets / Code Snippets
+8. ⏳ 全站验收后才进入 DNS 切换
+
+粗略判断：离“可谨慎推 production 部署”还差 1-2 个认真验证窗口；离“最终 DNS 切换并稳定收口”还差 2-4 个窗口。
 
 ### P2：暂不做的事
 
