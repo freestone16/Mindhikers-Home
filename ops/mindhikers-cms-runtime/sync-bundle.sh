@@ -40,34 +40,18 @@ echo "[mh-sync-bundle] done."
 echo "[mh-sync-bundle] themes dir listing:"
 ls -la "$TARGET/themes/" || true
 
-cat > "$WP_ROOT/check-cf.php" << 'CFDIAG'
+cat > "$WP_ROOT/check-rest.php" << 'CFDIAG'
 <?php
 header('Content-Type: text/plain; charset=utf-8');
-require_once '/var/www/html/wp-load.php';
-
-$fields = [
-  'hero_title_zh', 'hero_desc_zh', 'hero_eyebrow_zh',
-  'about_title_zh', 'about_content_zh',
-  'contact_email', 'contact_desc_zh',
-  'product_title_zh', 'product_desc_zh',
-  'blog_title_zh', 'blog_desc_zh'
-];
-
-echo "=== Carbon Fields Direct Read ===\n\n";
-foreach ($fields as $f) {
-  $val = carbon_get_theme_option($f);
-  echo "$f: " . (is_array($val) ? json_encode($val) : $val) . "\n";
+$restFile = WP_PLUGIN_DIR . '/m1-rest/homepage.php';
+echo "=== m1-rest/homepage.php ===\n";
+if (file_exists($restFile)) {
+    echo file_get_contents($restFile);
+} else {
+    echo "File not found: $restFile\n";
 }
-
-echo "\n=== WP Options Table ===\n";
-global $wpdb;
-$rows = $wpdb->get_results("SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE '%carbon%' LIMIT 20");
-foreach ($rows as $r) {
-  echo $r->option_name . ": " . substr($r->option_value, 0, 100) . "\n";
-}
-
 unlink(__FILE__);
 echo "\nCleaned up.\n";
 CFDIAG
-chown www-data:www-data "$WP_ROOT/check-cf.php" || true
+chown www-data:www-data "$WP_ROOT/check-rest.php" || true
 
