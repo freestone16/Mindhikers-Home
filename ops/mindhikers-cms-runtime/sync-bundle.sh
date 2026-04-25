@@ -12,12 +12,10 @@ fi
 
 echo "[mh-sync-bundle] syncing mu-plugins..."
 mkdir -p "$TARGET/mu-plugins"
-rm -rf "$TARGET/mu-plugins/"*
 cp -rf "$BUNDLE/mu-plugins/." "$TARGET/mu-plugins/"
 
 echo "[mh-sync-bundle] syncing themes..."
 mkdir -p "$TARGET/themes"
-rm -rf "$TARGET/themes/"*
 cp -rf "$BUNDLE/themes/." "$TARGET/themes/"
 
 echo "[mh-sync-bundle] syncing bundled plugins..."
