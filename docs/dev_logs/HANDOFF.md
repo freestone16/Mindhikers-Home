@@ -1,13 +1,23 @@
-🕐 Last updated: 2026-04-25 15:55 CST
+🕐 Last updated: 2026-04-25 16:00 CST
 🌿 Branch: `experiment/wp-traditional-mode`
-📌 Latest commit: `5985655` refs MIN-30 fix(wp): move m1-seed.php out of mu-plugins to prevent fatal error on Carbon Fields boot
-🚀 Push status: ✅ 已 push，等待 Railway staging 自动部署恢复
+📌 Latest commit: `20327c2` refs MIN-30 fix(wp): correct m1-rest require path from mu-plugins to plugins dir
+🚀 Push status: ✅ 已 push，staging 网站已恢复
 
 ---
 
-## 当前状态：staging WordPress 致命错误已定位并修复，等待部署恢复
+## 当前状态：staging WordPress 已恢复访问
 
-一句话：Astra 父主题已恢复，但发现新的 fatal error：`m1-seed.php` 作为 mu-plugin 在 WordPress 启动时尝试 boot Carbon Fields，但此时 Carbon Fields 的 autoload 尚未加载。已将 `m1-seed.php` 移出 mu-plugins 并更新 sync-bundle.sh 清理 Volume 中的残留文件，当前等待 `5985655` 部署完成。
+一句话：经过三轮修复，staging WordPress 已恢复。修复内容：(1) 将 Astra 父主题加入仓库 (2) 将 `m1-seed.php` 移出 mu-plugins（它是 CLI 脚本，不应自动加载）(3) 修复 `mindhikers-m1-core.php` 中 `m1-rest` 的 require 路径。当前网站可访问、wp-login 200、REST API 200，但返回空数据（尚未执行 seed）。
+
+---
+
+## 修复记录
+
+| 问题 | 原因 | 修复 |
+|---|---|---|
+| 500 白屏 | `rm -rf` 删除了 Astra 父主题 | 从 wordpress.org 下载 Astra 加入 `wordpress/themes/astra` |
+| 500 致命错误 | `m1-seed.php` 作为 mu-plugin 在 WP 启动时 boot Carbon Fields，但 autoload 尚未加载 | 将 `m1-seed.php` 移出 mu-plugins 到 `ops/wordpress/`，sync-bundle.sh 清理残留 |
+| 500 致命错误 | `mindhikers-m1-core.php` 中 `__DIR__ . '/m1-rest/'` 指向 mu-plugins，但 `m1-rest` 在 plugins 目录 | 改为 `WP_PLUGIN_DIR . '/m1-rest/'` |
 
 一句话：WP 单栈迁移 Phase 1 Dockerfile 部署已成功，但在清理 Volume 旧文件时引入了 `rm -rf`，删除了 Astra 父主题导致 WordPress 致命错误/白屏。已回退 `sync-bundle.sh` 移除 `rm-rf`，当前等待 `d8fc902` 部署恢复网站访问。
 
