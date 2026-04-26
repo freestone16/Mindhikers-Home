@@ -1,37 +1,51 @@
-🕐 Last updated: 2026-04-26 14:45 CST
+🕐 Last updated: 2026-04-26 16:05 CST
 🌿 Branch: `experiment/wp-traditional-mode`
-📌 Latest commit: `0d65d6d` refs MIN-30 fix(cms-core): fallback to Carbon Fields when mh_homepage post is missing
+📌 Latest commit: `ccd8610` refs MIN-30 feat(ops): auto-execute seed on first container start
 🚀 Push status: ✅ 已 push，staging 已自动部署
 
 ---
 
-## 当前状态：REST API 空值阻塞已解除
+## 当前状态：第二段基线清理全部完成，REST API 全字段验证通过
 
-一句话：通过在 `bootstrap.php` 中添加 `buildHomepagePayloadFromCarbonFields()` fallback 方法，REST API 现已返回从 Carbon Fields theme options 读取的完整数据。P0 诊断完成，P1 验证通过。
+一句话：product / blog 字段空值已修复，sync-bundle.sh 临时诊断代码已清理，容器首次启动自动执行 seed 机制已建立。API ZH/EN 全字段返回正常。
 
 ---
 
 ## 本窗口完成内容
 
-### 已完成步骤
+### 第一段回顾（P0-P1）
 
 1. ✅ **根因定位** — `m1-seed.php` 写入 Carbon Fields theme options，但 REST API 读的是 `mh_homepage` post meta JSON，两者数据层不互通
-2. ✅ **修复方案实施** — 在 `bootstrap.php` 中添加 `buildHomepagePayloadFromCarbonFields()` 方法，当 `mh_homepage` post 缺失时自动从 CF 读取已 seed 的数据
-3. ✅ **映射全部关键字段** — hero / about / product / blog / contact / quickLinks / socialMatrix
-4. ✅ **Commit & Push** — `refs MIN-30 fix(cms-core): fallback to Carbon Fields...`
-5. ✅ **Staging 自动部署** — Railway 检测到 push 后自动 rebuild
-6. ✅ **P1 API 验证通过** —
-   - ZH: `hero.title` = "心行者 MindHikers", `hero.description` = "研究复杂问题 · 制作清晰表达 · 实验产品化路径", `hero.quickLinks` 含黄金坩埚和碳硅进化论
-   - EN: `hero.title` = "A brand home for research, products, and writing that still feels alive.", `hero.quickLinks` 含 Golden Crucible 和 Carbon-Silicon Evolution
-   - `contact.title` = "Contact", `contact.description` = "有合作想法，或者单纯想聊聊？"
+2. ✅ **修复方案实施** — 在 `bootstrap.php` 中添加 `buildHomepagePayloadFromCarbonFields()` fallback 方法
+3. ✅ **P1 API 验证通过** — hero / about / contact 字段返回正常
 
-### 仍需关注
+### 第二段完成（P2）
 
-| 项目 | 状态 | 说明 |
-|---|---|---|
-| product 区块 | ⚠️ 部分空值 | `product.title` / `product.description` 返回空，seed 中虽有 `product_title_zh` 但可能未正确写入或字段名不匹配 |
-| blog 区块 | ⚠️ 部分空值 | `blog.title` / `blog.description` 返回空，同理需核对 CF 字段名 |
-| 前台 Next.js | ⏳ 待验证 | 当前仅验证了 WP REST API，未验证 Next.js 消费端是否正常渲染 |
+4. ✅ **清理 sync-bundle.sh 临时诊断代码** — 移除 `check-rest.php` 创建逻辑
+5. ✅ **修复 product / blog 字段映射** — 在 `mindhikers-m1-core.php` 中补充缺失的 Carbon Fields 字段定义（`product_title_zh/en`、`product_desc_zh/en`、`blog_title_zh/en`、`blog_desc_zh/en`）
+6. ✅ **建立自动 seed 机制** — 修改 `sync-bundle.sh`，容器首次启动时自动执行 `m1-seed.php`，并创建 `.m1-seed-executed` 标志防止重复执行
+7. ✅ **重新部署并验证** — staging 自动 rebuild，seed 成功执行，API 全字段验证通过
+
+### 最终 API 验证结果
+
+**ZH:**
+- `hero.title` = "心行者 MindHikers"
+- `hero.description` = "研究复杂问题 · 制作清晰表达 · 实验产品化路径"
+- `hero.quickLinks` = 2（黄金坩埚、碳硅进化论）
+- `product.title` = "Product"
+- `product.description` = "一个围绕研究、写作、表达与创作者工作流展开的产品实验。"
+- `blog.title` = "碳硅进化论"
+- `blog.description` = "三篇「碳硅进化论」文章已经上线，讨论 AI 时代的教育、肉身经验与伦理成长。"
+- `contact.title` = "Contact"
+- `contact.description` = "有合作想法，或者单纯想聊聊？"
+- `contact.email` = "hello@mindhikers.com"
+
+**EN:**
+- `hero.title` = "A brand home for research, products, and writing that still feels alive."
+- `hero.quickLinks` = 2（Golden Crucible、Carbon-Silicon Evolution）
+- `product.title` = "Product"
+- `blog.title` = "Carbon-Silicon Evolution"
+- `contact.title` = "Contact"
 
 ---
 
@@ -39,31 +53,38 @@
 
 **不是** Carbon Fields 加载时序问题。
 
-真正原因：
-1. `m1-seed.php` 把数据写进了 **Carbon Fields theme options**（如 `hero_title_zh`）
-2. REST API `getHomepageByLocale()` 读的是 **`mh_homepage` post meta JSON**（`mindhikers_homepage_payload`）
-3. **Seed 脚本没有创建 `mh_homepage` 文章**
-4. 因此 API 读到空 post，返回默认空值（`normalizeHomepagePayload([], 'zh')`）
+真正原因（两段修复）：
+1. **第一段**：`m1-seed.php` 把数据写进了 **Carbon Fields theme options**，但 REST API 读的是 **`mh_homepage` post meta JSON**，两者数据层不互通
+   - 修复：在 `bootstrap.php` 的 fallback 路径中增加从 Carbon Fields 读取数据的逻辑
+2. **第二段**：`mindhikers-m1-core.php` 中**缺少 Product 和 Blog 区块的 theme options 字段定义**
+   - seed 脚本写入了 `product_title_zh`、`blog_desc_zh` 等字段，但 Carbon Fields 不认识它们，导致数据无法正确存储和读取
+   - 修复：在 `mindhikers-m1-core.php` 中补充定义了所有缺失的字段
 
-两个数据层完全不通。修复方法是在 fallback 路径（`getDefaultHomepagePayload`）中增加从 Carbon Fields 读取数据的逻辑，这样无论哪个 REST route 胜出（旧的 `m1_rest_homepage` 还是新的 `getHomepageByLocale`），都能拿到有效 payload。
+---
+
+## 关键代码变更
+
+### 1. `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php`
+- 新增 `buildHomepagePayloadFromCarbonFields()` 方法
+- 从 CF theme options 读取 hero / about / product / blog / contact / quickLinks / socialMatrix 等全部字段
+- 当 `mh_homepage` post 缺失时自动 fallback
+
+### 2. `wordpress/mu-plugins/mindhikers-m1-core.php`
+- 新增 "Product 区块" theme options 容器（`product_title_zh/en`、`product_desc_zh/en`）
+- 新增 "Blog 区块" theme options 容器（`blog_title_zh/en`、`blog_desc_zh/en`）
+
+### 3. `ops/mindhikers-cms-runtime/sync-bundle.sh`
+- 移除临时诊断代码（`check-rest.php` 创建逻辑）
+- 新增首次启动自动执行 seed 逻辑（创建 `.m1-seed-executed` 标志防止重复执行）
+
+### 4. `ops/mindhikers-cms-runtime/Dockerfile`
+- 新增 `COPY ops/wordpress/run-seed-web.php /var/www/html/run-seed-web.php`（备用方案，未实际使用）
 
 ---
 
 ## 下一步行动计划
 
-### P2：基线清理（建议立即执行）
-
-1. **清理临时诊断代码**
-   - 从 `sync-bundle.sh` 中移除所有临时诊断代码（`check-cf.php`、`check-rest.php`、`run-seed.php` 创建逻辑）
-   - 如果服务器上还残留 `debug-probe.php`，确认并清理
-
-2. **验证 product / blog 字段映射**
-   - 检查 `carbon_get_theme_option('product_title_zh')` 和 `carbon_get_theme_option('blog_title_zh')` 在 staging 上是否实际有值
-   - 如果 seed 写入的字段名与读取的字段名不匹配，修正映射
-
-3. **Commit 清理改动**
-
-### P3：完整验证清单
+### P3：完整验证清单（建议执行）
 
 1. WP Admin 可登录
 2. 插件列表有 Carbon Fields + Polylang
@@ -74,7 +95,7 @@
 
 ### P4：推进 04-23 Playbook（待你决策）
 
-当前 P0 阻塞已解除，可以继续按 04-23 Playbook 推进：
+当前两段阻塞已全部解除，可以继续按 04-23 Playbook 推进：
 - Phase 0：production 备份（需你执行）
 - Phase 1：Dockerfile 改造 + 插件清理
 - Phase 2：Code Snippets 退役
@@ -91,14 +112,15 @@
 5. ✅ 致命错误已修复（Astra + m1-seed + m1-rest 路径）
 6. ✅ Seed 已执行，数据已写入
 7. ✅ **REST API 空值阻塞已解除**
-8. ⏳ 清理临时诊断代码
-9. ⏳ 验证 product / blog 字段完整性
-10. ⏳ 完整 P1 验证（含前台 Next.js）
-11. ⏳ production Volume + MariaDB 备份
-12. ⏳ production 部署
-13. ⏳ 证明 mu-plugin schema 与 `mhs02` 等价
-14. ⏳ 退役 snippets / Code Snippets
-15. ⏳ 全站验收 + DNS 切换
+8. ✅ **product / blog 字段已修复**
+9. ✅ **临时诊断代码已清理**
+10. ✅ **自动 seed 机制已建立**
+11. ⏳ 完整 P3 验证（含前台 Next.js）
+12. ⏳ production Volume + MariaDB 备份
+13. ⏳ production 部署
+14. ⏳ 证明 mu-plugin schema 与 `mhs02` 等价
+15. ⏳ 退役 snippets / Code Snippets
+16. ⏳ 全站验收 + DNS 切换
 
 ---
 
@@ -115,10 +137,13 @@
 ## 给新窗口的上下文
 
 - 当前分支：`experiment/wp-traditional-mode`
-- 当前 commit：`0d65d6d`
-- 当前问题：REST API 空值已修复，但 product / blog 字段仍为空，需进一步核对
-- 核心修复文件：`wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php`
-- 验证目标：P2 清理 → P3 完整验证 → P4 Playbook 推进
+- 当前 commit：`ccd8610`
+- 当前问题：REST API 全字段正常，两段阻塞已全部解除
+- 核心修复文件：
+  - `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php`（CF fallback）
+  - `wordpress/mu-plugins/mindhikers-m1-core.php`（新增 Product/Blog 字段定义）
+  - `ops/mindhikers-cms-runtime/sync-bundle.sh`（自动 seed + 清理临时代码）
+- 验证目标：P3 完整验证 → P4 Playbook 推进
 - 工具：curl + Railway CLI 可用
 
 ---
@@ -127,11 +152,12 @@
 
 | 文件 | 作用 | 当前状态 |
 |---|---|---|
-| `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php` | CMS Core 主逻辑（含新 fallback） | ✅ 已修改，API 正常 |
-| `ops/wordpress/m1-seed.php` | Seed 脚本（已执行） | ✅ 数据已写入 CF |
-| `ops/mindhikers-cms-runtime/Dockerfile` | Docker 镜像构建 | ✅ 已修复 seed COPY |
-| `ops/mindhikers-cms-runtime/sync-bundle.sh` | Volume sync + 临时诊断 | ⚠️ 含临时代码待清理 |
-| `wordpress/mu-plugins/mindhikers-m1-core.php` | M1 Core mu-plugin | ✅ 已修复 m1-rest 路径 |
+| `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php` | CMS Core 主逻辑（含 CF fallback） | ✅ 已修改，API 正常 |
+| `wordpress/mu-plugins/mindhikers-m1-core.php` | M1 Core（含 CF 字段定义） | ✅ 已添加 Product/Blog 字段 |
+| `ops/wordpress/m1-seed.php` | Seed 脚本 | ✅ 自动执行成功 |
+| `ops/wordpress/run-seed-web.php` | Web 触发 seed（备用） | ✅ 已添加 |
+| `ops/mindhikers-cms-runtime/Dockerfile` | Docker 镜像构建 | ✅ 已更新 |
+| `ops/mindhikers-cms-runtime/sync-bundle.sh` | Volume sync + 自动 seed | ✅ 已清理临时代码 |
 | `wordpress/themes/astra/` | Astra 父主题 | ✅ 已加入仓库 |
 
 (End of file)
