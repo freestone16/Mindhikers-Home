@@ -1,6 +1,6 @@
-🕐 Last updated: 2026-04-26 16:05 CST
+🕐 Last updated: 2026-04-26 16:30 CST
 🌿 Branch: `experiment/wp-traditional-mode`
-📌 Latest commit: `ccd8610` refs MIN-30 feat(ops): auto-execute seed on first container start
+📌 Latest commit: `d8d2233` refs MIN-30 docs: update handoff after P2 baseline cleanup complete
 🚀 Push status: ✅ 已 push，staging 已自动部署
 
 ---
@@ -100,6 +100,111 @@
 - Phase 1：Dockerfile 改造 + 插件清理
 - Phase 2：Code Snippets 退役
 - Phase 3：主题重命名 + 补齐模板
+
+### P5：架构决策 — 统一数据层（方案A，强烈推荐）
+
+当前系统存在**双层数据存储**的根本缺陷：
+- **抽屉A**：Carbon Fields theme options（由 `m1-seed.php` 自动写入）
+- **抽屉B**：`mh_homepage` post meta JSON（由 WP Admin 编辑写入）
+- **问题**：两者永不同步，API 返回什么取决于 `mh_homepage` post 是否存在 —— 运营人员不可控
+
+**第一性原理**：一个内容块，一个存储位置，一个编辑入口。
+
+**方案A目标**：统一用 `mh_homepage` post meta JSON 作为唯一数据源，彻底消除双层歧义。
+
+#### 方案A实施步骤
+
+**步骤1：修改 `m1-seed.php` — 创建 `mh_homepage` post 而不是写 CF**
+
+当前 `m1-seed.php` 使用 `carbon_set_theme_option()` 把数据写入 CF。改为：
+1. 加载 `wp-load.php` 和 `bootstrap.php`（或直接使用 `wp_insert_post` + `update_post_meta`）
+2. 读取 `ops/wordpress/homepage-seeds/homepage-zh.json` 和 `homepage-en.json`
+3. 检查是否已存在 `locale=zh` 和 `locale=en` 的 `mh_homepage` post
+4. 如果不存在，创建两条 post：
+   ```php
+   $post_id = wp_insert_post([
+       'post_type'   => 'mh_homepage',
+       'post_title'  => 'Homepage ZH',
+       'post_status' => 'publish',
+   ]);
+   update_post_meta($post_id, 'mindhikers_locale', 'zh');
+   update_post_meta($post_id, 'mindhikers_homepage_payload', $json_string);
+   ```
+5. 对 EN 重复同样操作
+
+**步骤2：验证 API 返回完整 JSON**
+
+```bash
+curl -sL "https://wordpress-l1ta-staging.up.railway.app/wp-json/mindhikers/v1/homepage/zh" | jq '{hero: .hero.title, product: .product.title, blog: .blog.title, contact: .contact.title}'
+```
+应看到所有字段非空。
+
+**步骤3：清理 `bootstrap.php` 中的 CF fallback 代码**
+
+删除或注释掉：
+- `buildHomepagePayloadFromCarbonFields()` 方法（~130行）
+- `getDefaultHomepagePayload()` 中对 `buildHomepagePayloadFromCarbonFields()` 的调用
+- 恢复为直接返回 `normalizeHomepagePayload([], $locale)`
+
+**步骤4：清理 `mindhikers-m1-core.php` 中的 homepage 相关 CF 字段**
+
+删除以下容器（保留 Product CPT 和 Revalidate 配置）：
+- "Hero 管理" theme options 容器
+- "About 管理" theme options 容器
+- "Contact 管理" theme options 容器
+- "Product 区块" theme options 容器（步骤2中新增的）
+- "Blog 区块" theme options 容器（步骤2中新增的）
+
+**保留**：
+- Product CPT 的 post meta 字段（`product_subtitle`、`product_status` 等）—— 这些是产品详情页用的，不是首页区块
+- Revalidate 配置
+
+**步骤5：更新 `sync-bundle.sh` 自动 seed 逻辑**
+
+当前 `sync-bundle.sh` 在首次启动时执行 `m1-seed.php`。由于 seed 脚本已改为创建 post 而不是写 CF，需要确认：
+- `.m1-seed-executed` 标志是否需要清除以触发重新 seed
+- 或者手动执行 seed（通过 WP CLI 或 web runner）
+
+**步骤6：验证运营编辑流程**
+
+1. 登录 WP Admin → Mindhikers Homepages
+2. 编辑 zh 或 en 的 JSON payload
+3. 保存后 curl 验证 API 返回新值
+4. 确认没有 Carbon Fields 的 homepage 表单干扰（已删除）
+
+#### 方案A影响范围
+
+| 文件 | 变更 | 备注 |
+|---|---|---|
+| `ops/wordpress/m1-seed.php` | 重写 | 从写 CF 改为创建 `mh_homepage` post |
+| `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php` | 删除 ~130 行 | 移除 `buildHomepagePayloadFromCarbonFields()` |
+| `wordpress/mu-plugins/mindhikers-m1-core.php` | 删除 ~80 行 | 移除 Hero/About/Contact/Product/Blog 的 CF 容器 |
+| `ops/mindhikers-cms-runtime/sync-bundle.sh` | 可能需要调整 | 确认 seed 执行时机和标志逻辑 |
+
+#### 方案A验收标准
+
+- [ ] `m1-seed.php` 执行后创建两条 `mh_homepage` post（zh + en）
+- [ ] API `/homepage/zh` 和 `/homepage/en` 返回 200 + 完整 JSON（不依赖 CF）
+- [ ] 删除 `buildHomepagePayloadFromCarbonFields()` 后 API 仍然正常
+- [ ] WP Admin 只剩一个 homepage 编辑入口（`mh_homepage` post 的 JSON 编辑框）
+- [ ] 运营人员修改 JSON 后，API 即时生效
+
+#### 方案A风险提示
+
+1. **删除 CF 字段后无法回滚**：如果删除 CF 字段定义，已存储的 CF 数据不会丢失（仍在数据库 `wp_options` 中），但 WP Admin 界面不再显示这些字段。如需回滚，只需恢复字段定义代码。
+2. **现有 staging/production 数据**：staging 上已有 seed 写入的 CF 数据，执行新 seed 后会创建 post，API 立即切换数据源。需提前验证新 seed 创建的 post 数据完整性。
+3. **Next.js 前台缓存**：如果前台使用 ISR 缓存，修改 post meta 后需要等待缓存失效或手动触发 revalidate。当前 CMS Core 的 `saveHomepageMeta()` 已包含 revalidate webhook 触发逻辑，应自动生效。
+
+#### 如果不执行方案A的风险
+
+- 运营人员永远面对两个不可同步的数据源
+- API 行为不可预测（取决于 post 是否存在）
+- 任何 future bug 都可能引发"改了数据但前台不更新"的困惑
+- 技术债累积，04-23 Playbook 推进时需要额外处理数据层兼容
+
+---
+
+**决策点**：是否同意执行方案A？如果同意，可以从步骤1开始实施。如果希望先保持现状（双层并存），需要明确这是一个**临时补丁状态**，并记录后续清理计划。
 
 ---
 
