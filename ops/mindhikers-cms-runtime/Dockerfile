@@ -25,6 +25,7 @@ RUN if [ -f /var/www/html/wp-content/plugins/carbon-fields/composer.json ]; then
     cp -r /var/www/html/wp-content/plugins/polylang /opt/wp-bundle/plugins/
 
 COPY ops/wordpress/m1-seed.php /opt/wp-bundle/seed/m1-seed.php
+COPY ops/wordpress/run-seed-web.php /var/www/html/run-seed-web.php
 
 COPY ops/mindhikers-cms-runtime/sync-bundle.sh /usr/local/bin/mh-sync-bundle.sh
 RUN chmod +x /usr/local/bin/mh-sync-bundle.sh
