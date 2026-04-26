@@ -716,8 +716,143 @@ final class Mindhikers_Cms_Core
         ];
     }
 
+    /**
+     * Build fallback payload from Carbon Fields theme options.
+     *
+     * This bridges the gap when mh_homepage post meta is empty
+     * but Carbon Fields has been seeded (e.g. via m1-seed.php).
+     */
+    private function buildHomepagePayloadFromCarbonFields(string $locale): array
+    {
+        if (!function_exists('carbon_get_theme_option')) {
+            return [];
+        }
+
+        $heroQuickLinks = [];
+        $rawQuickLinks = carbon_get_theme_option('hero_quick_links');
+        if (is_array($rawQuickLinks)) {
+            foreach ($rawQuickLinks as $link) {
+                if (!is_array($link)) {
+                    continue;
+                }
+                $heroQuickLinks[] = [
+                    'href'  => (string) ($link['link_url'] ?? ''),
+                    'label' => (string) ($link["link_label_{$locale}"] ?? ''),
+                    'tag'   => (string) ($link["link_tag_{$locale}"] ?? ''),
+                ];
+            }
+        }
+
+        $contactLinks = [];
+        $rawSocialMatrix = carbon_get_theme_option('contact_social_matrix');
+        if (is_array($rawSocialMatrix)) {
+            foreach ($rawSocialMatrix as $link) {
+                if (!is_array($link)) {
+                    continue;
+                }
+                $contactLinks[] = [
+                    'href'    => (string) ($link['platform_url'] ?? ''),
+                    'label'   => (string) ($link["platform_name_{$locale}"] ?? ''),
+                    'note'    => '',
+                    'qrImage' => '',
+                ];
+            }
+        }
+
+        return [
+            'locale'     => $locale,
+            'metadata'   => [
+                'title'       => (string) carbon_get_theme_option("hero_title_{$locale}") ?: '心行者 Mindhikers',
+                'description' => '',
+            ],
+            'navigation' => [
+                'brand'          => (string) carbon_get_theme_option("hero_title_{$locale}") ?: '心行者 Mindhikers',
+                'links'          => [],
+                'switchLanguage' => $locale === 'en'
+                    ? ['href' => '/', 'label' => '中文']
+                    : ['href' => '/en', 'label' => 'EN'],
+            ],
+            'hero'       => [
+                'eyebrow'            => (string) carbon_get_theme_option("hero_eyebrow_{$locale}"),
+                'title'              => (string) carbon_get_theme_option("hero_title_{$locale}"),
+                'description'        => (string) carbon_get_theme_option("hero_desc_{$locale}"),
+                'primaryAction'      => [
+                    'href'  => (string) carbon_get_theme_option('hero_cta_primary_url'),
+                    'label' => (string) carbon_get_theme_option("hero_cta_primary_text_{$locale}"),
+                ],
+                'secondaryAction'    => [
+                    'href'  => (string) carbon_get_theme_option('hero_cta_secondary_url'),
+                    'label' => (string) carbon_get_theme_option("hero_cta_secondary_text_{$locale}"),
+                ],
+                'highlights'         => [],
+                'statusLabel'        => '',
+                'statusValue'        => '',
+                'availabilityLabel'  => '',
+                'availabilityValue'  => '',
+                'panelTitle'         => 'Quick Links',
+                'quickLinks'         => $heroQuickLinks,
+            ],
+            'about'      => [
+                'title'      => (string) carbon_get_theme_option("about_title_{$locale}"),
+                'intro'      => (string) carbon_get_theme_option("about_content_{$locale}"),
+                'paragraphs' => [],
+                'notes'      => [],
+            ],
+            'product'    => [
+                'title'       => (string) carbon_get_theme_option("product_title_{$locale}"),
+                'description' => (string) carbon_get_theme_option("product_desc_{$locale}"),
+                'headline'    => '',
+                'featured'    => [],
+                'items'       => [],
+            ],
+            'blog'       => [
+                'title'            => (string) carbon_get_theme_option("blog_title_{$locale}"),
+                'description'      => (string) carbon_get_theme_option("blog_desc_{$locale}"),
+                'headline'         => '',
+                'cta'              => [
+                    'href'  => '/blog',
+                    'label' => $locale === 'en' ? 'Browse all posts' : '查看全部文章',
+                ],
+                'emptyLabel'       => '',
+                'readArticleLabel' => 'Read article',
+            ],
+            'contact'    => [
+                'title'             => (string) carbon_get_theme_option("contact_title_{$locale}"),
+                'description'       => (string) carbon_get_theme_option("contact_desc_{$locale}"),
+                'headline'          => '',
+                'emailLabel'        => 'Email',
+                'email'             => sanitize_email((string) carbon_get_theme_option('contact_email')),
+                'locationLabel'     => 'Base',
+                'location'          => (string) carbon_get_theme_option("contact_location_{$locale}"),
+                'availabilityLabel' => 'Open to',
+                'availability'      => '',
+                'links'             => $contactLinks,
+            ],
+            'productDetail' => [
+                'eyebrow'        => '',
+                'title'          => '',
+                'summary'        => '',
+                'bullets'        => [],
+                'stageLabel'     => '',
+                'stageValue'     => '',
+                'returnHome'     => [
+                    'href'  => $locale === 'en' ? '/en' : '/',
+                    'label' => $locale === 'en' ? 'Back to homepage' : '返回首页',
+                ],
+                'switchLanguage' => [
+                    'href'  => $locale === 'en' ? '/golden-crucible' : '/en/golden-crucible',
+                    'label' => $locale === 'en' ? '查看中文版' : 'View in English',
+                ],
+            ],
+        ];
+    }
+
     private function getDefaultHomepagePayload(string $locale): array
     {
+        $cfPayload = $this->buildHomepagePayloadFromCarbonFields($locale);
+        if ($cfPayload !== []) {
+            return $this->normalizeHomepagePayload($cfPayload, $locale);
+        }
         return $this->normalizeHomepagePayload([], $locale);
     }
 
