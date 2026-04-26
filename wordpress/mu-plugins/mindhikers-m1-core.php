@@ -134,6 +134,28 @@ function m1_register_carbon_fields(): void
             Field::make('checkbox', 'product_is_featured', __('Featured 产品', 'mindhikers-m1')),
         ]);
 
+    // Product Section 管理（theme options，用于首页 Product 区块展示）
+    Container::make('theme_options', __('Product 区块', 'mindhikers-m1'))
+        ->set_page_menu_position(33)
+        ->set_icon('dashicons-products')
+        ->add_fields([
+            Field::make('text', 'product_title_zh', __('标题 (ZH)', 'mindhikers-m1')),
+            Field::make('text', 'product_title_en', __('标题 (EN)', 'mindhikers-m1')),
+            Field::make('textarea', 'product_desc_zh', __('描述 (ZH)', 'mindhikers-m1')),
+            Field::make('textarea', 'product_desc_en', __('描述 (EN)', 'mindhikers-m1')),
+        ]);
+
+    // Blog Section 管理（theme options，用于首页 Blog 区块展示）
+    Container::make('theme_options', __('Blog 区块', 'mindhikers-m1'))
+        ->set_page_menu_position(34)
+        ->set_icon('dashicons-welcome-write-blog')
+        ->add_fields([
+            Field::make('text', 'blog_title_zh', __('标题 (ZH)', 'mindhikers-m1')),
+            Field::make('text', 'blog_title_en', __('标题 (EN)', 'mindhikers-m1')),
+            Field::make('textarea', 'blog_desc_zh', __('描述 (ZH)', 'mindhikers-m1')),
+            Field::make('textarea', 'blog_desc_en', __('描述 (EN)', 'mindhikers-m1')),
+        ]);
+
     // Revalidate 配置
     Container::make('theme_options', __('Revalidate 配置', 'mindhikers-m1'))
         ->set_page_menu_position(35)

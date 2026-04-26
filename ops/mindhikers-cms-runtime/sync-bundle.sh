@@ -40,21 +40,3 @@ echo "[mh-sync-bundle] done."
 echo "[mh-sync-bundle] themes dir listing:"
 ls -la "$TARGET/themes/" || true
 
-cat > "$WP_ROOT/check-rest.php" << 'CFDIAG'
-<?php
-header('Content-Type: text/plain; charset=utf-8');
-$helperFile = '/var/www/html/wp-content/plugins/m1-rest/helpers.php';
-echo "=== m1-rest/helpers.php (first 150 lines) ===\n";
-if (file_exists($helperFile)) {
-    $lines = file($helperFile);
-    foreach (array_slice($lines, 0, 150) as $line) {
-        echo $line;
-    }
-} else {
-    echo "File not found: $helperFile\n";
-}
-unlink(__FILE__);
-echo "\nCleaned up.\n";
-CFDIAG
-chown www-data:www-data "$WP_ROOT/check-rest.php" || true
-
