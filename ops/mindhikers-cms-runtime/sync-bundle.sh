@@ -40,3 +40,12 @@ echo "[mh-sync-bundle] done."
 echo "[mh-sync-bundle] themes dir listing:"
 ls -la "$TARGET/themes/" || true
 
+SEED_FLAG="$WP_ROOT/.m1-seed-executed"
+if [ ! -f "$SEED_FLAG" ] && [ -f "$BUNDLE/seed/m1-seed.php" ]; then
+  echo "[mh-sync-bundle] executing m1-seed.php (first run)..."
+  cd "$WP_ROOT"
+  php "$BUNDLE/seed/m1-seed.php" || echo "[mh-sync-bundle] seed failed, continuing..."
+  touch "$SEED_FLAG"
+  echo "[mh-sync-bundle] seed completed."
+fi
+
