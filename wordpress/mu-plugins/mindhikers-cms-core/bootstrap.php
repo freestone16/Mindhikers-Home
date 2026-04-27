@@ -410,11 +410,18 @@ final class Mindhikers_Cms_Core
             return rest_ensure_response($this->getDefaultHomepagePayload($locale));
         }
 
-        $rawPayload = (string) get_post_meta($post->ID, $this->homepagePayloadMeta, true);
-        $payload = $this->decodeJsonPayload($rawPayload);
-        $payloadLen = strlen($rawPayload);
-        $payloadOk = is_array($payload);
-        error_log("getHomepageByLocale: locale={$locale}, postId={$post->ID}, payload_len={$payloadLen}, payload_ok=" . var_export($payloadOk, true));
+        $rawPayloadMeta = (string) get_post_meta($post->ID, $this->homepagePayloadMeta, true);
+        global $wpdb;
+        $rawPayloadDb = (string) $wpdb->get_var($wpdb->prepare(
+            "SELECT meta_value FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = %s ORDER BY meta_id DESC LIMIT 1",
+            $post->ID,
+            $this->homepagePayloadMeta
+        ));
+        $payloadMeta = $this->decodeJsonPayload($rawPayloadMeta);
+        $payloadDb = $this->decodeJsonPayload($rawPayloadDb);
+        error_log("getHomepageByLocale: locale={$locale}, postId={$post->ID}, meta_len=" . strlen($rawPayloadMeta) . ", meta_ok=" . var_export(is_array($payloadMeta), true) . ", db_len=" . strlen($rawPayloadDb) . ", db_ok=" . var_export(is_array($payloadDb), true));
+        $rawPayload = is_array($payloadDb) ? $rawPayloadDb : $rawPayloadMeta;
+        $payload = is_array($payloadDb) ? $payloadDb : $payloadMeta;
 
         return rest_ensure_response($this->normalizeHomepagePayload(is_array($payload) ? $payload : [], $locale));
     }
