@@ -187,9 +187,7 @@ final class Mindhikers_Cms_Core
 
         register_post_meta($this->homepagePostType, $this->homepagePayloadMeta, [
             'single' => true,
-            'type' => 'string',
             'show_in_rest' => false,
-            'sanitize_callback' => [$this, 'sanitizeJsonPayload'],
             'auth_callback' => static fn () => current_user_can('edit_posts'),
         ]);
     }
