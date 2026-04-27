@@ -2,10 +2,14 @@
 /**
  * M1 Content Seeder — 创建 mh_homepage post 作为唯一数据源
  * 执行方式：php /opt/wp-bundle/seed/m1-seed.php
- * 修订：v2 — 统一数据层，从 CF theme options 迁移到 mh_homepage post meta
  */
 
 require_once '/var/www/html/wp-load.php';
+
+$adminUsers = get_users(['role' => 'administrator', 'number' => 1]);
+if (!empty($adminUsers)) {
+    wp_set_current_user($adminUsers[0]->ID);
+}
 
 function m1_build_homepage_payload(string $locale): array
 {
@@ -149,11 +153,7 @@ $locales = ['zh', 'en'];
 
 foreach ($locales as $locale) {
     $payload = m1_build_homepage_payload($locale);
-    echo "Build {$locale}: keys=" . implode(',', array_keys($payload)) . ", count=" . count($payload) . "\n";
     $jsonPayload = wp_json_encode($payload);
-    $decodeTest = json_decode((string) $jsonPayload, true);
-    echo "Encode {$locale}: len=" . strlen((string) $jsonPayload) . ", decode_ok=" . (is_array($decodeTest) ? 'yes' : 'no') . ", decode_err=" . json_last_error_msg() . "\n";
-    echo "POST keys: " . (empty($_POST) ? 'EMPTY' : implode(',', array_keys($_POST))) . "\n";
 
     $existing = get_posts([
         'post_type'      => 'mh_homepage',
@@ -167,9 +167,8 @@ foreach ($locales as $locale) {
 
     if (!empty($existing)) {
         $postId = $existing[0]->ID;
-        $updResult = update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
-        $immediate = get_post_meta($postId, 'mindhikers_homepage_payload', true);
-        echo "Updated mh_homepage post for {$locale}: {$postId}, updResult=" . var_export($updResult, true) . ", immediate_len=" . strlen((string) $immediate) . "\n";
+        update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
+        echo "Updated mh_homepage post for {$locale}: {$postId}\n";
     } else {
         $postId = wp_insert_post([
             'post_type'   => 'mh_homepage',
@@ -178,35 +177,16 @@ foreach ($locales as $locale) {
             'post_name'   => "homepage-{$locale}",
         ]);
         if ($postId && !is_wp_error($postId)) {
-            $localeResult = update_post_meta($postId, 'mindhikers_locale', $locale);
-            $payloadResult = update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
-            echo "Created mh_homepage post for {$locale}: {$postId}, locale_meta={$localeResult}, payload_meta={$payloadResult}\n";
+            update_post_meta($postId, 'mindhikers_locale', $locale);
+            update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
+            echo "Created mh_homepage post for {$locale}: {$postId}\n";
         } else {
-            $errorMsg = is_wp_error($postId) ? $postId->get_error_message() : 'unknown';
-            echo "Failed to create mh_homepage post for {$locale}: {$errorMsg}\n";
+            echo "Failed to create mh_homepage post for {$locale}\n";
         }
     }
 }
 
 echo "Homepage posts seeded.\n";
-
-foreach (['zh', 'en'] as $verifyLocale) {
-    $verifyPosts = get_posts([
-        'post_type'      => 'mh_homepage',
-        'post_status'    => 'publish',
-        'posts_per_page' => 1,
-        'meta_key'       => 'mindhikers_locale',
-        'meta_value'     => $verifyLocale,
-    ]);
-    if (!empty($verifyPosts)) {
-        $verifyId = $verifyPosts[0]->ID;
-        $verifyLocaleMeta = get_post_meta($verifyId, 'mindhikers_locale', true);
-        $verifyPayloadMeta = get_post_meta($verifyId, 'mindhikers_homepage_payload', true);
-        echo "Verify {$verifyLocale}: post_id={$verifyId}, locale_meta={$verifyLocaleMeta}, payload_len=" . strlen((string) $verifyPayloadMeta) . "\n";
-    } else {
-        echo "Verify {$verifyLocale}: post NOT FOUND\n";
-    }
-}
 
 $zh_product_id = wp_insert_post([
     'post_type'    => 'mh_product',
