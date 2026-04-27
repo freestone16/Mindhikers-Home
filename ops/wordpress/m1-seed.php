@@ -167,8 +167,9 @@ foreach ($locales as $locale) {
 
     if (!empty($existing)) {
         $postId = $existing[0]->ID;
-        update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
-        echo "Updated mh_homepage post for {$locale}: {$postId}\n";
+        $updResult = update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
+        $immediate = get_post_meta($postId, 'mindhikers_homepage_payload', true);
+        echo "Updated mh_homepage post for {$locale}: {$postId}, updResult=" . var_export($updResult, true) . ", immediate_len=" . strlen((string) $immediate) . "\n";
     } else {
         $postId = wp_insert_post([
             'post_type'   => 'mh_homepage',
