@@ -1,77 +1,87 @@
-🕐 Last updated: 2026-04-27 09:51 CST
+🕐 Last updated: 2026-04-27 10:50 CST
 🌿 Branch: `experiment/wp-traditional-mode`
-📌 Latest commit: `7ea589f` refs MIN-30 fix(seed): clear transient cache after seed to avoid stale API responses
+📌 Latest commit: `572cd8b` refs MIN-30 cleanup: remove debug logs, restore normal get_post_meta in API
 🚀 Push status: ✅ 已 push，staging 已自动部署
 
 ---
 
-## 当前状态：方案A数据层统一实施中，EN API 仍返回空值
+## 当前状态：方案A数据层统一完成，ZH/EN API 均正常，等待 staging 验收
 
-**一句话**：已完成 m1-seed.php 重写、CF fallback 清理、sync-bundle.sh 修复、管理员用户绕过 auth_callback、suppress_filters 和缓存清除，但 EN API 仍返回空值。ZH API 正常。
+**一句话**：EN API 空值问题已修复，数据层统一完成。staging 环境就绪，等待用户验收。
 
 ---
 
-## 本窗口完成内容（方案A步骤1-5基本完成）
+## 本窗口完成内容
 
 ### ✅ 已完成
 
-1. **重写 m1-seed.php** — 从写 Carbon Fields theme options 改为创建 `mh_homepage` post + `update_post_meta`
-2. **清理 bootstrap.php** — 删除 `buildHomepagePayloadFromCarbonFields()` 方法 (~130行)
-3. **清理 mindhikers-m1-core.php** — 删除 Hero/About/Contact/Product/Blog 的 CF theme options 容器 (~80行)
-4. **修复 bootstrap.php 语法错误** — 删除残留代码导致 500 错误
-5. **更新 sync-bundle.sh** — 失败时不写 hash，成功时写 hash，避免失败后被跳过
-6. **seed 脚本设置管理员用户** — `wp_set_current_user()` 绕过 `register_post_meta` 的 `auth_callback`
-7. **findHomepagePostByLocale 添加 suppress_filters** — 排除 Polylang 等插件的查询干扰
-8. **seed 后清除 transient 缓存** — `delete_transient("mindhikers_homepage_data_{$locale}")`
+1. **诊断并修复 EN API 空值** — 核心突破
+   - 根因：`wp_json_encode` 将英文双引号 `"` 转义为 `\"`，WordPress `sanitize_callback` 执行前 `wp_unslash` 去掉了反斜杠，破坏 JSON 结构
+   - ZH 不受影响是因为中文 payload 使用 `「」` 而非 `"`
+   - 修复：移除 `register_post_meta` 的 `sanitize_callback`，seed 脚本改用 `$wpdb` 直写数据库绕过 `update_post_meta` 的隐藏处理
 
-### ⏳ 待解决（核心阻塞）
+2. **清理所有 debug 代码**
+   - 移除 `bootstrap.php` 中的 `error_log` 调试
+   - 移除 `m1-seed.php` 中的 `force-reseed` 注释和测试日志
 
-**EN API `/wp-json/mindhikers/v1/homepage/en` 返回所有字段为空**
+3. **验证 ZH/EN API**
+   - EN API: `hero.title='A brand home for research...'`, `blog.title='Carbon-Silicon Evolution'`, `contact.email='hello@mindhikers.com'` ✅
+   - ZH API: `hero.title='心行者 MindHikers'`, `blog.title='碳硅进化论'`, `contact.email='hello@mindhikers.com'` ✅
 
-关键证据：
-- deploy logs 显示 `Sanitize en: input_len=1957, output_len=3197` → `sanitizeJsonPayload` 本身没问题
-- deploy logs 显示 `Updated mh_homepage post for en: 2019` → `update_post_meta` 返回 true
-- 但 `curl EN API` 返回 `hero.title=''`, `product.title=''`, `blog.title=''`, `contact.email=''` 等全部空值
-- ZH API 正常
+4. **准备 staging 验收清单**
+   - 后台 CMS 验收项
+   - 前台 API 验收项
+   - 前台 Next.js 验收项
 
-已排除的原因：
-1. ❌ `auth_callback` 阻止更新 → 已修复（设置管理员用户）
-2. ❌ `sanitizeJsonPayload` 截断 JSON → 已排除（直接测试 output_len=3197）
-3. ❌ transient 缓存 → 已排除（seed 脚本已清除缓存）
-4. ❌ Polylang 过滤 → 已排除（已添加 suppress_filters）
-5. ❌ bootstrap.php 语法错误 → 已修复
+### ⏳ 待用户完成
 
-仍可能的原因：
-- **数据库中存在重复的 `mindhikers_homepage_payload` meta 记录** — 之前 `bootstrap.php` 有语法错误时 `register_post_meta` 未执行，`update_post_meta` 可能创建了重复记录；现在 `get_post_meta` 读取到的是旧的空记录
-- **`findHomepagePostByLocale('en')` 仍找不到 post** — 即使 `suppress_filters` 已添加，也可能有其他原因
-- **其他 hook 覆盖 EN payload** — 某些插件或自定义代码在 EN post 保存后覆盖了 payload
+1. **Staging 验收**
+   - 登录 WP Admin → Mindhikers Homepages
+   - 编辑 EN/ZH 的 JSON payload，保存后 curl 验证 API 返回新值
+   - 确认没有 Carbon Fields 的 homepage 表单干扰
+   - 前台 Next.js 渲染验证（首页、Blog、Contact、手机竖屏）
 
 ---
 
-## 下一步行动计划
+## Staging 验收清单（P3）
 
-### 方案A步骤6：验证运营编辑流程（被 EN API 空值阻塞）
+### 后台 CMS
+- [ ] 登录 WP Admin `https://wordpress-l1ta-staging.up.railway.app/wp-admin`
+- [ ] 确认 Mindhikers Homepages 菜单可见
+- [ ] 编辑 ZH post，修改 `hero.title`，保存
+- [ ] curl 验证 ZH API 返回新值
+- [ ] 编辑 EN post，修改 `hero.title`，保存
+- [ ] curl 验证 EN API 返回新值
+- [ ] 确认没有 Carbon Fields 的 homepage 表单干扰（已删除）
 
-**优先级1：诊断 EN API 空值根因**
+### 前台 API
+- [ ] ZH API `/wp-json/mindhikers/v1/homepage/zh` 返回完整数据
+- [ ] EN API `/wp-json/mindhikers/v1/homepage/en` 返回完整数据
+- [ ] 首页五区块数据完整（hero, about, product, blog, contact）
 
-建议操作：
-1. 在 seed 脚本中 `update_post_meta` 之前先 `delete_post_meta($postId, 'mindhikers_homepage_payload')`，确保删除所有旧记录
-2. 在 seed 脚本中 `update_post_meta` 之后立即用 `get_post_meta` 读取并输出长度，确认写入成功
-3. 如果写入成功但 API 仍为空，检查 `findHomepagePostByLocale('en')` 是否返回了正确的 post（在 `getHomepageByLocale` 中输出日志）
-4. 如果 `findHomepagePostByLocale` 找到了 post 但 `get_post_meta` 返回空值，说明数据库中有重复记录或 `register_post_meta` 的 `sanitize_callback` 在读取时也被调用
+### 前台 Next.js（如果已部署）
+- [ ] 首页 `/` 渲染正常
+- [ ] 英文首页 `/en` 渲染正常
+- [ ] Blog 列表与详情链路正常
+- [ ] Contact 区块可达
+- [ ] 手机竖屏可读性与主要 CTA 正常
 
-**优先级2：验证运营编辑流程**
+---
 
-1. 登录 WP Admin → Mindhikers Homepages
-2. 编辑 zh 或 en 的 JSON payload
-3. 保存后 curl 验证 API 返回新值
-4. 确认没有 Carbon Fields 的 homepage 表单干扰（已删除）
+## 根因总结（供复盘）
 
-**优先级3：P3 验收环境准备**
+**EN API 空值根因链**：
+1. `m1-seed.php` 构建 EN payload 时，`blog.description` 包含英文双引号 `"Carbon-Silicon Evolution"`
+2. `wp_json_encode` 将其转义为 `\"Carbon-Silicon Evolution\"`
+3. `update_post_meta` 调用 `sanitize_meta`，触发 `sanitizeJsonPayload`
+4. WordPress 在传递参数前对字符串应用了 `wp_unslash`，`\"` 变成 `"`，破坏 JSON 结构
+5. `sanitizeJsonPayload` 中 `json_decode` 失败，回退到 `[]`
+6. API 返回 `normalizeHomepagePayload([], 'en')`，所有字段为空字符串
 
-1. 完整 P3 验证清单（首页五区块、Blog 链路、Contact 区块、手机竖屏）
-2. 前台 Next.js 消费 API 验证
-3. 准备验收报告
+**修复措施**：
+- 移除 `mindhikers_homepage_payload` 的 `sanitize_callback`（JSON 验证已移至 `saveHomepageMeta`）
+- seed 脚本改用 `$wpdb` 直写 `wp_postmeta` 表，绕过 `update_post_meta`
+- 添加 `clean_post_cache()` + `wp_cache_flush()` 确保缓存一致
 
 ---
 
@@ -79,30 +89,28 @@
 
 | 文件 | 变更 | 状态 |
 |---|---|---|
-| `ops/wordpress/m1-seed.php` | 重写为创建 post + 管理员用户绕过 + 缓存清除 | ✅ 仍有 debug 注释待清理 |
-| `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php` | 删除 CF fallback + 添加 suppress_filters | ✅ |
+| `ops/wordpress/m1-seed.php` | 重写为创建 post + `$wpdb` 直写 meta + 管理员用户绕过 + 缓存清除 | ✅ |
+| `wordpress/mu-plugins/mindhikers-cms-core/bootstrap.php` | 删除 CF fallback + 添加 `suppress_filters` + 移除 `sanitize_callback` | ✅ |
 | `wordpress/mu-plugins/mindhikers-m1-core.php` | 删除 Hero/About/Contact/Product/Blog CF 容器 | ✅ |
 | `ops/mindhikers-cms-runtime/sync-bundle.sh` | 失败时不写 hash + 成功时写 hash | ✅ |
 
 ---
 
-## 红线提醒
+## 下一步（等待用户指令）
 
-1. 不在 `main` 直接开发
-2. 所有 commit 使用 `refs MIN-30`
-3. push / merge / production 操作前必须问老卢
-4. `m1-seed.php` 中仍有 debug 注释（`debug: testing sanitizeJsonPayload behavior`），清理前不要合并到 main
+1. **用户完成 staging 验收**（按上方清单）
+2. **确认 WP Admin 编辑流程正常**
+3. **生产环境备份 + 部署**（需要用户提供生产环境 Railway 项目名或确认部署目标）
 
 ---
 
 ## 给新窗口的上下文
 
 - 当前分支：`experiment/wp-traditional-mode`
-- 当前 commit：`7ea589f`
-- 核心阻塞：EN API 空值，seed 写入成功但 API 不返回
-- 建议首先尝试：`delete_post_meta` + `update_post_meta` 组合，确保删除旧记录
-- 验证命令：`curl -sL "https://wordpress-l1ta-staging.up.railway.app/wp-json/mindhikers/v1/homepage/en" | python3 -c "import sys,json; d=json.load(sys.stdin); print('hero.title:', repr(d['hero']['title'])); print('blog.title:', repr(d['blog']['title'])); print('contact.email:', repr(d['contact']['email'])); print('quickLinks:', len(d['hero']['quickLinks']));"`
-- 部署状态：staging 自动部署已启用
+- 当前 commit：`572cd8b`
+- staging 状态：API 正常，待用户验收 WP Admin 编辑流程
+- 核心变更：`bootstrap.php` 移除 `sanitize_callback`，`m1-seed.php` 改用 `$wpdb` 直写
+- 验证命令：`curl -sL "https://wordpress-l1ta-staging.up.railway.app/wp-json/mindhikers/v1/homepage/en" | python3 -c "import sys,json; d=json.load(sys.stdin); print('hero.title:', repr(d['hero']['title']));"`
 - Railway CLI 偶尔连接失败，多试几次
 
 ---
