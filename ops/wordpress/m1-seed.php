@@ -196,6 +196,11 @@ foreach ($locales as $locale) {
 
 echo "Homepage posts seeded.\n";
 
+foreach (['zh', 'en'] as $clearLocale) {
+    delete_transient("mindhikers_homepage_data_{$clearLocale}");
+    echo "Cleared cache for {$clearLocale}\n";
+}
+
 $zh_product_id = wp_insert_post([
     'post_type'    => 'mh_product',
     'post_title'   => '黄金坩埚',
