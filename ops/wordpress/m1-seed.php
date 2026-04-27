@@ -153,6 +153,7 @@ foreach ($locales as $locale) {
     $jsonPayload = wp_json_encode($payload);
     $decodeTest = json_decode((string) $jsonPayload, true);
     echo "Encode {$locale}: len=" . strlen((string) $jsonPayload) . ", decode_ok=" . (is_array($decodeTest) ? 'yes' : 'no') . ", decode_err=" . json_last_error_msg() . "\n";
+    echo "POST keys: " . (empty($_POST) ? 'EMPTY' : implode(',', array_keys($_POST))) . "\n";
 
     $existing = get_posts([
         'post_type'      => 'mh_homepage',
