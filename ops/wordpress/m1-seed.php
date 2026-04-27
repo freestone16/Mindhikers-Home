@@ -156,9 +156,6 @@ $locales = ['zh', 'en'];
 foreach ($locales as $locale) {
     $payload = m1_build_homepage_payload($locale);
     $jsonPayload = wp_json_encode($payload);
-    $jsonOk = ($jsonPayload !== false);
-    $decodedTest = json_decode($jsonPayload, true);
-    echo "Build payload for {$locale}: json_ok=" . var_export($jsonOk, true) . ", json_len=" . ($jsonOk ? strlen($jsonPayload) : 0) . ", decode_is_array=" . var_export(is_array($decodedTest), true) . ", json_err=" . json_last_error_msg() . "\n";
 
     $existing = get_posts([
         'post_type'      => 'mh_homepage',

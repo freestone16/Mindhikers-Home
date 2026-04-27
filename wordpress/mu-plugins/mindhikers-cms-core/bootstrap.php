@@ -459,20 +459,25 @@ final class Mindhikers_Cms_Core
 
     public function sanitizeJsonPayload(mixed $value): string
     {
-        $type = gettype($value);
-        $len = is_string($value) ? strlen($value) : 0;
-        $preview = is_string($value) ? substr($value, 0, 100) : '';
-        error_log("sanitizeJsonPayload called: type={$type}, len={$len}, preview={$preview}");
-
         if (is_array($value)) {
             return $this->encodeJson($value);
         }
 
-        $decoded = $this->decodeJsonPayload(is_string($value) ? $value : '');
-        $decodedOk = is_array($decoded);
-        error_log("sanitizeJsonPayload decode result: is_array=" . var_export($decodedOk, true));
-        if ($decodedOk) {
+        $strValue = is_string($value) ? $value : '';
+        $decoded = $this->decodeJsonPayload($strValue);
+        if (is_array($decoded)) {
             return $this->encodeJson($decoded);
+        }
+
+        // WordPress wp_unslashes $_POST values and some meta paths,
+        // which breaks JSON strings containing escaped quotes (\").
+        // Re-add slashes and try decoding again.
+        $slashed = wp_slash($strValue);
+        if ($slashed !== $strValue) {
+            $decoded = $this->decodeJsonPayload($slashed);
+            if (is_array($decoded)) {
+                return $this->encodeJson($decoded);
+            }
         }
 
         return $this->encodeJson([]);
@@ -650,11 +655,7 @@ final class Mindhikers_Cms_Core
         }
 
         $decoded = json_decode($rawPayload, true);
-        $isArr = is_array($decoded);
-        if (!$isArr) {
-            error_log("decodeJsonPayload failed: len=" . strlen($rawPayload) . ", json_err=" . json_last_error_msg() . ", preview=" . substr($rawPayload, 0, 200));
-        }
-        return $isArr ? $decoded : null;
+        return is_array($decoded) ? $decoded : null;
     }
 
     private function encodeJson(array $value): string
