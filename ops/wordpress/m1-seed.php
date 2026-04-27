@@ -3,7 +3,7 @@
  * M1 Content Seeder — 创建 mh_homepage post 作为唯一数据源
  * 执行方式：php /opt/wp-bundle/seed/m1-seed.php
  * 注意：CLI 执行前需设置管理员用户以通过 auth_callback
- * force-reseed: v2
+ * force-reseed: v3
  */
 
 require_once '/var/www/html/wp-load.php';
