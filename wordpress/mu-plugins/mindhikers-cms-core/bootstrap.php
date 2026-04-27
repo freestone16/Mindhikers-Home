@@ -629,6 +629,7 @@ final class Mindhikers_Cms_Core
             'meta_value' => $locale,
             'orderby' => 'modified',
             'order' => 'DESC',
+            'suppress_filters' => true,
         ]);
 
         return $posts[0] ?? null;
