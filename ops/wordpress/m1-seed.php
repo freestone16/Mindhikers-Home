@@ -3,7 +3,6 @@
  * M1 Content Seeder — 创建 mh_homepage post 作为唯一数据源
  * 执行方式：php /opt/wp-bundle/seed/m1-seed.php
  * 注意：CLI 执行前需设置管理员用户以通过 auth_callback
- * debug: testing sanitizeJsonPayload behavior
  */
 
 require_once '/var/www/html/wp-load.php';
@@ -157,12 +156,6 @@ foreach ($locales as $locale) {
     $payload = m1_build_homepage_payload($locale);
     $jsonPayload = wp_json_encode($payload);
 
-    $core = Mindhikers_Cms_Core::getInstance();
-    if ($core) {
-        $sanitized = $core->sanitizeJsonPayload($jsonPayload);
-        echo "Sanitize {$locale}: input_len=" . strlen((string) $jsonPayload) . ", output_len=" . strlen($sanitized) . "\n";
-    }
-
     $existing = get_posts([
         'post_type'      => 'mh_homepage',
         'post_status'    => 'publish',
@@ -171,12 +164,15 @@ foreach ($locales as $locale) {
         'meta_value'     => $locale,
         'orderby'        => 'modified',
         'order'          => 'DESC',
+        'suppress_filters' => true,
     ]);
 
     if (!empty($existing)) {
         $postId = $existing[0]->ID;
-        update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
-        echo "Updated mh_homepage post for {$locale}: {$postId}\n";
+        delete_post_meta($postId, 'mindhikers_homepage_payload');
+        $updated = update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
+        $verified = (string) get_post_meta($postId, 'mindhikers_homepage_payload', true);
+        echo "Updated mh_homepage post for {$locale}: {$postId} (update_result=" . var_export($updated, true) . ", verified_len=" . strlen($verified) . ")\n";
     } else {
         $postId = wp_insert_post([
             'post_type'   => 'mh_homepage',
@@ -186,8 +182,10 @@ foreach ($locales as $locale) {
         ]);
         if ($postId && !is_wp_error($postId)) {
             update_post_meta($postId, 'mindhikers_locale', $locale);
-            update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
-            echo "Created mh_homepage post for {$locale}: {$postId}\n";
+            delete_post_meta($postId, 'mindhikers_homepage_payload');
+            $updated = update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
+            $verified = (string) get_post_meta($postId, 'mindhikers_homepage_payload', true);
+            echo "Created mh_homepage post for {$locale}: {$postId} (update_result=" . var_export($updated, true) . ", verified_len=" . strlen($verified) . ")\n";
         } else {
             echo "Failed to create mh_homepage post for {$locale}\n";
         }
