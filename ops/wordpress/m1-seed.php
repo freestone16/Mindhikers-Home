@@ -184,6 +184,24 @@ foreach ($locales as $locale) {
 
 echo "Homepage posts seeded.\n";
 
+foreach (['zh', 'en'] as $verifyLocale) {
+    $verifyPosts = get_posts([
+        'post_type'      => 'mh_homepage',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+        'meta_key'       => 'mindhikers_locale',
+        'meta_value'     => $verifyLocale,
+    ]);
+    if (!empty($verifyPosts)) {
+        $verifyId = $verifyPosts[0]->ID;
+        $verifyLocaleMeta = get_post_meta($verifyId, 'mindhikers_locale', true);
+        $verifyPayloadMeta = get_post_meta($verifyId, 'mindhikers_homepage_payload', true);
+        echo "Verify {$verifyLocale}: post_id={$verifyId}, locale_meta={$verifyLocaleMeta}, payload_len=" . strlen((string) $verifyPayloadMeta) . "\n";
+    } else {
+        echo "Verify {$verifyLocale}: post NOT FOUND\n";
+    }
+}
+
 $zh_product_id = wp_insert_post([
     'post_type'    => 'mh_product',
     'post_title'   => '黄金坩埚',
