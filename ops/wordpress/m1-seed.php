@@ -149,7 +149,9 @@ $locales = ['zh', 'en'];
 
 foreach ($locales as $locale) {
     $payload = m1_build_homepage_payload($locale);
+    echo "Build {$locale}: keys=" . implode(',', array_keys($payload)) . ", count=" . count($payload) . "\n";
     $jsonPayload = wp_json_encode($payload);
+    echo "Encode {$locale}: len=" . strlen((string) $jsonPayload) . ", preview=" . substr((string) $jsonPayload, 0, 60) . "\n";
 
     $existing = get_posts([
         'post_type'      => 'mh_homepage',
