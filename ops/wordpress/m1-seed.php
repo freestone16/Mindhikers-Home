@@ -168,13 +168,9 @@ foreach ($locales as $locale) {
         'suppress_filters' => true,
     ]);
 
+    global $wpdb;
     if (!empty($existing)) {
         $postId = $existing[0]->ID;
-        delete_post_meta($postId, 'mindhikers_homepage_payload');
-        $updated = update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
-        clean_post_cache($postId);
-        $verified = (string) get_post_meta($postId, 'mindhikers_homepage_payload', true);
-        echo "Updated mh_homepage post for {$locale}: {$postId} (update_result=" . var_export($updated, true) . ", verified_len=" . strlen($verified) . ")\n";
     } else {
         $postId = wp_insert_post([
             'post_type'   => 'mh_homepage',
@@ -184,15 +180,31 @@ foreach ($locales as $locale) {
         ]);
         if ($postId && !is_wp_error($postId)) {
             update_post_meta($postId, 'mindhikers_locale', $locale);
-            delete_post_meta($postId, 'mindhikers_homepage_payload');
-            $updated = update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
-            clean_post_cache($postId);
-            $verified = (string) get_post_meta($postId, 'mindhikers_homepage_payload', true);
-            echo "Created mh_homepage post for {$locale}: {$postId} (update_result=" . var_export($updated, true) . ", verified_len=" . strlen($verified) . ")\n";
+            echo "Created mh_homepage post for {$locale}: {$postId}\n";
         } else {
             echo "Failed to create mh_homepage post for {$locale}\n";
+            continue;
         }
     }
+
+    // Bypass update_post_meta to avoid any wp_unslash/filter interference
+    $wpdb->query($wpdb->prepare(
+        "DELETE FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = %s",
+        $postId,
+        'mindhikers_homepage_payload'
+    ));
+    $wpdb->insert($wpdb->postmeta, [
+        'post_id'    => $postId,
+        'meta_key'   => 'mindhikers_homepage_payload',
+        'meta_value' => $jsonPayload,
+    ]);
+    clean_post_cache($postId);
+    $verified = (string) $wpdb->get_var($wpdb->prepare(
+        "SELECT meta_value FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = %s ORDER BY meta_id DESC LIMIT 1",
+        $postId,
+        'mindhikers_homepage_payload'
+    ));
+    echo "Direct DB write for {$locale}: postId={$postId}, db_verified_len=" . strlen($verified) . "\n";
 }
 
 echo "Homepage posts seeded.\n";
