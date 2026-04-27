@@ -173,11 +173,12 @@ foreach ($locales as $locale) {
             'post_name'   => "homepage-{$locale}",
         ]);
         if ($postId && !is_wp_error($postId)) {
-            update_post_meta($postId, 'mindhikers_locale', $locale);
-            update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
-            echo "Created mh_homepage post for {$locale}: {$postId}\n";
+            $localeResult = update_post_meta($postId, 'mindhikers_locale', $locale);
+            $payloadResult = update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
+            echo "Created mh_homepage post for {$locale}: {$postId}, locale_meta={$localeResult}, payload_meta={$payloadResult}\n";
         } else {
-            echo "Failed to create mh_homepage post for {$locale}\n";
+            $errorMsg = is_wp_error($postId) ? $postId->get_error_message() : 'unknown';
+            echo "Failed to create mh_homepage post for {$locale}: {$errorMsg}\n";
         }
     }
 }
