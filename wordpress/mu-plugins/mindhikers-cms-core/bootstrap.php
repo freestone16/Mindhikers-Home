@@ -406,11 +406,15 @@ final class Mindhikers_Cms_Core
         $post = $this->findHomepagePostByLocale($locale);
 
         if (!$post instanceof WP_Post) {
+            error_log("getHomepageByLocale: no post found for locale={$locale}");
             return rest_ensure_response($this->getDefaultHomepagePayload($locale));
         }
 
         $rawPayload = (string) get_post_meta($post->ID, $this->homepagePayloadMeta, true);
         $payload = $this->decodeJsonPayload($rawPayload);
+        $payloadLen = strlen($rawPayload);
+        $payloadOk = is_array($payload);
+        error_log("getHomepageByLocale: locale={$locale}, postId={$post->ID}, payload_len={$payloadLen}, payload_ok=" . var_export($payloadOk, true));
 
         return rest_ensure_response($this->normalizeHomepagePayload(is_array($payload) ? $payload : [], $locale));
     }
