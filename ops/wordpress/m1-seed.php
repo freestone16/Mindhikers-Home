@@ -172,6 +172,7 @@ foreach ($locales as $locale) {
         $postId = $existing[0]->ID;
         delete_post_meta($postId, 'mindhikers_homepage_payload');
         $updated = update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
+        clean_post_cache($postId);
         $verified = (string) get_post_meta($postId, 'mindhikers_homepage_payload', true);
         echo "Updated mh_homepage post for {$locale}: {$postId} (update_result=" . var_export($updated, true) . ", verified_len=" . strlen($verified) . ")\n";
     } else {
@@ -185,6 +186,7 @@ foreach ($locales as $locale) {
             update_post_meta($postId, 'mindhikers_locale', $locale);
             delete_post_meta($postId, 'mindhikers_homepage_payload');
             $updated = update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
+            clean_post_cache($postId);
             $verified = (string) get_post_meta($postId, 'mindhikers_homepage_payload', true);
             echo "Created mh_homepage post for {$locale}: {$postId} (update_result=" . var_export($updated, true) . ", verified_len=" . strlen($verified) . ")\n";
         } else {
@@ -199,6 +201,9 @@ foreach (['zh', 'en'] as $clearLocale) {
     delete_transient("mindhikers_homepage_data_{$clearLocale}");
     echo "Cleared cache for {$clearLocale}\n";
 }
+
+wp_cache_flush();
+echo "Flushed object cache.\n";
 
 $zh_product_id = wp_insert_post([
     'post_type'    => 'mh_product',
