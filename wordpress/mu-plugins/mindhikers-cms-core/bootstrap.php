@@ -459,12 +459,19 @@ final class Mindhikers_Cms_Core
 
     public function sanitizeJsonPayload(mixed $value): string
     {
+        $type = gettype($value);
+        $len = is_string($value) ? strlen($value) : 0;
+        $preview = is_string($value) ? substr($value, 0, 100) : '';
+        error_log("sanitizeJsonPayload called: type={$type}, len={$len}, preview={$preview}");
+
         if (is_array($value)) {
             return $this->encodeJson($value);
         }
 
         $decoded = $this->decodeJsonPayload(is_string($value) ? $value : '');
-        if (is_array($decoded)) {
+        $decodedOk = is_array($decoded);
+        error_log("sanitizeJsonPayload decode result: is_array=" . var_export($decodedOk, true));
+        if ($decodedOk) {
             return $this->encodeJson($decoded);
         }
 
