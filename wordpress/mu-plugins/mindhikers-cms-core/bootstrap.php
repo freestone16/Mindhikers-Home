@@ -650,7 +650,11 @@ final class Mindhikers_Cms_Core
         }
 
         $decoded = json_decode($rawPayload, true);
-        return is_array($decoded) ? $decoded : null;
+        $isArr = is_array($decoded);
+        if (!$isArr) {
+            error_log("decodeJsonPayload failed: len=" . strlen($rawPayload) . ", json_err=" . json_last_error_msg() . ", preview=" . substr($rawPayload, 0, 200));
+        }
+        return $isArr ? $decoded : null;
     }
 
     private function encodeJson(array $value): string
