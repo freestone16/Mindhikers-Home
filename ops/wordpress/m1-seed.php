@@ -2,6 +2,7 @@
 /**
  * M1 Content Seeder — 创建 mh_homepage post 作为唯一数据源
  * 执行方式：php /opt/wp-bundle/seed/m1-seed.php
+ * 修订：v2 — 统一数据层，从 CF theme options 迁移到 mh_homepage post meta
  */
 
 require_once '/var/www/html/wp-load.php';

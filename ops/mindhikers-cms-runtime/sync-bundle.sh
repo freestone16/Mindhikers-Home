@@ -57,8 +57,11 @@ fi
 if [ "$CURRENT_HASH" != "" ] && [ "$CURRENT_HASH" != "$STORED_HASH" ]; then
   echo "[mh-sync-bundle] executing m1-seed.php (hash changed or first run)..."
   cd "$WP_ROOT"
-  php "$SEED_SCRIPT" || echo "[mh-sync-bundle] seed failed, continuing..."
-  echo "$CURRENT_HASH" > "$SEED_HASH_FLAG"
-  echo "[mh-sync-bundle] seed completed."
+  if php "$SEED_SCRIPT"; then
+    echo "$CURRENT_HASH" > "$SEED_HASH_FLAG"
+    echo "[mh-sync-bundle] seed completed successfully."
+  else
+    echo "[mh-sync-bundle] seed failed, will retry on next deploy."
+  fi
 fi
 
