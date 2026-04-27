@@ -50,73 +50,6 @@ add_action('carbon_fields_register_fields', 'm1_register_carbon_fields');
 
 function m1_register_carbon_fields(): void
 {
-    // Hero 管理
-    Container::make('theme_options', __('Hero 管理', 'mindhikers-m1'))
-        ->set_page_menu_position(30)
-        ->set_icon('dashicons-megaphone')
-        ->add_fields([
-            Field::make('text', 'hero_eyebrow_zh', __('眉标 (ZH)', 'mindhikers-m1')),
-            Field::make('text', 'hero_eyebrow_en', __('眉标 (EN)', 'mindhikers-m1')),
-            Field::make('text', 'hero_title_zh', __('标题 (ZH)', 'mindhikers-m1')),
-            Field::make('text', 'hero_title_en', __('标题 (EN)', 'mindhikers-m1')),
-            Field::make('textarea', 'hero_desc_zh', __('描述 (ZH)', 'mindhikers-m1')),
-            Field::make('textarea', 'hero_desc_en', __('描述 (EN)', 'mindhikers-m1')),
-            Field::make('text', 'hero_cta_primary_text_zh', __('主按钮文字 (ZH)', 'mindhikers-m1')),
-            Field::make('text', 'hero_cta_primary_text_en', __('主按钮文字 (EN)', 'mindhikers-m1')),
-            Field::make('text', 'hero_cta_primary_url', __('主按钮链接', 'mindhikers-m1')),
-            Field::make('text', 'hero_cta_secondary_text_zh', __('次按钮文字 (ZH)', 'mindhikers-m1')),
-            Field::make('text', 'hero_cta_secondary_text_en', __('次按钮文字 (EN)', 'mindhikers-m1')),
-            Field::make('text', 'hero_cta_secondary_url', __('次按钮链接', 'mindhikers-m1')),
-            Field::make('image', 'hero_image', __('配图', 'mindhikers-m1')),
-            Field::make('complex', 'hero_quick_links', __('Quick Links', 'mindhikers-m1'))
-                ->add_fields([
-                    Field::make('text', 'link_label_zh', __('链接文字 (ZH)', 'mindhikers-m1')),
-                    Field::make('text', 'link_label_en', __('链接文字 (EN)', 'mindhikers-m1')),
-                    Field::make('text', 'link_url', __('链接地址', 'mindhikers-m1')),
-                    Field::make('text', 'link_tag_zh', __('标签 (ZH)', 'mindhikers-m1'))
-                        ->set_help_text(__('如：产品、内容、服务', 'mindhikers-m1')),
-                    Field::make('text', 'link_tag_en', __('标签 (EN)', 'mindhikers-m1'))
-                        ->set_help_text(__('如：Product、Content、Service', 'mindhikers-m1')),
-                ])
-                ->set_header_template('<% if (link_label_zh) { %> <%- link_label_zh %> <% } %>')
-                ->set_help_text(__('首页右侧 Quick Links 面板内容，可添加多个链接', 'mindhikers-m1')),
-        ]);
-
-    // About 管理
-    Container::make('theme_options', __('About 管理', 'mindhikers-m1'))
-        ->set_page_menu_position(31)
-        ->set_icon('dashicons-info')
-        ->add_fields([
-            Field::make('text', 'about_title_zh', __('标题 (ZH)', 'mindhikers-m1')),
-            Field::make('text', 'about_title_en', __('标题 (EN)', 'mindhikers-m1')),
-            Field::make('rich_text', 'about_content_zh', __('内容 (ZH)', 'mindhikers-m1')),
-            Field::make('rich_text', 'about_content_en', __('内容 (EN)', 'mindhikers-m1')),
-            Field::make('image', 'about_image', __('配图', 'mindhikers-m1')),
-        ]);
-
-    // Contact 管理
-    Container::make('theme_options', __('Contact 管理', 'mindhikers-m1'))
-        ->set_page_menu_position(32)
-        ->set_icon('dashicons-email')
-        ->add_fields([
-            Field::make('text', 'contact_email', __('邮箱', 'mindhikers-m1')),
-            Field::make('text', 'contact_location_zh', __('位置 (ZH)', 'mindhikers-m1')),
-            Field::make('text', 'contact_location_en', __('位置 (EN)', 'mindhikers-m1')),
-            Field::make('text', 'contact_title_zh', __('区块标题 (ZH)', 'mindhikers-m1')),
-            Field::make('text', 'contact_title_en', __('区块标题 (EN)', 'mindhikers-m1')),
-            Field::make('textarea', 'contact_desc_zh', __('区块描述 (ZH)', 'mindhikers-m1')),
-            Field::make('textarea', 'contact_desc_en', __('区块描述 (EN)', 'mindhikers-m1')),
-            Field::make('complex', 'contact_social_matrix', __('社交矩阵', 'mindhikers-m1'))
-                ->add_fields([
-                    Field::make('text', 'platform_name_zh', __('平台名称 (ZH)', 'mindhikers-m1')),
-                    Field::make('text', 'platform_name_en', __('平台名称 (EN)', 'mindhikers-m1')),
-                    Field::make('text', 'platform_url', __('链接', 'mindhikers-m1')),
-                    Field::make('image', 'platform_qr_image', __('二维码图片', 'mindhikers-m1'))
-                        ->set_help_text(__('用于微信公众号等需要展示二维码的平台', 'mindhikers-m1')),
-                ])
-                ->set_header_template('<% if (platform_name_zh) { %> <%- platform_name_zh %> <% } %>'),
-        ]);
-
     // Product 管理（post meta）
     Container::make('post_meta', __('产品信息', 'mindhikers-m1'))
         ->where('post_type', '=', 'mh_product')
@@ -132,28 +65,6 @@ function m1_register_carbon_fields(): void
                 ]),
             Field::make('text', 'product_entry_url', __('产品入口链接', 'mindhikers-m1')),
             Field::make('checkbox', 'product_is_featured', __('Featured 产品', 'mindhikers-m1')),
-        ]);
-
-    // Product Section 管理（theme options，用于首页 Product 区块展示）
-    Container::make('theme_options', __('Product 区块', 'mindhikers-m1'))
-        ->set_page_menu_position(33)
-        ->set_icon('dashicons-products')
-        ->add_fields([
-            Field::make('text', 'product_title_zh', __('标题 (ZH)', 'mindhikers-m1')),
-            Field::make('text', 'product_title_en', __('标题 (EN)', 'mindhikers-m1')),
-            Field::make('textarea', 'product_desc_zh', __('描述 (ZH)', 'mindhikers-m1')),
-            Field::make('textarea', 'product_desc_en', __('描述 (EN)', 'mindhikers-m1')),
-        ]);
-
-    // Blog Section 管理（theme options，用于首页 Blog 区块展示）
-    Container::make('theme_options', __('Blog 区块', 'mindhikers-m1'))
-        ->set_page_menu_position(34)
-        ->set_icon('dashicons-welcome-write-blog')
-        ->add_fields([
-            Field::make('text', 'blog_title_zh', __('标题 (ZH)', 'mindhikers-m1')),
-            Field::make('text', 'blog_title_en', __('标题 (EN)', 'mindhikers-m1')),
-            Field::make('textarea', 'blog_desc_zh', __('描述 (ZH)', 'mindhikers-m1')),
-            Field::make('textarea', 'blog_desc_en', __('描述 (EN)', 'mindhikers-m1')),
         ]);
 
     // Revalidate 配置

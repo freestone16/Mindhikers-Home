@@ -716,17 +716,10 @@ final class Mindhikers_Cms_Core
         ];
     }
 
-    /**
-     * Build fallback payload from Carbon Fields theme options.
-     *
-     * This bridges the gap when mh_homepage post meta is empty
-     * but Carbon Fields has been seeded (e.g. via m1-seed.php).
-     */
-    private function buildHomepagePayloadFromCarbonFields(string $locale): array
+    private function getDefaultHomepagePayload(string $locale): array
     {
-        if (!function_exists('carbon_get_theme_option')) {
-            return [];
-        }
+        return $this->normalizeHomepagePayload([], $locale);
+    }
 
         $heroQuickLinks = [];
         $rawQuickLinks = carbon_get_theme_option('hero_quick_links');

@@ -40,12 +40,25 @@ echo "[mh-sync-bundle] done."
 echo "[mh-sync-bundle] themes dir listing:"
 ls -la "$TARGET/themes/" || true
 
-SEED_FLAG="$WP_ROOT/.m1-seed-executed"
-if [ ! -f "$SEED_FLAG" ] && [ -f "$BUNDLE/seed/m1-seed.php" ]; then
-  echo "[mh-sync-bundle] executing m1-seed.php (first run)..."
+SEED_SCRIPT="$BUNDLE/seed/m1-seed.php"
+SEED_HASH_FLAG="$WP_ROOT/.m1-seed-hash"
+CURRENT_HASH=""
+
+if [ -f "$SEED_SCRIPT" ]; then
+  CURRENT_HASH=$(md5sum "$SEED_SCRIPT" | awk '{print $1}')
+fi
+
+if [ -f "$SEED_HASH_FLAG" ]; then
+  STORED_HASH=$(cat "$SEED_HASH_FLAG")
+else
+  STORED_HASH=""
+fi
+
+if [ "$CURRENT_HASH" != "" ] && [ "$CURRENT_HASH" != "$STORED_HASH" ]; then
+  echo "[mh-sync-bundle] executing m1-seed.php (hash changed or first run)..."
   cd "$WP_ROOT"
-  php "$BUNDLE/seed/m1-seed.php" || echo "[mh-sync-bundle] seed failed, continuing..."
-  touch "$SEED_FLAG"
+  php "$SEED_SCRIPT" || echo "[mh-sync-bundle] seed failed, continuing..."
+  echo "$CURRENT_HASH" > "$SEED_HASH_FLAG"
   echo "[mh-sync-bundle] seed completed."
 fi
 

@@ -1,110 +1,204 @@
 <?php
 /**
- * M1 Content Seeder — 从生产环境 mindhikers.com 爬取的内容
+ * M1 Content Seeder — 创建 mh_homepage post 作为唯一数据源
  * 执行方式：php /opt/wp-bundle/seed/m1-seed.php
  */
 
 require_once '/var/www/html/wp-load.php';
-require_once '/var/www/html/wp-content/plugins/carbon-fields/carbon-fields-plugin.php';
 
-\Carbon_Fields\Carbon_Fields::boot();
+function m1_build_homepage_payload(string $locale): array
+{
+    $isEn = $locale === 'en';
 
-// ============================================
-// 1. Carbon Fields Theme Options (ZH)
-// ============================================
+    $heroQuickLinks = [
+        [
+            'href'  => '/golden-crucible',
+            'label' => $isEn ? 'Golden Crucible' : '黄金坩埚',
+            'tag'   => $isEn ? 'Product' : '产品',
+        ],
+        [
+            'href'  => '/blog',
+            'label' => $isEn ? 'Carbon-Silicon Evolution' : '碳硅进化论',
+            'tag'   => $isEn ? 'Content' : '文章',
+        ],
+    ];
 
-carbon_set_theme_option('hero_eyebrow_zh', 'MindHikers');
-carbon_set_theme_option('hero_title_zh', '心行者 MindHikers');
-carbon_set_theme_option('hero_desc_zh', '研究复杂问题 · 制作清晰表达 · 实验产品化路径');
-carbon_set_theme_option('hero_cta_primary_text_zh', '查看产品');
-carbon_set_theme_option('hero_cta_primary_url', '#product');
-carbon_set_theme_option('hero_cta_secondary_text_zh', '阅读博客');
-carbon_set_theme_option('hero_cta_secondary_url', '/blog');
+    $contactLinks = [
+        [
+            'href'    => 'mailto:hello@mindhikers.com',
+            'label'   => $isEn ? 'Email' : '发邮件',
+            'note'    => '',
+            'qrImage' => '',
+        ],
+        [
+            'href'    => $isEn ? '/' : '/en',
+            'label'   => $isEn ? 'Chinese home' : 'English home',
+            'note'    => '',
+            'qrImage' => '',
+        ],
+        [
+            'href'    => '/blog',
+            'label'   => $isEn ? 'Blog' : '碳硅进化论',
+            'note'    => '',
+            'qrImage' => '',
+        ],
+    ];
 
-// Quick Links
-carbon_set_theme_option('hero_quick_links', [
-    [
-        'link_label_zh' => '黄金坩埚',
-        'link_label_en' => 'Golden Crucible',
-        'link_url' => '/golden-crucible',
-        'link_tag_zh' => '产品',
-        'link_tag_en' => 'Product',
-    ],
-    [
-        'link_label_zh' => '碳硅进化论',
-        'link_label_en' => 'Carbon-Silicon Evolution',
-        'link_url' => '/blog',
-        'link_tag_zh' => '文章',
-        'link_tag_en' => 'Content',
-    ],
-]);
+    return [
+        'locale'     => $locale,
+        'metadata'   => [
+            'title'       => '心行者 MindHikers',
+            'description' => '',
+        ],
+        'navigation' => [
+            'brand'          => '心行者 MindHikers',
+            'links'          => [],
+            'switchLanguage' => $isEn
+                ? ['href' => '/', 'label' => '中文']
+                : ['href' => '/en', 'label' => 'EN'],
+        ],
+        'hero'       => [
+            'eyebrow'            => 'MindHikers',
+            'title'              => $isEn
+                ? 'A brand home for research, products, and writing that still feels alive.'
+                : '心行者 MindHikers',
+            'description'        => $isEn
+                ? ''
+                : '研究复杂问题 · 制作清晰表达 · 实验产品化路径',
+            'primaryAction'      => [
+                'href'  => '#product',
+                'label' => $isEn ? '' : '查看产品',
+            ],
+            'secondaryAction'    => [
+                'href'  => '/blog',
+                'label' => $isEn ? '' : '阅读博客',
+            ],
+            'highlights'         => [],
+            'statusLabel'        => '',
+            'statusValue'        => '',
+            'availabilityLabel'  => '',
+            'availabilityValue'  => '',
+            'panelTitle'         => 'Quick Links',
+            'quickLinks'         => $heroQuickLinks,
+        ],
+        'about'      => [
+            'title'      => 'About',
+            'intro'      => $isEn
+                ? ''
+                : "<p>MindHikers 是一间一人工作室，主营两件事：</p>\n<p><strong>做内容：</strong>在 YouTube / Bilibili 上研究并讲述复杂议题，面向中文世界的知性探索者。</p>\n<p><strong>做产品：</strong>把创作工作流和研究方法沉淀成工具，先自用，再分享。</p>",
+            'paragraphs' => [],
+            'notes'      => [],
+        ],
+        'product'    => [
+            'title'       => 'Product',
+            'description' => $isEn
+                ? 'A product experiment around research, writing, expression, and creator workflows.'
+                : '一个围绕研究、写作、表达与创作者工作流展开的产品实验。',
+            'headline'    => '',
+            'featured'    => [],
+            'items'       => [],
+        ],
+        'blog'       => [
+            'title'            => $isEn ? 'Carbon-Silicon Evolution' : '碳硅进化论',
+            'description'      => $isEn
+                ? 'Three articles on "Carbon-Silicon Evolution" are now live, discussing AI-era education, embodied experience, and ethical growth.'
+                : '三篇「碳硅进化论」文章已经上线，讨论 AI 时代的教育、肉身经验与伦理成长。',
+            'headline'         => '',
+            'cta'              => [
+                'href'  => '/blog',
+                'label' => $isEn ? 'Browse all posts' : '查看全部文章',
+            ],
+            'emptyLabel'       => '',
+            'readArticleLabel' => 'Read article',
+        ],
+        'contact'    => [
+            'title'             => 'Contact',
+            'description'       => $isEn
+                ? 'Have a collaboration idea, or just want to chat?'
+                : '有合作想法，或者单纯想聊聊？',
+            'headline'          => '',
+            'emailLabel'        => 'Email',
+            'email'             => 'hello@mindhikers.com',
+            'locationLabel'     => 'Base',
+            'location'          => 'Shanghai / Remote',
+            'availabilityLabel' => 'Open to',
+            'availability'      => '',
+            'links'             => $contactLinks,
+        ],
+        'productDetail' => [
+            'eyebrow'        => '',
+            'title'          => '',
+            'summary'        => '',
+            'bullets'        => [],
+            'stageLabel'     => '',
+            'stageValue'     => '',
+            'returnHome'     => [
+                'href'  => $isEn ? '/en' : '/',
+                'label' => $isEn ? 'Back to homepage' : '返回首页',
+            ],
+            'switchLanguage' => [
+                'href'  => $isEn ? '/golden-crucible' : '/en/golden-crucible',
+                'label' => $isEn ? '查看中文版' : 'View in English',
+            ],
+        ],
+    ];
+}
 
-// About
-carbon_set_theme_option('about_title_zh', 'About');
-carbon_set_theme_option('about_content_zh', "<p>MindHikers 是一间一人工作室，主营两件事：</p>
-<p><strong>做内容：</strong>在 YouTube / Bilibili 上研究并讲述复杂议题，面向中文世界的知性探索者。</p>
-<p><strong>做产品：</strong>把创作工作流和研究方法沉淀成工具，先自用，再分享。</p>");
+$locales = ['zh', 'en'];
 
-// Contact
-carbon_set_theme_option('contact_email', 'hello@mindhikers.com');
-carbon_set_theme_option('contact_location_zh', 'Shanghai / Remote');
-carbon_set_theme_option('contact_location_en', 'Shanghai / Remote');
-carbon_set_theme_option('contact_title_zh', 'Contact');
-carbon_set_theme_option('contact_title_en', 'Contact');
-carbon_set_theme_option('contact_desc_zh', '有合作想法，或者单纯想聊聊？');
-carbon_set_theme_option('contact_desc_en', 'Have a collaboration idea, or just want to chat?');
+foreach ($locales as $locale) {
+    $payload = m1_build_homepage_payload($locale);
+    $jsonPayload = wp_json_encode($payload);
 
-// Social Matrix
-carbon_set_theme_option('contact_social_matrix', [
-    [
-        'platform_name_zh' => '发邮件',
-        'platform_name_en' => 'Email',
-        'platform_url' => 'mailto:hello@mindhikers.com',
-    ],
-    [
-        'platform_name_zh' => 'English home',
-        'platform_name_en' => 'English home',
-        'platform_url' => '/en',
-    ],
-    [
-        'platform_name_zh' => '碳硅进化论',
-        'platform_name_en' => 'Blog',
-        'platform_url' => '/blog',
-    ],
-]);
+    $existing = get_posts([
+        'post_type'      => 'mh_homepage',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+        'meta_key'       => 'mindhikers_locale',
+        'meta_value'     => $locale,
+        'orderby'        => 'modified',
+        'order'          => 'DESC',
+    ]);
 
-// Product section titles
-carbon_set_theme_option('product_title_zh', 'Product');
-carbon_set_theme_option('product_title_en', 'Product');
-carbon_set_theme_option('product_desc_zh', '一个围绕研究、写作、表达与创作者工作流展开的产品实验。');
-carbon_set_theme_option('product_desc_en', 'A product experiment around research, writing, expression, and creator workflows.');
+    if (!empty($existing)) {
+        $postId = $existing[0]->ID;
+        update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
+        echo "Updated mh_homepage post for {$locale}: {$postId}\n";
+    } else {
+        $postId = wp_insert_post([
+            'post_type'   => 'mh_homepage',
+            'post_title'  => $locale === 'zh' ? 'Homepage ZH' : 'Homepage EN',
+            'post_status' => 'publish',
+            'post_name'   => "homepage-{$locale}",
+        ]);
+        if ($postId && !is_wp_error($postId)) {
+            update_post_meta($postId, 'mindhikers_locale', $locale);
+            update_post_meta($postId, 'mindhikers_homepage_payload', $jsonPayload);
+            echo "Created mh_homepage post for {$locale}: {$postId}\n";
+        } else {
+            echo "Failed to create mh_homepage post for {$locale}\n";
+        }
+    }
+}
 
-// Blog section titles
-carbon_set_theme_option('blog_title_zh', '碳硅进化论');
-carbon_set_theme_option('blog_title_en', 'Carbon-Silicon Evolution');
-carbon_set_theme_option('blog_desc_zh', '三篇「碳硅进化论」文章已经上线，讨论 AI 时代的教育、肉身经验与伦理成长。');
-carbon_set_theme_option('blog_desc_en', 'Three articles on "Carbon-Silicon Evolution" are now live, discussing AI-era education, embodied experience, and ethical growth.');
-
-echo "Theme options seeded (ZH).\n";
-
-// ============================================
-// 2. Product CPT: 黄金坩埚 ZH + EN
-// ============================================
+echo "Homepage posts seeded.\n";
 
 $zh_product_id = wp_insert_post([
-    'post_type'   => 'mh_product',
-    'post_title'  => '黄金坩埚',
+    'post_type'    => 'mh_product',
+    'post_title'   => '黄金坩埚',
     'post_content' => '一个围绕研究、写作、表达与创作者工作流展开的产品实验。2026年5月待开放：AI 辅助深度写作工作流、知识管理模板、创作者效率工具集。',
     'post_excerpt' => '一个围绕研究、写作、表达与创作者工作流展开的产品实验。',
-    'post_status' => 'publish',
-    'post_name'   => 'golden-crucible',
+    'post_status'  => 'publish',
+    'post_name'    => 'golden-crucible',
 ]);
 
 if ($zh_product_id && !is_wp_error($zh_product_id)) {
-    carbon_set_post_meta($zh_product_id, 'product_subtitle', '已上线');
-    carbon_set_post_meta($zh_product_id, 'product_status', 'live');
-    carbon_set_post_meta($zh_product_id, 'product_entry_url', '/golden-crucible');
-    carbon_set_post_meta($zh_product_id, 'product_is_featured', true);
+    if (function_exists('carbon_set_post_meta')) {
+        carbon_set_post_meta($zh_product_id, 'product_subtitle', '已上线');
+        carbon_set_post_meta($zh_product_id, 'product_status', 'live');
+        carbon_set_post_meta($zh_product_id, 'product_entry_url', '/golden-crucible');
+        carbon_set_post_meta($zh_product_id, 'product_is_featured', true);
+    }
     echo "ZH Product created: {$zh_product_id}\n";
 
     if (function_exists('pll_set_post_language')) {
@@ -116,19 +210,21 @@ if ($zh_product_id && !is_wp_error($zh_product_id)) {
 }
 
 $en_product_id = wp_insert_post([
-    'post_type'   => 'mh_product',
-    'post_title'  => 'Golden Crucible',
+    'post_type'    => 'mh_product',
+    'post_title'   => 'Golden Crucible',
     'post_content' => 'A product experiment around research, writing, expression, and creator workflows. Coming May 2026: AI-assisted deep writing workflow, knowledge management templates, creator efficiency toolkit.',
     'post_excerpt' => 'A product experiment around research, writing, expression, and creator workflows.',
-    'post_status' => 'publish',
-    'post_name'   => 'golden-crucible',
+    'post_status'  => 'publish',
+    'post_name'    => 'golden-crucible',
 ]);
 
 if ($en_product_id && !is_wp_error($en_product_id)) {
-    carbon_set_post_meta($en_product_id, 'product_subtitle', 'Live now');
-    carbon_set_post_meta($en_product_id, 'product_status', 'live');
-    carbon_set_post_meta($en_product_id, 'product_entry_url', '/en/golden-crucible');
-    carbon_set_post_meta($en_product_id, 'product_is_featured', false);
+    if (function_exists('carbon_set_post_meta')) {
+        carbon_set_post_meta($en_product_id, 'product_subtitle', 'Live now');
+        carbon_set_post_meta($en_product_id, 'product_status', 'live');
+        carbon_set_post_meta($en_product_id, 'product_entry_url', '/en/golden-crucible');
+        carbon_set_post_meta($en_product_id, 'product_is_featured', false);
+    }
     echo "EN Product created: {$en_product_id}\n";
 
     if (function_exists('pll_set_post_language')) {
