@@ -14,3 +14,8 @@ out
 .env
 .env.*
 !.env.example
+
+# Exclude pnpm lockfile to avoid RAILPACK parsing bug
+# (it misreads lockfileVersion: '9.0' as pnpm version 9)
+# RAILPACK will use engines.pnpm instead
+pnpm-lock.yaml
