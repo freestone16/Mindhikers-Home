@@ -1,122 +1,129 @@
-🕐 Last updated: 2026-04-28 01:00 CST
+🕐 Last updated: 2026-04-30 CST
 🌿 Branch: `staging`
-📌 Latest commit: `a3140ba` ops: use exact pnpm version 9.15.9 for RAILPACK
-🚀 Push status: ✅ 已 push，前台部署 FAILED
+📌 Latest commit on staging: `a57bff5` ops(railpack): add packageManager field for corepack-style resolution
+🚀 Push status: ✅ 已 push，前台 Plan B 部署 SUCCESS
 
 ---
 
-## 当前状态：根目录 railway.json 全局 DOCKERFILE 问题已定位，前台仍 502
+## 当前状态：staging 全绿，production 在跑但配置脆弱
 
-**一句话**：根目录 `railway.json` 错误地把 WordPress Dockerfile 推给了所有服务，前台 Next.js 因此跑成 WordPress。已做配置分离，但前台改用 RAILPACK builder 后遭遇 Railpack pnpm 解析 bug，连续 4 次部署全部失败。后台 WordPress 正常。
+**一句话**：staging 前台 502 已修复（Railpack pnpm 9.x 不支持，改用 `packageManager` 字段触发 corepack 路径绕开）。staging 可以验收。Production 当前还在跑 4 天前那次成功部署的旧镜像，但 main 分支当前的配置组合（RAILPACK builder + 缺 `packageManager`）跟修复前的 staging 一样脆弱——下次推任何 commit 到 main 都会复现 pnpm 解析失败。
+
+---
+
+## 验收域名 & 状态（2026-04-30 实测）
+
+### Staging（本次修复目标，✅ 全绿）
+
+| 角色 | 域名 | HTTP | 说明 |
+|---|---|---|---|
+| 前台 Next.js | https://mindhikers-homepage-staging.up.railway.app | **200** | ✅ Plan B 修复后正常，Next.js 16.1.7 在跑 |
+| 后台 WordPress | https://wordpress-l1ta-staging.up.railway.app | 200 | ✅ Apache+PHP 正常 |
+| ZH API | https://wordpress-l1ta-staging.up.railway.app/wp-json/mindhikers/v1/homepage/zh | 200 | ✅ |
+| EN API | https://wordpress-l1ta-staging.up.railway.app/wp-json/mindhikers/v1/homepage/en | 200 | ✅ |
+
+### Production（暂时在跑，⚠️ 配置已脆弱）
+
+| 角色 | 域名 | HTTP | 说明 |
+|---|---|---|---|
+| 前台主域名 | https://mindhikers.com | 200 | ⚠️ 跑的是 4-24 的旧镜像（commit `a7cabf16`） |
+| 前台 www | https://www.mindhikers.com | 301 → mindhikers.com | ⚠️ 同上 |
+| 前台 Railway | https://mindhikers-homepage-production.up.railway.app | 200 | ⚠️ 同上 |
+| 后台 CMS | https://homepage-manage.mindhikers.com | 302（登录跳转，正常） | ✅ |
+| 后台 Railway | https://wordpress-l1ta-production.up.railway.app | 200 | ✅ |
+| ZH API（prod） | https://homepage-manage.mindhikers.com/wp-json/mindhikers/v1/homepage/zh | 200 | ✅ |
+
+⚠️ 标记说明：production 前台**当前能访问**没问题，但 main 分支的 `railway.json` 已经被 commit `8744c4f` 切到 RAILPACK，且 main 上的 `package.json` 还没有 `packageManager` 字段——下次任何 push 到 main 都会复现 staging 之前那 5 次失败。production 只是"还没触发部署"才暂时活着。
 
 ---
 
 ## 本窗口完成内容
 
-### ✅ 已完成
+### ✅ 修复路径（A→B→C→D 递进策略，止步于 B）
 
-1. **诊断前台 502 根因**
-   - Railway 项目有 3 个服务：WordPress-L1ta、Mindhikers-Homepage、MariaDB
-   - 根目录 `railway.json` 配置 `builder: "DOCKERFILE"`，被所有服务共享
-   - 前台 Next.js 服务因此被强制使用 WordPress Dockerfile，启动 PHP+Apache 而非 Next.js
-   - 结果：前台返回 502（实际上跑的是 WordPress 镜像，没有前台路由）
+1. **重新诊断**：上一份 HANDOFF 把"前台 502"归因为"Railpack pnpm bug 阻塞构建"——表面对，但有遗漏：Railway 在新部署连续失败时**自动回滚到 9 小时前那次 SUCCESS 的镜像**（基于当时根目录 `railway.json` 还是 DOCKERFILE + WordPress Dockerfile），所以前台容器实际跑的是 Apache+WordPress，前端访问当然 502。这点纠偏靠 `railway logs --build`/`railway logs --deployment` 直接拉 ACTIVE 部署日志看到 `Apache/2.4.66 (Debian) PHP/8.3.30 configured` 验证。
 
-2. **分离 WordPress 后台构建配置**
-   - 新建 `ops/mindhikers-cms-runtime/railway.json`（内容与原根目录一致）
-   - 在 Railway Dashboard → WordPress-L1ta 服务 → Settings → Config File 绑定：`/ops/mindhikers-cms-runtime/railway.json`
-   - 验证：WordPress 重新部署 SUCCESS，API 正常 200
+2. **拿到 Railpack 真实错误**（用 `railway logs --build --latest`，此前 5 次失败的原始 build log）：
+   ```
+   using build driver railpack-v0.23.0
+   ↳ Detected Node
+   ↳ Using pnpm package manager
+   ✖ Failed to resolve version 9.15.9 of pnpm
+   railpack process exited with an error
+   ```
 
-3. **修改根目录 `railway.json` 为前台 Next.js 配置**
-   - 将 `builder: "DOCKERFILE"` 改为 `builder: "RAILPACK"`
-   - 删除 `dockerfilePath`（不再需要）
+3. **Plan A**（commit `18106e9`）：删除 `package.json` 的 `engines.pnpm: "9.15.9"`。
+   - 结果：FAILED，但错误从 "9.15.9" 变成 "**9**"——证明 Railpack 退而读 `pnpm-lock.yaml` 的 `lockfileVersion: '9.0'` 推断主版本，但**连主版本 9 也解析不了**。结论：Railpack 0.23.0 的内置 pnpm 版本索引根本不支持 pnpm 9.x 系列。
 
-4. **RAILPACK pnpm 版本解析问题 — 4 次尝试全部失败**
-   - 尝试 1：纯 RAILPACK，无额外配置 → `Failed to resolve version 9 of pnpm`
-   - 尝试 2：`package.json` 加 `"pnpm": ">=9.0.0"` → 同上
-   - 尝试 3：`.dockerignore` 排除 `pnpm-lock.yaml` → 同上
-   - 尝试 4：`package.json` 改为 `"pnpm": "9.15.9"` → `Failed to resolve version 9.15.9 of pnpm`
-   - **结论**：Railpack v0.23.0 的 pnpm 版本解析器存在根本性 bug，不是配置问题
+4. **Plan B**（commit `a57bff5`）：在 `package.json` 加 `"packageManager": "pnpm@9.15.9"`（Corepack 标准字段）。
+   - 结果：**SUCCESS**。Railpack 看到 `packageManager` 后改走 corepack 路径，直接从 npm 拉 pnpm 9.15.9（绕过 Railpack 自己的版本索引）。Build log 出现 `copy /opt/corepack` 是直接证据。Next.js build 全过，所有路由（包括 `/`、`/en`、`/api/revalidate`、`/health` 等）正常生成；deploy log 显示 `▲ Next.js 16.1.7 ✓ Ready in 141ms`。
 
-5. **提交的 commit 序列**
-   | hash | message | 说明 |
-   |---|---|---|
-   | `125743e` | ops: add WordPress-specific railway.json for per-service build config | WordPress 专用配置 |
-   | `61f395d` | ops: switch root railway.json to RAILPACK for Next.js frontend | 根目录切 RAILPACK |
-   | `eb4ebca` | ops: add pnpm engine version to fix RAILPACK auto-detection | engines 加 pnpm |
-   | `8a0bf24` | ops: exclude pnpm-lock.yaml from RAILPACK to bypass version parsing bug | dockerignore 排除 lock |
-   | `a3140ba` | ops: use exact pnpm version 9.15.9 for RAILPACK | 精确版本号 |
+5. **未启用方案 C（NIXPACKS）和 D（写 Dockerfile）**——B 已成功，无需。
+
+### 关键技术发现（值得长期记忆）
+
+> **Railpack v0.23.0 的内置 pnpm 版本索引不包含 pnpm 9.x 系列**。
+> 修法：在 `package.json` 设置 `"packageManager": "pnpm@<version>"`（Corepack 标准字段）。Railpack 会改走 corepack 路径，从 npm 直接安装精确版本。
+> 注意：`engines.pnpm` 字段反而会触发 Railpack 自身的 resolver，建议在用 Railpack + pnpm 9.x 时**只用 `packageManager`，不要再写 `engines.pnpm`**。
 
 ---
 
-### ❌ 当前阻塞
+## 现在留下的两组 commit（都在 staging）
 
-**RAILPACK pnpm 版本解析 bug**
-
-- 现象：Railpack v0.23.0 在解析 pnpm 版本时始终失败
-- 错误信息：`Failed to resolve version 9 of pnpm` / `Failed to resolve version 9.15.9 of pnpm`
-- 影响：前台 Next.js 服务无法构建，无法部署
-- 根因分析：Railpack 从 `pnpm-lock.yaml` 读取 `lockfileVersion: '9.0'`，误将其当作 pnpm 版本号去请求（如请求 npm 仓库 `pnpm@9` 或 `pnpm@9.15.9`），但该版本不存在导致解析失败。即使 `engines.pnpm` 声明了版本、即使排除 lockfile，Railpack 内部逻辑仍可能保留缓存或解析路径
-
----
-
-## 验收域名
-
-| 环境 | 域名 | 状态 |
+| hash | message | 状态 |
 |---|---|---|
-| 后台 CMS | `https://wordpress-l1ta-staging.up.railway.app/wp-admin` | ✅ 正常 |
-| 前台 Next.js | `https://mindhikers-homepage-staging.up.railway.app` | ❌ 502（RAILPACK 构建失败） |
-| ZH API | `https://wordpress-l1ta-staging.up.railway.app/wp-json/mindhikers/v1/homepage/zh` | ✅ 正常 |
-| EN API | `https://wordpress-l1ta-staging.up.railway.app/wp-json/mindhikers/v1/homepage/en` | ✅ 正常 |
+| `a57bff5` | ops(railpack): add packageManager field for corepack-style resolution | ✅ Plan B，让 staging build 通过 |
+| `18106e9` | ops(railpack): drop engines.pnpm to bypass Railpack version resolver | Plan A，删除有害的 engines.pnpm |
+| `e01c584` | docs(handoff): update Railway build config split and RAILPACK pnpm bug status | 上一份 HANDOFF |
+| `a3140ba` ~ `61f395d` | 之前 5 次失败尝试 | 历史，可保留也可后续 squash |
+| `125743e` | ops: add WordPress-specific railway.json for per-service build config | WordPress 配置分离，已生效 |
 
 ---
 
-## 下一步（需要决策）
+## 下一步建议（需要老卢决策）
 
-**核心问题**：如何修复前台 Next.js 服务的构建方式，绕过 RAILPACK pnpm bug。
+### 待办 1：把 Plan B 修复合到 main，让 production 也安全
 
-| 方案 | 做法 | 风险 | 工作量 |
-|---|---|---|---|
-| **A. 改用 NIXPACKS** | `railway.json` builder 从 `RAILPACK` 改为 `NIXPACKS` | NIXPACKS 是旧版，可能对 pnpm 9 支持也不好；可能同样失败 | 1 分钟改配置 |
-| **B. 给前台写 Dockerfile** | 新建 `ops/frontend/Dockerfile`，基于 Node 镜像手动 `pnpm install` → `pnpm build` → `pnpm start` | 最可控，但需要写 Dockerfile；需要测试本地构建 | 10-15 分钟 |
-| **C. 改回 DOCKERFILE + 分别配置** | 根目录 `railway.json` 恢复 DOCKERFILE builder，前台另写一个 Next.js Dockerfile | 两个服务都用 DOCKERFILE，最一致；需要写前台 Dockerfile | 10-15 分钟 |
-| **D. 删除 `railway.json` 让 Railway 自动检测** | 不指定 builder，看 Railway 自己选什么 | 可能还是选 RAILPACK（检测到 Node.js 后默认用 RAILPACK），继续失败 | 1 分钟 |
-| **E. 降级 pnpm 版本** | 尝试 `engines.pnpm: "8.15.0"`，pnpm 8 的 lockfileVersion 不同 | 需要重新生成 lockfile（pnpm install），可能影响依赖兼容性 | 5-10 分钟 |
+**为什么必须做**：production 现在能访问，是因为 4-24 那次 SUCCESS 镜像还在 ACTIVE。但 main 分支 `8744c4f` 已经把 builder 切到 RAILPACK，**下次 push 到 main 触发部署就会炸**。
 
-**推荐方案**：**B**（前台专用 Dockerfile），因为：
-1. RAILPACK 的 pnpm 解析器明显有 bug，NIXPACKS 也可能同样问题
-2. Dockerfile 最可控，不受 Railway builder 解析器影响
-3. 之前 DOCKERFILE builder 对 WordPress 的构建是成功的，说明 DOCKERFILE builder 本身没问题
+**怎么做**（任选其一）：
+- 选项 a：`git checkout main && git merge staging`（带过去全部 staging 的修改，包括 MIN-30 那批 debug 历史）。然后 push origin main，触发 production 自动部署。
+- 选项 b：cherry-pick 最小修复集到 main（只挑 `18106e9` + `a57bff5`），让 production 部署只带必需的修复。其他 staging 上的内容延后再合。
+- 选项 c：现在不动 main，让 production 继续跑 4-24 的旧镜像，等下一次正常 release 时一起合。**风险**：万一 Railway 出于任何原因（Metal builder 升级、image GC 等）需要重新 build，production 会瞬间挂掉。
+
+我推荐：**选项 b**（cherry-pick 最小修复，立刻合 main 并 push，让 production 重新部署一遍验证它也能 build 出来）。这样 production 配置也进入"健康"状态，不再有定时炸弹。
+
+### 待办 2：HANDOFF 之外的清理（次要）
+
+- staging 上 5 次失败尝试的 commit（`61f395d` ~ `a3140ba`）历史价值已经定格在这份 HANDOFF 里。是否 squash 看团队习惯。
+- `.dockerignore` 在 `8a0bf24` 加过的"排除 pnpm-lock.yaml"那行——其实现在已经不需要了（Plan B 走 corepack 不依赖那个排除）。可以反向 review 后再决定是否回退。
 
 ---
 
 ## 给新窗口的上下文
 
-- 当前分支：`staging`
-- 当前 commit：`a3140ba`
-- WordPress 后台：`Online`，API 正常，Dashboard 上 WordPress-L1ta 服务已绑定 `ops/mindhikers-cms-runtime/railway.json`
-- 前台 Next.js：`502`，Mindhikers-Homepage 服务使用根目录 `railway.json`（builder: RAILPACK），连续 4 次部署 FAILED
-- Railway 项目：`Mindhikers-Homepage`，staging 环境，3 个服务
-- 验证命令：
-  - 后台 API：`curl -sL "https://wordpress-l1ta-staging.up.railway.app/wp-json/mindhikers/v1/homepage/en"`
-  - 前台状态：`curl -sL "https://mindhikers-homepage-staging.up.railway.app"`
-- 关键文件变更（未合并到 main）：
-  - `ops/mindhikers-cms-runtime/railway.json`（新建）
-  - `railway.json`（从 DOCKERFILE 改为 RAILPACK）
-  - `package.json`（engines 加 pnpm）
-  - `.dockerignore`（排除 pnpm-lock.yaml）
+- **当前分支**：`staging`，最新 commit `a57bff5`，与 origin/staging 同步
+- **当前 staging 状态**：前后台都正常，可以验收
+- **production 状态**：当前 ACTIVE 部署是 4-24 的 commit `a7cabf16`（基于当时的 main 分支配置），跑得好；但 main 分支当前 HEAD `95008e6` 的配置（RAILPACK + 缺 `packageManager`）一旦触发新部署就会失败
+- **Railway 项目**：`Mindhikers-Homepage`，三个服务（Mindhikers-Homepage / WordPress-L1ta / MariaDB）
+- **CLI 用法快速参考**：
+  - 看任意 deployment 的 build log：`railway logs --build <DEPLOYMENT_ID>`
+  - 看最新（即使失败）：`railway logs --build --latest`
+  - 列部署：`railway deployment list --json`
+  - 切环境：`railway environment <staging|production>`
+  - 切 service：`railway service <Mindhikers-Homepage|WordPress-L1ta|MariaDB>`
 
 ---
 
-## 回退手段
+## 回退手段（仅 staging）
 
-如需回退到 502 之前的已知状态：
+如需回退本次 staging 修复：
 ```bash
-git checkout 8a77167 -- railway.json
-git reset --soft 8a77167
-git checkout HEAD -- package.json .dockerignore
-git push origin staging --force  # ⚠️ 需要老卢确认
+git checkout staging
+git revert a57bff5 18106e9  # 撤销 Plan A + Plan B
+git push origin staging
 ```
-> 注意：`8a77167` 是上一个已知状态（根目录 railway.json 为 DOCKERFILE，前台 502），回退不会修复前台，只是回到可预测状态。
+> 回退后 staging 会立刻回到 502，因为 RAILPACK 又会被 pnpm 9.x 卡住。无确切理由不要回退。
 
 ---
 
