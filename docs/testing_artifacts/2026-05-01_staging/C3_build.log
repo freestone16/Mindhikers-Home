@@ -1,0 +1,192 @@
+[snapshot] received sha256:423713c19ea4e7c731f635302edf73e17839f13852b8aaa4d2af06c2d333a053 md5:cae229031ee329612e1602db3778eda4
+[INFO] receiving snapshot
+[DBUG] skipping 'Dockerfile' at 'ops/mindhikers-cms-runtime/Dockerfile' as it is not rooted at a valid path (root_dir=, fileOpts={acceptChildOfRepoRoot:false})
+[DBUG] skipping 'railway.json' at 'ops/mindhikers-cms-runtime/railway.json' as it is not rooted at a valid path (root_dir=, fileOpts={acceptChildOfRepoRoot:true})
+[DBUG] found 'railway.json' at 'railway.json'
+[INFO] analyzing snapshot
+[INFO] uploading snapshot
+[INFO] unpacking archive
+scheduling build on Metal builder "builder-dslylg"
+using build driver railpack-v0.23.0
+                   
+[38;2;125;86;243m╭─────────────────╮[0m
+[38;2;125;86;243m│[0m Railpack 0.23.0 [38;2;125;86;243m│[0m
+[38;2;125;86;243m╰─────────────────╯[0m
+
+  [97m↳ Found .dockerignore file, applying filters[0m
+  [97m↳ Detected Node[0m
+  [97m↳ Using pnpm package manager[0m
+  [97m↳ Installing pnpm@9.15.9 with Corepack[0m
+            
+  [1mPackages[0m  
+  [38;5;238m──────────[0m
+  [95mnode[0m  [38;5;238m│[0m  [96m20.20.2[0m  [38;5;238m│[0m  package.json > engines > node (>=20.9.0)
+  [95mpnpm[0m  [38;5;238m│[0m  [96m9.15.9[0m   [38;5;238m│[0m  package.json > packageManager (9.15.9)
+            
+  [1mSteps[0m     
+  [38;5;238m──────────[0m
+  [95m▸ install[0m
+    [38;5;245m$[0m [1mnpm i -g corepack@latest && corepack enable && corepack prepare --activate[0m
+    [38;5;245m$[0m [1mpnpm install --frozen-lockfile --prefer-offline[0m
+         
+  [95m▸ build[0m
+    [38;5;245m$[0m [1mpnpm run build[0m
+            
+  [1mDeploy[0m    
+  [38;5;238m──────────[0m
+    [38;5;245m$[0m [1mpnpm run start[0m
+
+[INFO] resolve image config for docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0
+[INFO] resolve image config for docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0
+[INFO] docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0@sha256:ba4c430961d9ee3215c64807727a4b11e2198daac31250e9db9eaf9cee4624d6
+[INFO] docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0@sha256:ba4c430961d9ee3215c64807727a4b11e2198daac31250e9db9eaf9cee4624d6
+[INFO] docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0@sha256:ba4c430961d9ee3215c64807727a4b11e2198daac31250e9db9eaf9cee4624d6
+[INFO] docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0@sha256:ba4c430961d9ee3215c64807727a4b11e2198daac31250e9db9eaf9cee4624d6
+[INFO] load build definition from ./railpack-plan.json
+[INFO] load build definition from ./railpack-plan.json
+[INFO] load build definition from ./railpack-plan.json
+[INFO] load build definition from ./railpack-plan.json
+[INFO] copy /mise/shims
+[INFO] docker-image://ghcr.io/railwayapp/railpack-runtime:mise-2026.3.17
+[INFO] create mise config
+[INFO] copy package.json
+[INFO] copy package.json
+[INFO] mkdir /etc/mise
+[INFO] copy pnpm-lock.yaml
+[INFO] install apt packages: libatomic1
+[INFO] copy /etc/mise/config.toml
+[INFO] copy .npmrc
+[INFO] mkdir -p /app/node_modules/.cache
+[INFO] copy /mise/installs
+[INFO] install mise packages: node
+[INFO] npm i -g corepack@latest && corepack enable && corepack prepare --activate
+[INFO] copy /usr/local/bin/mise
+[INFO] pnpm install --frozen-lockfile --prefer-offline
+[INFO] docker-image://ghcr.io/railwayapp/railpack-builder:mise-2026.3.17
+[INFO] loading .
+[INFO] copy / /app
+[INFO] copy /root/.local/state/mise
+[INFO] [railpack] merge $packages:apt:runtime, $packages:mise, $build, $build
+[INFO] copy /opt/corepack
+[INFO] copy /app
+[INFO] copy /root/.cache
+[INFO] copy /app/node_modules
+[INFO] pnpm run build
+[INFO] [railpack] secrets hash
+[INFO] copy /.env.example /app/.env.example
+[INFO] docker-image://ghcr.io/railwayapp/railpack-runtime:mise-2026.3.17
+[INFO] loading .
+[INFO] [railpack] secrets hash
+[INFO] [railpack] secrets hash
+[INFO] docker-image://ghcr.io/railwayapp/railpack-builder:mise-2026.3.17
+[INFO] docker-image://ghcr.io/railwayapp/railpack-builder:mise-2026.3.17
+[INFO] loading .
+[INFO] [railpack] secrets hash
+[INFO] docker-image://ghcr.io/railwayapp/railpack-runtime:mise-2026.3.17
+[INFO] [railpack] secrets hash
+[INFO] loading .
+[INFO] mkdir /etc/mise
+[INFO] create mise config
+[INFO] install mise packages: node
+[INFO] copy package.json
+[INFO] npm i -g corepack@latest && corepack enable && corepack prepare --activate
+[INFO] mkdir -p /app/node_modules/.cache
+[INFO] copy .npmrc
+[INFO] copy package.json
+[INFO] copy pnpm-lock.yaml
+[INFO] pnpm install --frozen-lockfile --prefer-offline
+[INFO] copy / /app
+[INFO] copy / /app
+[INFO] copy /.env.example /app/.env.example
+[INFO] copy /.env.example /app/.env.example
+[INFO] pnpm run build
+[INFO] 
+> porfolio@0.1.0 build /app
+> next build
+
+
+[INFO] Starting content-collections content-collections.ts
+
+[INFO] build started ...
+
+[INFO] ... finished build of 1 collection and 0 documents in 5ms
+
+[INFO] ▲ Next.js 16.1.7 (Turbopack)
+
+[INFO] 
+[INFO]   Creating an optimized production build ...
+
+[INFO] ✓ Compiled successfully in 3.4s
+
+[INFO]   Running TypeScript ...
+
+[INFO]   Collecting page data using 31 workers ...
+
+[INFO] ⚠ Using edge runtime on a page currently disables static generation for that page
+
+[INFO]   Generating static pages using 31 workers (0/14) ...
+
+[INFO]   Generating static pages using 31 workers (3/14) 
+
+[INFO]   Generating static pages using 31 workers (6/14) 
+
+[INFO]   Generating static pages using 31 workers (10/14) 
+
+[INFO] ✓ Generating static pages using 31 workers (14/14) in 752.3ms
+
+[INFO]   Finalizing page optimization ...
+
+[INFO] 
+[INFO] Route (app)                                                       Revalidate  Expire
+┌ ○ /                                                                     5m      1y
+├ ○ /_not-found
+├ ƒ /api/revalidate
+├ ƒ /blog
+├ ● /blog/[slug]                                                          5m      1y
+│ ├ /blog/testing-react-applications-a-practical-guide                    5m      1y
+│ ├ /blog/rest-api-design-principles-that-stand-the-test-of-time          5m      1y
+│ └ /blog/git-workflow-guide-from-chaos-to-clarity                        5m      1y
+├ ƒ /blog/[slug]/opengraph-image
+├ ƒ /blog/opengraph-image
+├ ○ /en                                                                   5m      1y
+├ ○ /en/golden-crucible
+├ ƒ /en/product/[slug]
+├ ○ /golden-crucible
+├ ƒ /health
+├ ƒ /opengraph-image
+├ ƒ /product/[slug]
+└ ○ /robots.txt
+
+
+[INFO] 
+[INFO] ○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[INFO] pnpm run build
+[INFO] copy /root/.cache
+[INFO] copy /mise/shims
+[INFO] copy /mise/installs
+[INFO] copy /usr/local/bin/mise
+[INFO] copy /etc/mise/config.toml
+[INFO] copy /root/.local/state/mise
+[INFO] install apt packages: libatomic1
+[INFO] copy /app/node_modules
+[INFO] copy /app/node_modules
+[INFO] copy /app
+[INFO] install apt packages: libatomic1
+[INFO] copy /app
+[INFO] copy /opt/corepack
+[INFO] copy /opt/corepack
+[INFO] [railpack] merge $packages:apt:runtime, $packages:mise, $build, $build
+[INFO] [railpack] merge $packages:apt:runtime, $packages:mise, $build, $build
+[INFO] exporting to docker image format
+[INFO] docker-image://ghcr.io/railwayapp/railpack-runtime:mise-2026.3.17
+[INFO] docker-image://ghcr.io/railwayapp/railpack-runtime:mise-2026.3.17
+[INFO] exporting to docker image format
+containerimage.descriptor: eyJtZWRpYVR5cGUiOiJhcHBsaWNhdGlvbi92bmQub2NpLmltYWdlLm1hbmlmZXN0LnYxK2pzb24iLCJkaWdlc3QiOiJzaGEyNTY6OGRjY2ZmYmNkODVhODE4ZGU2NGU3M2UyNjgwMTlmNGZjNWRiMTE3Y2MxNGY0OWQzNzA1ZDcxZDY5YjE5ZDZiMyIsInNpemUiOjI1ODEsImFubm90YXRpb25zIjp7Im9yZy5vcGVuY29udGFpbmVycy5pbWFnZS5jcmVhdGVkIjoiMjAyNi0wNS0wMVQxMzoyODo0NloifSwicGxhdGZvcm0iOnsiYXJjaGl0ZWN0dXJlIjoiYW1kNjQiLCJvcyI6ImxpbnV4In19
+containerimage.config.digest: sha256:647341ae7f8bfd7ada4d5952a8d0510c15b31aee27f83fde095860284f5c7279
+containerimage.digest: sha256:8dccffbcd85a818de64e73e268019f4fc5db117cc14f49d3705d71d69b19d6b3
+[INFO] image push
+[INFO] image push

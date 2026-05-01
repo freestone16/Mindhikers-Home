@@ -1,0 +1,1 @@
+Lighthouse CLI missing; PageSpeed Insights API did not return within 150 seconds and was terminated.

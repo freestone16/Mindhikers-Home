@@ -1,0 +1,20 @@
+HTTP/2 200 
+cache-control: private, no-cache, no-store, max-age=0, must-revalidate
+content-security-policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data: blob: https://images.unsplash.com https://*.railway.app https://*.wordpress.com; font-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https: ws: wss:; media-src 'self' https:
+content-type: text/html; charset=utf-8
+date: Fri, 01 May 2026 13:39:36 GMT
+link: </_next/static/media/CabinetGrotesk_Medium-s.p.51c46af4.ttf>; rel=preload; as="font"; crossorigin=""; type="font/ttf", </_next/static/media/ClashDisplay_Semibold-s.p.c5d4e33f.ttf>; rel=preload; as="font"; crossorigin=""; type="font/ttf"
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: railway-edge
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-powered-by: Next.js
+x-railway-edge: railway/asia-southeast1-eqsg3a
+x-railway-request-id: WcSjgtzXQDK2usLJ-8Y8hA
+x-railway-cdn-edge: fastly/cache-sin-wsss1830070-SIN
+x-cache: MISS
+x-cache-hits: 0
+x-served-by: cache-sin-wsss1830070-SIN
+

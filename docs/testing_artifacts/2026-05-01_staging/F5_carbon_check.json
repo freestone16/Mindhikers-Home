@@ -1,0 +1,15 @@
+{
+  "hasHero": true,
+  "hasSections": false,
+  "keys": [
+    "about",
+    "blog",
+    "contact",
+    "hero",
+    "locale",
+    "metadata",
+    "navigation",
+    "product",
+    "productDetail"
+  ]
+}

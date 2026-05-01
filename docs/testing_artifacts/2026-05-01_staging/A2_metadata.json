@@ -1,0 +1,24 @@
+{
+  "title": "心行者 MindHikers | 心行者 Mindhikers",
+  "lang": "zh-CN",
+  "meta_description": null,
+  "robots": [
+    "index, follow"
+  ],
+  "og": {
+    "og:title": "心行者 MindHikers | 心行者 Mindhikers",
+    "og:locale": "en_US",
+    "og:locale:alternate": "zh_CN"
+  },
+  "canonical": null,
+  "hreflang": [
+    [
+      "zh-Hans",
+      "https://www.mindhikers.com"
+    ],
+    [
+      "en",
+      "https://www.mindhikers.com/en"
+    ]
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Git Workflow Guide: From Chaos to Clarity | 心行者 Mindhikers",
+  "lang": "zh-CN",
+  "meta_description": "Master Git workflows that keep your team productive and your codebase healthy.",
+  "og": {
+    "og:title": "Git Workflow Guide: From Chaos to Clarity",
+    "og:description": "Master Git workflows that keep your team productive and your codebase healthy.",
+    "og:url": "https://www.mindhikers.com/blog/git-workflow-guide-from-chaos-to-clarity",
+    "og:image:alt": "Blog Post",
+    "og:image:type": "image/png",
+    "og:image": "https://www.mindhikers.com/blog/git-workflow-guide-from-chaos-to-clarity/opengraph-image?129fd9f922932887",
+    "og:image:width": "1200",
+    "og:image:height": "630",
+    "og:type": "article"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Blog | 心行者 Mindhikers",
+  "lang": "zh-CN",
+  "meta_description": "Thoughts on software development, life, and more.",
+  "robots": [
+    "index, follow"
+  ],
+  "og": {
+    "og:title": "Blog",
+    "og:description": "Thoughts on software development, life, and more.",
+    "og:image:alt": "Blog",
+    "og:image:type": "image/png",
+    "og:image": "https://www.mindhikers.com/blog/opengraph-image?41616c2180cfb747",
+    "og:image:width": "1200",
+    "og:image:height": "630"
+  },
+  "canonical": "https://www.mindhikers.com",
+  "hreflang": [
+    [
+      "zh-Hans",
+      "https://www.mindhikers.com"
+    ],
+    [
+      "en",
+      "https://www.mindhikers.com/en"
+    ]
+  ]
+}

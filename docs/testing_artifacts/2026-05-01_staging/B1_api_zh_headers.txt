@@ -1,0 +1,19 @@
+HTTP/2 200 
+access-control-allow-headers: Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type
+access-control-expose-headers: X-WP-Total, X-WP-TotalPages, Link
+allow: GET
+x-railway-cdn-edge: fastly/cache-qpg1239-QPG
+content-type: application/json; charset=UTF-8
+date: Fri, 01 May 2026 14:01:47 GMT
+link: <https://wordpress-l1ta-staging.up.railway.app/wp-json/>; rel="https://api.w.org/"
+server: railway-edge
+x-content-type-options: nosniff
+x-powered-by: PHP/8.3.30
+x-railway-edge: railway/asia-southeast1-eqsg3a
+x-railway-request-id: Vuh84fXBT5Gk5ABnacI7Nw
+x-robots-tag: noindex
+x-cache: MISS
+x-cache-hits: 0
+x-served-by: cache-qpg1239-QPG
+content-length: 2234
+

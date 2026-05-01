@@ -1,0 +1,5 @@
+    [38;5;245m$[0m [1mpnpm install --frozen-lockfile --prefer-offline[0m
+[INFO] copy pnpm-lock.yaml
+[INFO] pnpm install --frozen-lockfile --prefer-offline
+[INFO] copy pnpm-lock.yaml
+[INFO] pnpm install --frozen-lockfile --prefer-offline

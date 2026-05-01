@@ -1,0 +1,17 @@
+Starting Container
+
+> porfolio@0.1.0 start /app
+> next start
+
+▲ Next.js 16.1.7
+- Local:         http://localhost:8080
+- Network:       http://10.141.121.19:8080
+
+✓ Starting...
+✓ Ready in 287ms
+Failed to load fonts: TypeError: fetch failed
+    at ignore-listed frames {
+  [cause]: Error: not implemented... yet...
+      at d (.next/server/chunks/ssr/[root-of-the-server]__c8cc1074._.js:8:5796)
+      at R (.next/server/chunks/ssr/[root-of-the-server]__c8cc1074._.js:8:11396)
+}

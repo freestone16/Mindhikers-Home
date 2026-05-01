@@ -1,0 +1,44 @@
+using build driver railpack-v0.23.0
+[38;2;125;86;243m│[0m Railpack 0.23.0 [38;2;125;86;243m│[0m
+  [97m↳ Using pnpm package manager[0m
+  [97m↳ Installing pnpm@9.15.9 with Corepack[0m
+  [95mpnpm[0m  [38;5;238m│[0m  [96m9.15.9[0m   [38;5;238m│[0m  package.json > packageManager (9.15.9)
+    [38;5;245m$[0m [1mpnpm install --frozen-lockfile --prefer-offline[0m
+    [38;5;245m$[0m [1mpnpm run build[0m
+    [38;5;245m$[0m [1mpnpm run start[0m
+[INFO] resolve image config for docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0
+[INFO] resolve image config for docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0
+[INFO] docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0@sha256:ba4c430961d9ee3215c64807727a4b11e2198daac31250e9db9eaf9cee4624d6
+[INFO] docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0@sha256:ba4c430961d9ee3215c64807727a4b11e2198daac31250e9db9eaf9cee4624d6
+[INFO] docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0@sha256:ba4c430961d9ee3215c64807727a4b11e2198daac31250e9db9eaf9cee4624d6
+[INFO] docker-image://ghcr.io/railwayapp/railpack-frontend:v0.23.0@sha256:ba4c430961d9ee3215c64807727a4b11e2198daac31250e9db9eaf9cee4624d6
+[INFO] load build definition from ./railpack-plan.json
+[INFO] load build definition from ./railpack-plan.json
+[INFO] load build definition from ./railpack-plan.json
+[INFO] load build definition from ./railpack-plan.json
+[INFO] docker-image://ghcr.io/railwayapp/railpack-runtime:mise-2026.3.17
+[INFO] copy pnpm-lock.yaml
+[INFO] pnpm install --frozen-lockfile --prefer-offline
+[INFO] docker-image://ghcr.io/railwayapp/railpack-builder:mise-2026.3.17
+[INFO] [railpack] merge $packages:apt:runtime, $packages:mise, $build, $build
+[INFO] pnpm run build
+[INFO] [railpack] secrets hash
+[INFO] docker-image://ghcr.io/railwayapp/railpack-runtime:mise-2026.3.17
+[INFO] [railpack] secrets hash
+[INFO] [railpack] secrets hash
+[INFO] docker-image://ghcr.io/railwayapp/railpack-builder:mise-2026.3.17
+[INFO] docker-image://ghcr.io/railwayapp/railpack-builder:mise-2026.3.17
+[INFO] [railpack] secrets hash
+[INFO] docker-image://ghcr.io/railwayapp/railpack-runtime:mise-2026.3.17
+[INFO] [railpack] secrets hash
+[INFO] copy pnpm-lock.yaml
+[INFO] pnpm install --frozen-lockfile --prefer-offline
+[INFO] pnpm run build
+[INFO] ✓ Compiled successfully in 3.4s
+[INFO] Route (app)                                                       Revalidate  Expire
+└ ○ /robots.txt
+[INFO] pnpm run build
+[INFO] [railpack] merge $packages:apt:runtime, $packages:mise, $build, $build
+[INFO] [railpack] merge $packages:apt:runtime, $packages:mise, $build, $build
+[INFO] docker-image://ghcr.io/railwayapp/railpack-runtime:mise-2026.3.17
+[INFO] docker-image://ghcr.io/railwayapp/railpack-runtime:mise-2026.3.17

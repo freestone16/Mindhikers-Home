@@ -1,0 +1,33 @@
+{
+  "title": "Golden Crucible | 心行者 Mindhikers",
+  "lang": "zh-CN",
+  "meta_description": "Golden Crucible is the first public product entry under 心行者 Mindhikers, designed to hold early experiments around research, expression, and creator workflows.",
+  "robots": [
+    "index, follow"
+  ],
+  "og": {
+    "og:title": "心行者 Mindhikers",
+    "og:description": "心行者 Mindhikers 是一个双语品牌主页，用来承载内容、方法、产品实验与创作者工具入口。",
+    "og:url": "https://www.mindhikers.com",
+    "og:site_name": "心行者 Mindhikers",
+    "og:locale": "zh_CN",
+    "og:image:alt": "心行者 Mindhikers",
+    "og:image:type": "image/png",
+    "og:image": "https://www.mindhikers.com/opengraph-image?b96c4649f6e164e9",
+    "og:image:width": "1200",
+    "og:image:height": "630",
+    "og:locale:alternate": "en_US",
+    "og:type": "website"
+  },
+  "canonical": "https://www.mindhikers.com",
+  "hreflang": [
+    [
+      "zh-Hans",
+      "https://www.mindhikers.com"
+    ],
+    [
+      "en",
+      "https://www.mindhikers.com/en"
+    ]
+  ]
+}

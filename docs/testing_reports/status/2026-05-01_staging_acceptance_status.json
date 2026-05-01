@@ -6,8 +6,17 @@
   "request": "docs/testing_reports/requests/2026-05-01_staging_deep_acceptance_request.md",
   "source_plan": "docs/plans/2026-05-01_Staging_Deep_Acceptance_Outsourced_Execution_Plan.md",
   "handoff": "docs/dev_logs/HANDOFF.md",
-  "status": "in_progress",
-  "current_gate": "red_1_staging_verified",
+  "status": "partial_pass",
+  "current_gate": "a_g_acceptance_completed",
+  "summary": {
+    "PASS": 23,
+    "WARN": 8,
+    "FAIL": 6,
+    "BLOCKED": 5,
+    "SKIPPED": 1,
+    "report": "docs/testing_reports/2026-05-01_staging_acceptance_report.md",
+    "machine_summary": "docs/testing_artifacts/2026-05-01_staging/acceptance_result_summary.json"
+  },
   "known_red_line": {
     "id": "RED-1",
     "item": "D5 robots.txt",
@@ -35,13 +44,13 @@
     }
   },
   "groups": {
-    "A_functional_routes": "pending",
-    "B_data_flow": "pending",
-    "C_performance_resources": "pending",
-    "D_seo_metadata": "in_progress: D5 robots.txt PASS",
-    "E_security_headers": "pending",
-    "F_cms_rest_operations": "pending",
-    "G_deployment_stability": "pending"
+    "A_functional_routes": "partial_pass: 8 PASS, 2 FAIL, 1 BLOCKED",
+    "B_data_flow": "partial_pass: 3 PASS, 2 WARN, 1 BLOCKED",
+    "C_performance_resources": "partial_pass: 2 PASS, 2 WARN",
+    "D_seo_metadata": "partial_pass: 1 PASS, 2 WARN, 4 FAIL",
+    "E_security_headers": "partial_pass: 4 PASS, 1 WARN",
+    "F_cms_rest_operations": "partial_pass: 2 PASS, 3 BLOCKED",
+    "G_deployment_stability": "partial_pass: 3 PASS, 1 WARN, 1 SKIPPED"
   },
   "required_outputs": [
     "docs/testing_reports/2026-05-01_staging_acceptance_report.md",

@@ -1,0 +1,96 @@
+{
+  "A1": {
+    "http_code": 200,
+    "size": 59172,
+    "ttfb": 0.970302,
+    "total": 1.438527,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "A2": {
+    "http_code": 200,
+    "size": 57638,
+    "ttfb": 1.175382,
+    "total": 1.59427,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "A3": {
+    "http_code": 200,
+    "size": 29211,
+    "ttfb": 1.822405,
+    "total": 2.114138,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "A4": {
+    "http_code": 200,
+    "size": 29925,
+    "ttfb": 1.459191,
+    "total": 2.932096,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "A5": {
+    "http_code": 200,
+    "size": 26933,
+    "ttfb": 1.209109,
+    "total": 1.469147,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "A6": {
+    "http_code": 200,
+    "size": 27269,
+    "ttfb": 0.997264,
+    "total": 1.05389,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "A8": {
+    "http_code": 200,
+    "size": 108,
+    "ttfb": 1.558054,
+    "total": 1.558466,
+    "content_type": "application/json"
+  },
+  "A9": {
+    "http_code": 404,
+    "size": 22706,
+    "ttfb": 1.175978,
+    "total": 1.217342,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "A9_en": {
+    "http_code": 404,
+    "size": 22706,
+    "ttfb": 0.858421,
+    "total": 0.974351,
+    "content_type": "text/html; charset=utf-8"
+  },
+  "A10": {
+    "http_code": 200,
+    "size": 46086,
+    "ttfb": 2.438099,
+    "total": 3.136823,
+    "content_type": "image/png"
+  },
+  "A5_assertions": {
+    "slug_count": 3,
+    "slugs": [
+      "/blog/git-workflow-guide-from-chaos-to-clarity",
+      "/blog/rest-api-design-principles-that-stand-the-test-of-time",
+      "/blog/testing-react-applications-a-practical-guide"
+    ]
+  },
+  "A6_assertions": {
+    "slug": "git-workflow-guide-from-chaos-to-clarity"
+  },
+  "A7": {
+    "product_links": []
+  },
+  "A11_blog": {
+    "http_code": 200,
+    "size": 35921,
+    "content_type": "image/png"
+  },
+  "A11_blog_slug": {
+    "http_code": 200,
+    "size": 53566,
+    "content_type": "image/png"
+  }
+}

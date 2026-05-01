@@ -1,0 +1,3 @@
+21:pnpm-lock.yaml
+8a0bf24 ops: exclude pnpm-lock.yaml from RAILPACK to bypass version parsing bug
+f9f0349 refs MIN-30 feat(ops): copy and sync WP bundle into image
