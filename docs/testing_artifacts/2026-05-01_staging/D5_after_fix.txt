@@ -1,0 +1,22 @@
+HTTP/2 200 
+cache-control: public, max-age=0, must-revalidate
+content-security-policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data: blob: https://images.unsplash.com https://*.railway.app https://*.wordpress.com; font-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https: ws: wss:; media-src 'self' https:
+content-type: text/plain
+date: Fri, 01 May 2026 13:26:54 GMT
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: railway-edge
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-nextjs-cache: HIT
+x-railway-edge: railway/asia-southeast1-eqsg3a
+x-railway-request-id: nVxpcPdjTVO3CzQ_ipRofQ
+x-railway-cdn-edge: fastly/cache-qpg1222-QPG
+x-cache: MISS
+x-cache-hits: 0
+x-served-by: cache-qpg1222-QPG
+
+User-Agent: *
+Disallow: /
+

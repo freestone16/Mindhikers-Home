@@ -1,0 +1,18 @@
+HTTP/2 200 
+content-security-policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; form-action 'self' mailto:; img-src 'self' data: blob: https://images.unsplash.com https://*.railway.app https://*.wordpress.com; font-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https: ws: wss:; media-src 'self' https:
+content-type: application/json
+date: Fri, 01 May 2026 13:26:54 GMT
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: railway-edge
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-railway-edge: railway/asia-southeast1-eqsg3a
+x-railway-request-id: iBmJk3fPQQKUooVnacI7Nw
+x-railway-cdn-edge: fastly/cache-qpg1255-QPG
+x-cache: MISS
+x-cache-hits: 0
+x-served-by: cache-qpg1255-QPG
+
+{"ok":true,"service":"mindhikers-homepage","version":"phase-closure","timestamp":"2026-05-01T13:26:54.874Z"}
