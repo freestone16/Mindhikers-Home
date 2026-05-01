@@ -1,0 +1,54 @@
+{
+  "project": "Mindhikers-Homepage",
+  "linear": "MIN-167",
+  "branch": "staging",
+  "target_environment": "staging",
+  "request": "docs/testing_reports/requests/2026-05-01_staging_deep_acceptance_request.md",
+  "source_plan": "docs/plans/2026-05-01_Staging_Deep_Acceptance_Outsourced_Execution_Plan.md",
+  "handoff": "docs/dev_logs/HANDOFF.md",
+  "status": "in_progress",
+  "current_gate": "red_1_local_verified",
+  "known_red_line": {
+    "id": "RED-1",
+    "item": "D5 robots.txt",
+    "summary": "staging /robots.txt returns HTML and must be fixed before the rest of deep acceptance proceeds",
+    "local_fix": "src/app/robots.ts",
+    "local_verification": "PASS: local production server returned HTTP 200 text/plain with Disallow: /",
+    "staging_verification": "pending push and deploy verification"
+  },
+  "self_check": {
+    "branch": "PASS: staging",
+    "node": "PASS: v20.19.5",
+    "pnpm": "PASS: 9.15.9",
+    "jq": "PASS: jq-1.7.1-apple",
+    "curl": "PASS",
+    "railway": "PASS: CLI authenticated through Railway MCP",
+    "lighthouse": "MISSING",
+    "shell_credentials": {
+      "RAILWAY_TOKEN": "MISSING",
+      "WP_BASE_URL": "MISSING",
+      "WP_USER": "MISSING",
+      "WP_APP_PASSWORD": "MISSING",
+      "WORDPRESS_REVALIDATE_TOKEN": "MISSING",
+      "GITHUB_TOKEN": "MISSING"
+    }
+  },
+  "groups": {
+    "A_functional_routes": "pending",
+    "B_data_flow": "pending",
+    "C_performance_resources": "pending",
+    "D_seo_metadata": "pending",
+    "E_security_headers": "pending",
+    "F_cms_rest_operations": "pending",
+    "G_deployment_stability": "pending"
+  },
+  "required_outputs": [
+    "docs/testing_reports/2026-05-01_staging_acceptance_report.md",
+    "docs/testing_artifacts/2026-05-01_staging/",
+    "docs/testing_reports/escalations.md",
+    "docs/dev_logs/2026-05-01.md",
+    "docs/dev_logs/HANDOFF.md",
+    "MIN-167 final summary comment"
+  ],
+  "production_boundary": "Do not touch main or production during outsourced staging acceptance."
+}
