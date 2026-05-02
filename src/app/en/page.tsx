@@ -1,24 +1,23 @@
 import { HomePage } from "@/components/home-page";
 import { getRecentPosts } from "@/lib/cms";
 import { getManagedHomeContent } from "@/lib/cms/homepage";
+import { buildPageMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getManagedHomeContent("en");
-  return {
+  return buildPageMetadata({
     title: content.metadata.title,
     description: content.metadata.description,
-    alternates: {
-      languages: {
-        "zh-Hans": "/",
-        en: "/en",
-      },
+    path: "/en",
+    locale: "en_US",
+    alternateLocale: "zh_CN",
+    languages: {
+      "zh-Hans": "/",
+      en: "/en",
+      "x-default": "/",
     },
-    openGraph: {
-      locale: "en_US",
-      alternateLocale: ["zh_CN"],
-    },
-  };
+  });
 }
 
 export default async function EnglishPage() {

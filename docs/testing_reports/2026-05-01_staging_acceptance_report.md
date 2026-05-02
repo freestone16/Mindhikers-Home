@@ -6,6 +6,38 @@
 终止 commit：`9450f83`
 状态：⚠️ 部分通过，需要整改后再进 production 决策
 
+## 2026-05-02 本地整改进展
+
+状态：本地已修复并验证，尚未提交、推送和部署到 staging。
+
+已处理：
+
+1. A1：将首页底部联系区从普通 `section` 改为语义 `footer`，本地 HTML 已出现 `<footer>`。
+2. A2/D1：为英文路径输出 `html lang="en"`，`/en` 已有 `meta description`。
+3. D2/D3/D4：补齐首页、英文首页、Blog、Golden Crucible 中英文页的 canonical、OG metadata、`x-default` hreflang。
+4. D6：新增 `src/app/sitemap.ts`，本地 `/sitemap.xml` 已返回 HTTP 200 XML。
+5. D7：新增 `/apple-touch-icon.png`，本地返回 HTTP 200 `image/png`。
+
+本地验证：
+
+- `pnpm build`：PASS。
+- 本地生产预览 `http://127.0.0.1:3001`：
+  - `/`：`lang=zh-CN`、canonical root、`og:url` root、`og:type=website`、`x-default` root、存在 `<footer>`。
+  - `/en`：`lang=en`、description 存在、canonical `/en`、`og:url=/en`、`og:type=website`、存在 `<footer>`。
+  - `/blog`：canonical `/blog`、`og:url=/blog`、`og:type=website`、`x-default=/blog`。
+  - `/golden-crucible` 与 `/en/golden-crucible`：canonical/OG URL 指向自身路径，英文页 `lang=en`。
+  - `/sitemap.xml`：HTTP 200，`content-type: application/xml`。
+  - `/apple-touch-icon.png`：HTTP 200，`content-type: image/png`。
+- `agent-browser open http://127.0.0.1:3001/en`：PASS，页面标题正常；`agent-browser errors` 无输出。
+
+仍未处理/仍需回归：
+
+1. B3、F1/F2/F3：仍需要 `WP_USER` / `WP_APP_PASSWORD` 才能跑写链路。
+2. C1/C2：仍需 Lighthouse CLI 或可用 PSI 环境。
+3. B5/G5：runtime font fetch error 尚未专项排查。
+4. E2：HSTS 仍需在部署/边缘层确认。
+5. 上述本地修复需要提交、推送、等待 Railway staging 成功部署后，再补跑 A/D 相关线上验收项。
+
 ## 验收概览
 
 | 组 | 通过 | 警告 | 失败 | 阻塞/跳过 |

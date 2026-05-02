@@ -4,6 +4,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { headers } from "next/headers";
 import "./globals.css";
 
 const cabinetGrotesk = localFont({
@@ -41,6 +42,7 @@ export const metadata: Metadata = {
     languages: {
       "zh-Hans": "/",
       en: "/en",
+      "x-default": "/",
     },
   },
   robots: {
@@ -64,13 +66,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const requestHeaders = await headers();
+  const pathname = requestHeaders.get("x-pathname") ?? "/";
+  const htmlLang = pathname === "/en" || pathname.startsWith("/en/")
+    ? "en"
+    : "zh-CN";
+
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
+    <html lang={htmlLang} suppressHydrationWarning>
       <body
         className={cn(
           "relative min-h-screen bg-background antialiased",

@@ -1,6 +1,6 @@
-🕐 Last updated: 2026-05-01 22:36 CST
+🕐 Last updated: 2026-05-02 11:20 CST
 🌿 Branch: `staging`
-📌 Latest commit on staging before this handoff update: `9450f83` docs(testing): record red-1 staging verification
+📌 Latest commit on staging before this handoff update: `cc28548` docs(testing): record staging A-G acceptance results
 🎫 Linear 跟踪：[MIN-167](https://linear.app/mindhikers/issue/MIN-167/staging-深度验收-外包-ai-执行)
 
 ---
@@ -9,13 +9,15 @@
 
 Staging A-G 深度验收已跑完，结果是 **部分通过，不建议进入 production 推送决策**。
 
+2026-05-02 已开始按报告整改：A1/A2/D1/D2/D3/D4/D6/D7 的本地修复已完成并通过本地生产预览验证；尚未提交、推送和部署到 staging。
+
 核心原因：
 
 1. RED-1 `/robots.txt` 已修复并在线上验证通过。
-2. A/B/C/E/F/G 多数组件可用，但 D 组 SEO/metadata 失败较集中。
-3. `/sitemap.xml` 仍返回 404 HTML。
-4. `/en` 页面仍输出 `<html lang="zh-CN">`，且英文页 metadata 不完整。
-5. WP REST 写链路缺 `WP_USER` / `WP_APP_PASSWORD`，B3 与 F1-F3 尚未能跑。
+2. 本地已修复 `/en` 语言标记、核心 metadata/canonical/OG/hreflang、`/sitemap.xml`、`<footer>` 与 `apple-touch-icon`。
+3. 修复尚未上 staging，需要提交推送并等 Railway 部署成功后做线上回归。
+4. WP REST 写链路缺 `WP_USER` / `WP_APP_PASSWORD`，B3 与 F1-F3 尚未能跑。
+5. C1/C2、runtime font fetch warning、HSTS warning 仍需单独补验或整改。
 
 ## 交付物
 
@@ -27,8 +29,31 @@ Staging A-G 深度验收已跑完，结果是 **部分通过，不建议进入 p
    - `docs/testing_reports/status/2026-05-01_staging_acceptance_status.json`
 4. 当日日志：
    - `docs/dev_logs/2026-05-01.md`
+   - `docs/dev_logs/2026-05-02.md`
 5. 证据目录：
    - `docs/testing_artifacts/2026-05-01_staging/`
+
+## 2026-05-02 本地整改
+
+已完成但未提交/推送：
+
+| 验收项 | 本地处理 |
+|---|---|
+| A1 | 首页 contact 区改为语义 `<footer>` |
+| A2/D1 | `/en` 输出 `html lang="en"` 并补 description |
+| D2/D3/D4 | 首页、英文首页、Blog、Golden Crucible 中英页补 canonical/OG/Twitter/x-default |
+| D6 | 新增 `src/app/sitemap.ts`，本地 `/sitemap.xml` HTTP 200 XML |
+| D7 | 新增 `public/apple-touch-icon.png`，本地 HTTP 200 image/png |
+
+本地验证：
+
+- `pnpm build`: PASS。
+- 本地生产预览：
+  - `/`、`/en`、`/blog`、`/golden-crucible`、`/en/golden-crucible` metadata 关键断言通过。
+  - `/sitemap.xml`: HTTP 200 `application/xml`。
+  - `/apple-touch-icon.png`: HTTP 200 `image/png`。
+- `agent-browser open http://127.0.0.1:3001/en`: PASS。
+- `agent-browser errors`: 无输出。
 
 ## 已完成并推送的 commit
 
@@ -37,6 +62,7 @@ Staging A-G 深度验收已跑完，结果是 **部分通过，不建议进入 p
 | `4ec2649` | docs(testing): add staging deep acceptance dispatch records |
 | `6642c73` | fix(seo): disallow crawlers on non-production robots.txt |
 | `9450f83` | docs(testing): record red-1 staging verification |
+| `cc28548` | docs(testing): record staging A-G acceptance results |
 
 ## RED-1 终态
 
@@ -97,8 +123,8 @@ Railway 最新验证：
 
 ## 下一步建议
 
-1. 先整改 D 组：英文 metadata、canonical、OG、hreflang、sitemap。
-2. 同步补 footer 语义与 apple-touch-icon。
+1. 确认后提交并推送本地 A/D 修复到 `origin/staging`。
+2. 等 Railway staging 部署成功后，补跑 A1/A2/D1-D7 线上回归。
 3. 再查 runtime font fetch error。
 4. 老卢提供 WP Application Password 后，补跑 B3 与 F1-F3。
 5. 装 Lighthouse 或换可用 PSI 环境补 C1/C2。

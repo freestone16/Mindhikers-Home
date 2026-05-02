@@ -302,7 +302,7 @@ export function HomePage({
         )}
       </section>
 
-      <section
+      <footer
         id="contact"
         className="scroll-mt-[5.1rem] grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] sm:scroll-mt-[5.2rem] lg:scroll-mt-[5.3rem] pb-20"
       >
@@ -359,7 +359,7 @@ export function HomePage({
             </BlurFade>
           ))}
         </div>
-      </section>
+      </footer>
     </main>
   );
 }

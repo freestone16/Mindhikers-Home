@@ -1,22 +1,24 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { listPosts } from "@/lib/cms";
+import { buildPageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { paginate, normalizePage } from "@/lib/pagination";
 import { ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Blog",
-  description: "Thoughts on software development, life, and more.",
-  openGraph: {
+  ...buildPageMetadata({
     title: "Blog",
     description: "Thoughts on software development, life, and more.",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Blog",
-    description: "Thoughts on software development, life, and more.",
-  },
+    path: "/blog",
+    locale: "zh_CN",
+    alternateLocale: "en_US",
+    languages: {
+      "zh-Hans": "/blog",
+      en: "/blog",
+      "x-default": "/blog",
+    },
+  }),
 };
 
 const PAGE_SIZE = 5;
