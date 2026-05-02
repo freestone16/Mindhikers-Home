@@ -8,7 +8,13 @@
 
 ## 2026-05-02 本地整改进展
 
-状态：本地已修复并验证，尚未提交、推送和部署到 staging。
+状态：已修复、提交、推送并部署到 staging；A/D 相关线上回归通过。
+
+提交与部署：
+
+- `d3b9981` fix(seo): repair staging acceptance metadata gaps refs MIN-167
+- `7576c67` fix(seo): fallback homepage metadata descriptions refs MIN-167
+- Railway deployment：`f38ddffa-538e-434b-9400-6aa3a35ad784`，SUCCESS。
 
 已处理：
 
@@ -30,13 +36,22 @@
   - `/apple-touch-icon.png`：HTTP 200，`content-type: image/png`。
 - `agent-browser open http://127.0.0.1:3001/en`：PASS，页面标题正常；`agent-browser errors` 无输出。
 
+Staging 线上回归：
+
+- `/`：HTTP 200，`lang=zh-CN`，存在 `<footer>`、description、canonical root、`og:url` root、`og:type=website`、`x-default` root。
+- `/en`：HTTP 200，`lang=en`，存在 `<footer>`、description、canonical `/en`、`og:url=/en`、`og:type=website`、`x-default` root。
+- `/blog`：HTTP 200，description、canonical `/blog`、`og:url=/blog`、`og:type=website`、`x-default=/blog`。
+- `/golden-crucible` 与 `/en/golden-crucible`：HTTP 200，canonical/OG URL 指向自身路径；英文页 `lang=en`。
+- `/sitemap.xml`：HTTP 200，`content-type: application/xml`。
+- `/apple-touch-icon.png`：HTTP 200，`content-type: image/png`。
+
 仍未处理/仍需回归：
 
 1. B3、F1/F2/F3：仍需要 `WP_USER` / `WP_APP_PASSWORD` 才能跑写链路。
 2. C1/C2：仍需 Lighthouse CLI 或可用 PSI 环境。
 3. B5/G5：runtime font fetch error 尚未专项排查。
 4. E2：HSTS 仍需在部署/边缘层确认。
-5. 上述本地修复需要提交、推送、等待 Railway staging 成功部署后，再补跑 A/D 相关线上验收项。
+5. A/D 相关线上回归已通过；后续可进入剩余阻塞项和警告项处理。
 
 ## 验收概览
 

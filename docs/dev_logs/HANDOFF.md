@@ -1,6 +1,6 @@
-🕐 Last updated: 2026-05-02 11:20 CST
+🕐 Last updated: 2026-05-02 11:45 CST
 🌿 Branch: `staging`
-📌 Latest commit on staging before this handoff update: `cc28548` docs(testing): record staging A-G acceptance results
+📌 Latest commit on staging before this handoff update: `7576c67` fix(seo): fallback homepage metadata descriptions refs MIN-167
 🎫 Linear 跟踪：[MIN-167](https://linear.app/mindhikers/issue/MIN-167/staging-深度验收-外包-ai-执行)
 
 ---
@@ -9,13 +9,13 @@
 
 Staging A-G 深度验收已跑完，结果是 **部分通过，不建议进入 production 推送决策**。
 
-2026-05-02 已开始按报告整改：A1/A2/D1/D2/D3/D4/D6/D7 的本地修复已完成并通过本地生产预览验证；尚未提交、推送和部署到 staging。
+2026-05-02 已完成按报告整改：A1/A2/D1/D2/D3/D4/D6/D7 已修复、提交、推送并部署到 staging；线上回归通过。
 
 核心原因：
 
 1. RED-1 `/robots.txt` 已修复并在线上验证通过。
-2. 本地已修复 `/en` 语言标记、核心 metadata/canonical/OG/hreflang、`/sitemap.xml`、`<footer>` 与 `apple-touch-icon`。
-3. 修复尚未上 staging，需要提交推送并等 Railway 部署成功后做线上回归。
+2. 已修复 `/en` 语言标记、核心 metadata/canonical/OG/hreflang、`/sitemap.xml`、`<footer>` 与 `apple-touch-icon`。
+3. Railway staging 最新部署 `f38ddffa-538e-434b-9400-6aa3a35ad784` 为 SUCCESS，A/D 线上回归通过。
 4. WP REST 写链路缺 `WP_USER` / `WP_APP_PASSWORD`，B3 与 F1-F3 尚未能跑。
 5. C1/C2、runtime font fetch warning、HSTS warning 仍需单独补验或整改。
 
@@ -33,9 +33,9 @@ Staging A-G 深度验收已跑完，结果是 **部分通过，不建议进入 p
 5. 证据目录：
    - `docs/testing_artifacts/2026-05-01_staging/`
 
-## 2026-05-02 本地整改
+## 2026-05-02 整改与线上回归
 
-已完成但未提交/推送：
+已完成并部署：
 
 | 验收项 | 本地处理 |
 |---|---|
@@ -55,6 +55,21 @@ Staging A-G 深度验收已跑完，结果是 **部分通过，不建议进入 p
 - `agent-browser open http://127.0.0.1:3001/en`: PASS。
 - `agent-browser errors`: 无输出。
 
+提交与部署：
+
+- `d3b9981` fix(seo): repair staging acceptance metadata gaps refs MIN-167
+- `7576c67` fix(seo): fallback homepage metadata descriptions refs MIN-167
+- Railway deployment：`f38ddffa-538e-434b-9400-6aa3a35ad784`，SUCCESS
+
+Staging 线上回归：
+
+- `/`：HTTP 200，`lang=zh-CN`，存在 `<footer>`、description、canonical、OG URL/type、`x-default`。
+- `/en`：HTTP 200，`lang=en`，存在 `<footer>`、description、canonical `/en`、OG URL/type、`x-default`。
+- `/blog`：HTTP 200，description、canonical `/blog`、OG URL/type、`x-default=/blog`。
+- `/golden-crucible` 与 `/en/golden-crucible`：HTTP 200，canonical/OG URL 指向自身路径；英文页 `lang=en`。
+- `/sitemap.xml`：HTTP 200 `application/xml`。
+- `/apple-touch-icon.png`：HTTP 200 `image/png`。
+
 ## 已完成并推送的 commit
 
 | commit | 说明 |
@@ -63,6 +78,8 @@ Staging A-G 深度验收已跑完，结果是 **部分通过，不建议进入 p
 | `6642c73` | fix(seo): disallow crawlers on non-production robots.txt |
 | `9450f83` | docs(testing): record red-1 staging verification |
 | `cc28548` | docs(testing): record staging A-G acceptance results |
+| `d3b9981` | fix(seo): repair staging acceptance metadata gaps refs MIN-167 |
+| `7576c67` | fix(seo): fallback homepage metadata descriptions refs MIN-167 |
 
 ## RED-1 终态
 
@@ -123,12 +140,11 @@ Railway 最新验证：
 
 ## 下一步建议
 
-1. 确认后提交并推送本地 A/D 修复到 `origin/staging`。
-2. 等 Railway staging 部署成功后，补跑 A1/A2/D1-D7 线上回归。
-3. 再查 runtime font fetch error。
-4. 老卢提供 WP Application Password 后，补跑 B3 与 F1-F3。
-5. 装 Lighthouse 或换可用 PSI 环境补 C1/C2。
-6. 全部回归后再进入 production 推送策略讨论。
+1. 再查 runtime font fetch error。
+2. 老卢提供 WP Application Password 后，补跑 B3 与 F1-F3。
+3. 装 Lighthouse 或换可用 PSI 环境补 C1/C2。
+4. 确认 HSTS 是否应在 Railway/Cloudflare 层补齐。
+5. 全部回归后再进入 production 推送策略讨论。
 
 ## 边界提醒
 
